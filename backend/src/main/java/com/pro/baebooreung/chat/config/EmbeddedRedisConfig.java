@@ -12,7 +12,6 @@ import javax.annotation.PreDestroy;
 /**
  * 로컬 환경일 경우 내장 레디스가 실행
  */
-
 @Configuration
 public class EmbeddedRedisConfig {
 
