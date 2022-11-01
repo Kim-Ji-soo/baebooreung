@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
+import CustomButton from '../../components/CustomButton';
 
 const Login = () => {
   const [id, setId] = React.useState();
@@ -41,7 +42,9 @@ const Login = () => {
         </View>
       </View>
       <View style={styles.btnArea}>
-        <Button title="로그인"></Button>
+        <CustomButton>
+          <Text>로그인</Text>
+        </CustomButton>
       </View>
     </SafeAreaView>
   );
@@ -65,7 +68,10 @@ const styles = StyleSheet.create({
     width: '80%',
     margin: 0,
   },
-  btnArea: {},
+  btnArea: {
+    marginTop: 25,
+    width: '40%',
+  },
   id: {
     borderWidth: 1,
     borderColor: 'gray',
