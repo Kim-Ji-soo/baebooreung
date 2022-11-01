@@ -1,10 +1,10 @@
 import {StyleSheet, View} from 'react-native';
 import ManagerChat from "../components/ManagerChat"
 
-function MessageScreen(){
+function MessageScreen({navigation}){
     return(
         <View style={styles.container}>
-            <ManagerChat></ManagerChat>
+            <ManagerChat navigation={navigation}></ManagerChat>
         </View>
     )
 }
