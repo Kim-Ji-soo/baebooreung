@@ -8,9 +8,7 @@ import { RenderAfterNavermapsLoaded } from 'react-naver-maps'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RenderAfterNavermapsLoaded clientId={"i3oq00t777"}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </RenderAfterNavermapsLoaded>
 );
 
