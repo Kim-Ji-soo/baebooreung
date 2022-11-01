@@ -31,25 +31,26 @@ const TestMap = () => {
         onClick={() => console.warn('onClick! p2')}
       />
       <Path
-        coordinates={[P0, P1]}
+        coordinates={[P0, P1, P2]}
         onClick={() => console.warn('onClick! path')}
         width={10}
+        color="red"
       />
-      {/* <Polyline
+      <Polyline
         coordinates={[P1, P2]}
         onClick={() => console.warn('onClick! polyline')}
-      /> */}
+      />
       {/* <Circle
         coordinate={P0}
         color={'rgba(255,0,0,0.3)'}
         radius={200}
         onClick={() => console.warn('onClick! circle')}
       /> */}
-      {/* <Polygon
+      <Polygon
         coordinates={[P0, P1, P2]}
         color={`rgba(0, 0, 0, 0.5)`}
         onClick={() => console.warn('onClick! polygon')}
-      /> */}
+      />
     </NaverMapView>
   );
 };
