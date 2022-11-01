@@ -5,8 +5,8 @@ plugins {
 }
 
 bootJar {
-	archivesBaseName = 'DiscoveryService'
-	archiveFileName = 'DiscoveryService.jar'
+	archivesBaseName = 'discoveryService'
+	archiveFileName = 'discoveryService.jar'
 }
 
 group = 'com.pro.baebooreung'
