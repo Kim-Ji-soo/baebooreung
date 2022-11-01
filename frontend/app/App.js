@@ -18,6 +18,8 @@ import GPSScreen from './src/pages/GPSScreen';
 import MessageScreen from './src/pages/MessageScreen';
 import DetailWorkScreen from './src/pages/DetailWorkScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Provider} from 'react-redux';
+import store from "./src/redux/store";
 
 // <-- driver App pages -->
 import Gps from './src/pages/driverApp/Gps';
@@ -25,6 +27,7 @@ import MainScreen from './src/pages/driverApp/MainScreen';
 import TestMap from './src/pages/driverApp/TestMap';
 import Login from './src/pages/driverApp/Login';
 import SignUp from './src/pages/driverApp/SignUp';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -69,6 +72,7 @@ function HomeStack() {
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
+      <Provider store={store}>
       <NavigationContainer>
         {isManager ? (
           // <-- manager 로그인 시-->
@@ -187,6 +191,7 @@ export default function App() {
           </Tab.Navigator>
         )}
       </NavigationContainer>
+      </Provider>
     </SafeAreaView>
   );
 }
