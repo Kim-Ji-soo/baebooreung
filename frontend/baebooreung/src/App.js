@@ -3,7 +3,7 @@ import NaverMapApi from './navermap/NaverMapApi';
 import { useState } from "react"
 
 export default function App() {
-  const [start, setStart] = useState("126.9042,35.1780") // 출발지
+  const [start, setStart] = useState("126.8950,35.1790") // 출발지
 
   return (
     <div className="App">
