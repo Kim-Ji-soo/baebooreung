@@ -38,7 +38,7 @@ public class UserController {
         return greeting.getMessage();
     }
 
-    @GetMapping("/health_check")
+    @GetMapping("/port_check")
     public String status(){
         return String.format("It's Working in User Service on PORT %s", env.getProperty("local.server.port"));
     }
@@ -60,7 +60,7 @@ public class UserController {
         //201 성공코드 반환환
     }
     @GetMapping("/users") //회원정보 얻어오기
-    public ResponseEntity<List<ResponseUser>> getUsers() {
+    public ResponseEntity<List<ResponseUser>> getUserList() {
         Iterable<UserEntity> userList = userService.getUserByAll();
 
         List<ResponseUser> result = new ArrayList<>();
@@ -71,4 +71,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/user/{id}") //회원정보 얻어오기
+    public ResponseEntity<ResponseUser> getUser(@PathVariable int id) {
+        ResponseUser user = userService.getUserById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
 }
+

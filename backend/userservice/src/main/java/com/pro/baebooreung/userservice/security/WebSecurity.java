@@ -33,7 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //        http.authorizeRequests().antMatchers("/health_check/**").permitAll();
         http.authorizeRequests().antMatchers("/**")
 //                .hasIpAddress(env.getProperty("gateway.ip")) // <- IP 제한적으로 받는 것
-                .hasIpAddress("172.24.0.3") // <- IP 제한적으로 받는 것
+                .hasIpAddress("172.24.0.3") // <- IP 제한적으로 받는 것 // 지금 넣은건
 //                .hasIpAddress("k7c207.p.ssafy.io") // <- IP 제한적으로 받는 것
 //                .access("hasIpAddress('" + env.getProperty("gateway.ip") + "')")
 //                .access("hasIpAddress('k7c207.p.ssafy.io')")
