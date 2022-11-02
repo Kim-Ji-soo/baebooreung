@@ -8,6 +8,7 @@ COPY src src
 RUN chmod +x ./gradlew
 CMD ["./gradlew", "clean", "build"]
 RUN ./gradlew bootJar
+RUN PWD
 EXPOSE 8082
 VOLUME /tmp
 ARG JAR_FILE=build/libs/*.jar
