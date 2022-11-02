@@ -27,6 +27,7 @@ public class GpsController {
             gpsService.sendGps(gpsSaveDto);
             return new ResponseEntity<String>("Success", HttpStatus.OK);
         } catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<String>("Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
