@@ -1,4 +1,5 @@
 FROM openjdk:11-jdk
+WORKDIR /var/jenkins_home/workspace/baebooreung/backend/producerservice
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
@@ -6,8 +7,6 @@ COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
 RUN ./gradew bootJar
-
-WORKDIR /var/jenkins_home/workspace/baebooreung/backend/producerservice
 EXPOSE 8082
 CMD ["./gradlew", "clean", "build"]
 VOLUME /tmp
