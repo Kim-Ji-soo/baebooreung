@@ -1,0 +1,26 @@
+.main_logo_image {
+  width:200px;
+  height:200px;
+}
+
+.main_display_flex {
+  display:flex;
+  
+}
+
+.main_display_flex_direction_col {
+  display:flex;
+  flex-direction: column;
+}
+
+.main_justify_content_space_between {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color:blue;
+  background-color: #878A8F;
+}
+
+.main_content {
+  background-color: aqua;
+}
