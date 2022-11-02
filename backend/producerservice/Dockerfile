@@ -6,7 +6,7 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
-RUN ./gradew bootJar
+RUN ./gradlew bootJar
 EXPOSE 8082
 CMD ["./gradlew", "clean", "build"]
 VOLUME /tmp
