@@ -7,19 +7,26 @@ import Main from './MainPage/Main';
 
 export default function App() {
   
-  useEffect(() => {
-    document.body.style.height = document.body.scrollHeight < window.innerHeight ? window.innerHeight + 'px' : document.body.scrollHeight + 'px'
-    console.log('스크롤 변화')
-  }, [document.body.scrollheight])
+  // useEffect(() => {
+  //   document.body.style.height = document.body.scrollHeight < window.innerHeight ? window.innerHeight + 'px' : document.body.scrollHeight + 'px'
+  // }, [])
 
   return (
     <div className="App" style={{height:"100%"}}>
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={< />}/> */}
+          
+          {/* 로그인 + 비로그인 */}
           <Route path="/" element={<Main/>}/>
           <Route path="/naver" element={<NaverMapApi/>}/>
-          {/* <Route path="/naver" element={<NaverMapApi start={start}/>}/> */}
+          
+          {/* 로그인  */}
+
+
+          {/* 비로그인  */}
+          
+          
           <Route path="/page404" element={<Page404/>}/>
         </Routes>
       </BrowserRouter> 
