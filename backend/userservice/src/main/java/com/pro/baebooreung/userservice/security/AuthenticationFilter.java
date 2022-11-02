@@ -80,5 +80,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader("token", token); // 헤더에 위에 만들어진 토큰을 token이란 이름으로 넣을 것
         response.addHeader("userId", userDetails.getUserId()); //토큰 확인을 위해 userId 같이 넣음
+        response.addIntHeader("id",userDetails.getId()); // 사람 id 값 헤더에 같이 보내주기
     }
 }
