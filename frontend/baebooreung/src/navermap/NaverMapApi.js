@@ -2,14 +2,14 @@ import React from "react";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { NaverMap, Polyline, Marker } from 'react-naver-maps'
-
+import styles from './NaverMapApi.module.css'
 
 // 출발지 | 1, 2, 3, 4, 5 ~ 11번까지 경유지 | 도착지가 있음
 // 출발지에서 출발하다가, 다음 경유지에 도달(root(x*2+y*2) <= 오차범위)하면 다음 목적지는 체크된다.
 // 네이버 API로 다음 다음 경유지 길찾기 시작 / 다음 다음 목적지로 goal이 변경된다.
 // goal에 도달하면 특정 이벤트 발생
 
-export default function NaverMapApi({start}) {
+export default function NaverMapApi() {
   // const X_NCP_APIGW_API_KEY_ID = "i3oq00t777"
   // const X_NCP_APIGW_API_KEY = "SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG"
   const X_NCP_APIGW_API_KEY_ID = "g05t2a43ik"
@@ -19,7 +19,7 @@ export default function NaverMapApi({start}) {
     "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID,
     "X-NCP-APIGW-API-KEY" : X_NCP_APIGW_API_KEY
   }
-  // const [start, setStart] = useState("126.8950,35.1790") // 출발지
+  const [start, setStart] = useState("126.8950,35.1790") // 출발지
   const waypoints1 = "126.8982,35.1786" // 킹스샌드
   const waypoints2 = "126.9043,35.1777" // 알촌
   const waypoints3 = "126.903,35.1777" // 봉구스밥버거
@@ -44,8 +44,8 @@ export default function NaverMapApi({start}) {
 
   const goal = "126.9108,35.1804" // 생활관5동입구
 
-  const url = `/map-direction-15/v1/driving?start=${start}&goal=${goal}&waypoints=${waypoints}`
-  const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints2}`
+  const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
 
   const [test_course, setTestCourse] = useState([])
   const [test_course_now, setTestCourseNow] = useState([])
@@ -55,6 +55,7 @@ export default function NaverMapApi({start}) {
     await axios.get(url, {
       headers: headers
     }).then((res) => {
+      console.log(res.data.route)
       const path = res.data.route.traoptimal[0].path
       for (let i = 0; i <= path.length-1; i ++) {
         course.push({lat:path[i][1],lng:path[i][0]})
@@ -80,53 +81,67 @@ export default function NaverMapApi({start}) {
   }
 
   useEffect(() => {
-    console.log('start가 바뀜')
     cal_course()
   }, [start])
 
-  return <NaverMap 
-    id='maps-examples-polyline'
-    style={{
-      width: '80%',
-      height: '100vh',
-    }}
-    center={translate_coordinate_lat_lng(start)}
-    defaultZoom={16}
-    >
-    <Marker 
-      position={translate_coordinate_lat_lng(start)}
-      animation={1}
-    />
-    <Marker position={translate_coordinate_lat_lng(waypoints1)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints2)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints3)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints4)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints5)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints6)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints7)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints8)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints9)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints10)}/>
-    <Marker position={translate_coordinate_lat_lng(waypoints11)}/>
-    <Marker 
-      position={translate_coordinate_lat_lng(goal)}
-      animation={1}
-    />
-    <Polyline 
-      path = {test_course}
-      strokeColor={'#000000'}
-      strokeStyle={'solid'}
-      strokeLineCap={'round'}
-      strokeOpacity={0.5}
-      strokeWeight={5}        
-    />
-    <Polyline
-      path = {test_course_now}
-      strokeColor={'red'}
-      strokeStyle={'solid'}
-      strokeLineCap={'round'}
-      strokeOpacity={0.6}
-      strokeWeight={10}        
-    />
-  </NaverMap>
+  return <div className={styles.App}>
+    <div className={styles.app_width}>
+      <div className={styles.app_color}>
+        <div className={styles.app_color_height}>
+          <div className={styles.app_color_white}>
+            <div>출발지좌표</div>
+            <input type="text" value={start} onChange={(e)=>{
+              setStart(e.target.value)
+            }} />
+          </div>
+          <div>{start}</div>
+        </div>
+      </div>
+      <NaverMap 
+        id='maps-examples-polyline'
+        style={{
+          width: '80%',
+          height: '100vh',
+        }}
+        center={translate_coordinate_lat_lng(start)}
+        zoom={16}
+        >
+        <Marker 
+          position={translate_coordinate_lat_lng(start)}
+          animation={1}
+          />
+        <Marker position={translate_coordinate_lat_lng(waypoints1)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints2)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints3)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints4)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints5)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints6)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints7)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints8)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints9)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints10)}/>
+        <Marker position={translate_coordinate_lat_lng(waypoints11)}/>
+        <Marker 
+          position={translate_coordinate_lat_lng(goal)}
+          animation={1}
+          />
+        <Polyline 
+          path = {test_course}
+          strokeColor={'#000000'}
+          strokeStyle={'solid'}
+          strokeLineCap={'round'}
+          strokeOpacity={0.5}
+          strokeWeight={10}        
+          />
+        <Polyline
+          path = {test_course_now}
+          strokeColor={'red'}
+          strokeStyle={'solid'}
+          strokeLineCap={'round'}
+          strokeOpacity={1}
+          strokeWeight={10}        
+          />
+      </NaverMap>
+    </div>
+  </div>
 }
