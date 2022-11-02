@@ -6,9 +6,9 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
+CMD ["./gradlew", "clean", "build"]
 RUN ./gradlew bootJar
 EXPOSE 8082
-CMD ["./gradlew", "clean", "build"]
 VOLUME /tmp
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
