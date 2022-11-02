@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.module.css';
 import App from './App';
 import { RenderAfterNavermapsLoaded } from 'react-naver-maps'
 

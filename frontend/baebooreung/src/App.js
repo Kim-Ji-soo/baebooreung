@@ -1,30 +1,29 @@
-import './App.css';
-import NaverMapApi from './navermap/NaverMapApi';
-import { useState } from "react"
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import NaverMapApi from './NaverMap/NaverMapApi';
+import Page404 from './Page404';
+import Main from './MainPage/Main';
 
 export default function App() {
-  const [start, setStart] = useState("126.8950,35.1790") // 출발지
+  
+  useEffect(() => {
+    document.body.style.height = document.body.scrollHeight < window.innerHeight ? window.innerHeight + 'px' : document.body.scrollHeight + 'px'
+    console.log('스크롤 변화')
+  }, [document.body.scrollheight])
 
   return (
-    <div className="App">
-      <div id="app_width">
-        <div id="app_color">
-          <div id="app_color_height">
-            <div id="app_color_white">
-              <div>출발지좌표</div>
-              <input type="text" value={start} onChange={(e)=>{
-                setStart(e.target.value)
-              }} />
-            </div>
-            <div>{start}</div>
-          </div>
-          <div>
-            {/* <button onClick={add_course}>경유지 추가</button>
-            <button onClick={cal_course}>경로계산</button> */}
-          </div>
-        </div>
-        <NaverMapApi start={start}/>
-      </div>
+    <div className="App" style={{height:"100%"}}>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/" element={< />}/> */}
+          <Route path="/" element={<Main/>}/>
+          <Route path="/naver" element={<NaverMapApi/>}/>
+          {/* <Route path="/naver" element={<NaverMapApi start={start}/>}/> */}
+          <Route path="/page404" element={<Page404/>}/>
+        </Routes>
+      </BrowserRouter> 
+
     </div>
   );
 }
