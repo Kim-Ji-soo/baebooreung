@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GpsService {
 
-    private static final String TOPIC = "testkafka";
+    private static final String TOPIC = "gps-kafka";
+
     private final KafkaTemplate<String, GpsSaveDto> kafkaTemplate;
 
 
     public void sendGps(GpsSaveDto gpsSaveDto){
+        System.out.println("send Gps Data = "+gpsSaveDto.toString());
         kafkaTemplate.send(TOPIC, gpsSaveDto);
     }
 
