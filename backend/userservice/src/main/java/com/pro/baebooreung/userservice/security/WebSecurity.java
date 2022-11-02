@@ -32,7 +32,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
 //        http.authorizeRequests().antMatchers("/health_check/**").permitAll();
         http.authorizeRequests().antMatchers("/**")
-                .hasIpAddress(env.getProperty("gateway.ip")) // <- IP 제한적으로 받는 것
+//                .hasIpAddress(env.getProperty("gateway.ip")) // <- IP 제한적으로 받는 것
+                .hasIpAddress("k7c207.p.ssafy.io") // <- IP 제한적으로 받는 것
 //                .access("hasIpAddress('" + env.getProperty("gateway.ip") + "')")
 //                .access("hasIpAddress('127.0.0.1')")
                 .and()
