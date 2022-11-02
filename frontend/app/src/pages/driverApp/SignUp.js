@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import SelectList from 'react-native-dropdown-select-list';
+import {isEmail, isPhoneNumber} from '../../utils/auth';
+import {isPassword} from '../../utils/auth';
+
 const SignUp = () => {
+  // dropdown 관련 state,
   const [selected, setSelected] = useState('');
   const [region, setRegion] = useState('');
   const dropdown = [
@@ -30,6 +34,86 @@ const SignUp = () => {
     {key: '11', value: '관악우성아파트'},
   ];
 
+  // 회원가입 관련 state
+  // id(email), password, passwordConfirm
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  // message state
+  const [idMessage, setIdMessage] = useState('');
+  const [pwMessage, setPwMessage] = useState('');
+  const [pwConfirmMessage, setPwConfirmMessage] = useState('');
+  const [phoneNumMessage, setPhoneNumMessage] = useState('');
+  // validation check
+  const [isId, setIsId] = useState(false);
+  const [isPw, setIsPw] = useState(false);
+  const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
+  const [isPhoneNum, setIsPhoneNum] = useState(false);
+
+  //autoFocus 관련
+  // if you press the next button, then move to next TextInput
+  const ref_input2 = useRef();
+  const ref_input3 = useRef();
+  const ref_input4 = useRef();
+  const ref_input5 = useRef();
+
+  // !! event.nativeEvent.text -> react.js의 event.target.value !!
+  // 아이디(이메일) 유효성 검사
+  const onChangeId = event => {
+    const ID = event.nativeEvent.text;
+    if (isEmail(ID)) {
+      // 유효성 통과 시 true 반환
+      setId(ID);
+      setIdMessage('올바른 이메일 형식입니다.');
+      setIsId(true);
+    } else {
+      setIdMessage('이메일 형식으로 입력해주세요.');
+      setIsId(false);
+    }
+    // console.log(isId, '-', idMessage);
+  };
+  // 비밀번호 유효성 검사
+  const onChangePw = event => {
+    const PW = event.nativeEvent.text;
+    if (isPassword(password)) {
+      // 유효성 통과 시 true 반환
+      setPwMessage('올바른 비밀번호입니다.');
+      setPassword(PW);
+      setIsPw(true);
+    } else {
+      setPwMessage(
+        '비밀번호는 영문자, 숫자, 특수기호를 포함하여  8 ~ 16자로 입력해주세요.',
+      );
+      setIsPw(false);
+    }
+    // console.log(isPw, '-', pwMessage);
+  };
+  // 비밀번호 확인 유효성 검사(password랑 confirmPassword가 같은지 만 확인)
+  const onChangePwConfirm = event => {
+    const CONFIRM = event.nativeEvent.text;
+    setConfirmPassword(CONFIRM);
+    // console.log(CONFIRM === password);
+    if (CONFIRM === password) {
+      setPwConfirmMessage('비밀번호가 일치합니다.');
+      setIsPasswordConfirm(true);
+    } else {
+      setPwConfirmMessage('비밀번호가 일치하지 않습니다.');
+      setIsPasswordConfirm(false);
+    }
+    // console.log(isPasswordConfirm, '-', pwConfirmMessage);
+  };
+  const onChangePhoneNum = event => {
+    const NUMBER = event.nativeEvent.text;
+    setPhoneNumber(event.nativeEvent.text);
+    if (isPhoneNumber(NUMBER)) {
+      setPhoneNumMessage('올바른 전화번호입니다.');
+      setIsPhoneNum(true);
+    } else {
+      setIsPhoneNum(false);
+      setPhoneNumMessage('000-0000-0000 형식으로 입력해주세요.');
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -41,24 +125,27 @@ const SignUp = () => {
           <TextInput
             style={styles.inputArea}
             placeholder="아이디를 입력하세요."
+            onChange={onChangeId}
+            autoFocus={true}
+            returnKeyType="next"
+            onSubmitEditing={() => ref_input2.current.focus()}
           />
-          {/* <Text style={styles.infoDescription}>
-            아이디는 공백없이 10자 이하, 특수문자는 사용불가합니다.
-          </Text> */}
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.infoTitle}>비밀번호</Text>
           <TextInput
             style={styles.inputArea}
-            // onChangeText={}
-            // value={id}
             placeholder="비밀번호를 입력하세요."
+            onChange={onChangePw}
+            returnKeyType="next"
+            onSubmitEditing={() => ref_input3.current.focus()}
+            ref={ref_input2}
           />
           <TextInput
             style={styles.inputArea}
-            // onChangeText={}
-            // value={id}
             placeholder="비밀번호를 한번 더 입력하세요."
+            onChange={onChangePwConfirm}
+            ref={ref_input3}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -67,8 +154,13 @@ const SignUp = () => {
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.infoTitle}>전화번호</Text>
-          <TextInput style={styles.inputArea} placeholder="010-1234-5678" />
+          <TextInput
+            style={styles.inputArea}
+            placeholder="010-1234-5678"
+            onChange={onChangePhoneNum}
+          />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.infoTitle}>지역</Text>
           <SelectList
@@ -132,7 +224,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 5,
-    // borderWidth: 1,
   },
   inputArea: {
     width: '100%',

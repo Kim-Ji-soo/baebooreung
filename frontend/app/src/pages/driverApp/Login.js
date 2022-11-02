@@ -6,8 +6,9 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Button,
 } from 'react-native';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+
 import CustomButton from '../../components/CustomButton';
 
 const Login = () => {
@@ -36,9 +37,12 @@ const Login = () => {
           <Text>회원이 아니신가요?</Text>
         </View>
         <View>
-          <TouchableOpacity>
-            <Text>회원가입</Text>
-          </TouchableOpacity>
+          <Pressable
+            onPress={() => {
+              console.log('pressed');
+            }}>
+            <Text style={{color: 'blue'}}>회원가입</Text>
+          </Pressable>
         </View>
       </View>
       <View style={styles.btnArea}>
