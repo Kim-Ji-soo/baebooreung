@@ -37,7 +37,7 @@ class UserControllerTest {
 //        ResponseEntity<ResponseUser> result = userController.getUser(id);
 //        System.out.println(result);
 
-        mvc.perform(get(BASE_URL + "/user"+id))
+        mvc.perform(get("/user"+id)) //BASE_URL
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 

@@ -111,5 +111,9 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = mapper.map(userEntity, UserDto.class);
         return userDto;
     }
+
+    public void logout(String token){
+
+    }
 }
 

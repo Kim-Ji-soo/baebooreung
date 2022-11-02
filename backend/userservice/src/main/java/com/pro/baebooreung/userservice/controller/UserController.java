@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,21 @@ public class UserController {
         ResponseUser user = userService.getUserById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping("/api/logout")
+    public ResponseEntity<?> logout(@RequestHeader(value="token") String token) {
+       userService.
+        try {
+            memberService.logoutMember(refreshToken);
+            message.setStatus(StatusEnum.OK);
+            message.setMessage("로그아웃 성공");
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        } catch (Exception e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage("ACCESS TOKEN이 일치하지 않습니다.");
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 }
 
