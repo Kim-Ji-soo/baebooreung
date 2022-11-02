@@ -17,7 +17,7 @@ public class GpsController {
 
     private final GpsService gpsService;
 
-    @PostMapping("/api/gps")
+    @PostMapping("/kafka/gps")
     public ResponseEntity<?> gpsSave(@RequestBody GpsSaveDto gpsSaveDto){
         try {
             log.info("userId : {}", gpsSaveDto.getUserId());
