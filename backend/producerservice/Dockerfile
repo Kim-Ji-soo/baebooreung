@@ -7,11 +7,11 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
-CMD ["./gradlew", "clean", "build"]
+RUN ./gradlew clean build
 RUN ./gradlew bootJar
+
+COPY build/libs/target/*.jar app.jar
 EXPOSE 8082
-ARG JAR_FILE=./build/libs/*.jar
-COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 ENV TZ=Asiz/Seoul
 RUN apt-get install -y tzdata
