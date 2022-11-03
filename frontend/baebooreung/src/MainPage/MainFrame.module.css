@@ -1,0 +1,47 @@
+.main_logo_image {
+  width:150px;
+  height:150px;
+  padding-bottom:20px;
+  margin:20px;
+}
+
+.button_style {
+  padding-left:30px;
+  padding-bottom:20px;
+  text-align:start;
+  background-color : transparent;
+  border: 0;
+  outline:0;
+  color: white;
+  font-size:20px;
+  display: flex;
+  align-items: center;
+  font-family: 'BMHANNAAir';
+}
+
+.main_frame_logo_image {
+  width:30px;
+  height:30px;
+}
+
+.main_display_flex {
+  display:flex;
+  font-family: "BMJUA";
+}
+
+.main_display_flex_direction_col {
+  display:flex;
+  flex-direction: column;
+}
+
+.main_justify_content_space_between {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #0F1839;
+  width:220px;
+}
+
+.main_content {
+  background-color: aqua;
+}
