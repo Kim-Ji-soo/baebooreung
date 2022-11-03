@@ -1,9 +1,14 @@
 package com.pro.baebooreung.userservice.service;
 
+import com.pro.baebooreung.userservice.domain.Grade;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -28,10 +34,24 @@ public class UserServiceImpl implements UserService {
 
     Environment env;
 //    RestTemplate restTemplate;
-
 //    OrderServiceClient orderServiceClient;
-
 //    CircuitBreakerFactory circuitBreakerFactory;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository,
+                           BCryptPasswordEncoder passwordEncoder,
+                           Environment env
+//                           RestTemplate restTemplate,
+//                           OrderServiceClient orderServiceClient,
+//                           CircuitBreakerFactory circuitBreakerFactory
+    ) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.env = env;
+//        this.restTemplate = restTemplate;
+//        this.orderServiceClient = orderServiceClient;
+//        this.circuitBreakerFactory = circuitBreakerFactory;
+    }
 
     public ResponseUser getUserById(int id) {
         UserEntity userEntity = userRepository.findById(id);
@@ -58,21 +78,7 @@ public class UserServiceImpl implements UserService {
                 new ArrayList<>()); //로그인되었을 때 그다음에 할 수 있는 작업 중 권한 추가하는 작업넣을 것
     }
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           BCryptPasswordEncoder passwordEncoder,
-                           Environment env
-//                           RestTemplate restTemplate,
-//                           OrderServiceClient orderServiceClient,
-//                           CircuitBreakerFactory circuitBreakerFactory
-    ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.env = env;
-//        this.restTemplate = restTemplate;
-//        this.orderServiceClient = orderServiceClient;
-//        this.circuitBreakerFactory = circuitBreakerFactory;
-    }
+
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -84,6 +90,7 @@ public class UserServiceImpl implements UserService {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         //전달받은 userDto 값을 UserEntity로 변환
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+        if(userEntity.getGrade()==Grade.DRIVER) userEntity.setGrade(Grade.UNAUTHORIZED); // 드라이버로 가입한 사람은 임시권한
         userEntity.setEncryptedPwd(passwordEncoder.encode(userDto.getPassword())); // 비밀번호 암호화
 
         userRepository.save(userEntity);
@@ -112,8 +119,15 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
-    public void logout(String token){
+    public ResponseUser setUsertoDriver(int id){
+        UserEntity findUser = userRepository.findById(id);
+        findUser.setGrade(Grade.DRIVER);
+        userRepository.save(findUser);
 
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        ResponseUser responseUser = mapper.map(findUser, ResponseUser.class);
+        return responseUser;
     }
 }
 

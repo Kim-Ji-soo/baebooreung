@@ -50,9 +50,8 @@ public class UserController {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto userDto = mapper.map(user, UserDto.class);
-        System.out.println(userDto.toString());
+
         UserDto response = userService.createUser(userDto);
-        System.out.println(response.toString());
 
         //반환값 설정정
        ResponseUser responseUser = mapper.map(response, ResponseUser.class);
@@ -63,10 +62,12 @@ public class UserController {
     @GetMapping("/users") //회원정보 얻어오기
     public ResponseEntity<List<ResponseUser>> getUserList() {
         Iterable<UserEntity> userList = userService.getUserByAll();
-
+        System.out.println(userList.toString());
         List<ResponseUser> result = new ArrayList<>();
         userList.forEach(v -> {
-            result.add(new ModelMapper().map(v, ResponseUser.class));
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            result.add(mapper.map(v, ResponseUser.class));
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -79,19 +80,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @GetMapping("/api/logout")
-    public ResponseEntity<?> logout(@RequestHeader(value="token") String token) {
-       userService.
-        try {
-            memberService.logoutMember(refreshToken);
-            message.setStatus(StatusEnum.OK);
-            message.setMessage("로그아웃 성공");
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
-        } catch (Exception e){
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage("ACCESS TOKEN이 일치하지 않습니다.");
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        }
+//    @GetMapping("/api/logout")
+//    public ResponseEntity<?> logout(@RequestHeader(value="token") String token) {
+//        //근데 그냥 토큰이 로그인 할 떄마다 발급되는데 내가 없애줄 게 있나? 강제로 만료하게 하는 것도 불가능 하잖아
+//    }
+
+    @PutMapping("/authdriver/{id}") //관리자가 가입한 사람 드라이버라고 인증해주기
+    public ResponseEntity<ResponseUser> authDriver(@PathVariable int id) {
+        ResponseUser user = userService.setUsertoDriver(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }
 
