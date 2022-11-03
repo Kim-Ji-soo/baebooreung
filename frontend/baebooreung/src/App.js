@@ -2,9 +2,9 @@ import React from 'react';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import NaverMapApi from './navermap/NaverMapApi';
+// import NaverMapApi from './navermap/NaverMapApi';
 import Page404 from './Page404';
-import MainPage from './mainpagesub/MainPage';
+// import MainPage from './mainpagesub/MainPage';
 // import Testpage from './testpage';
 import Login from './loginpage/login';
 
