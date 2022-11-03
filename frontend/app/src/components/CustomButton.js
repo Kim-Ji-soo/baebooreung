@@ -1,6 +1,9 @@
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 
 const CustomButton = props => {
+  const pressHandler = () => {
+    props.onPress(props.data);
+  };
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
@@ -9,7 +12,7 @@ const CustomButton = props => {
             ? [styles.buttonInnerContainer, styles.pressed]
             : styles.buttonInnerContainer
         }
-        // onPress={pressHandler}
+        onPress={pressHandler}
         android_ripple={{color: '#999999'}}>
         <Text style={styles.buttonText}>{props.children}</Text>
       </Pressable>

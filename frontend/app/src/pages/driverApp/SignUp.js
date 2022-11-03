@@ -11,15 +11,18 @@ import CustomButton from '../../components/CustomButton';
 import SelectList from 'react-native-dropdown-select-list';
 import {isEmail, isPhoneNumber} from '../../utils/auth';
 import {isPassword} from '../../utils/auth';
+import {join} from '../../api/auth';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const SignUp = () => {
-  // dropdown 관련 state,
-  const [selected, setSelected] = useState('');
-  const [region, setRegion] = useState('');
-  const dropdown = [
+  // grade 관련 state,
+  const [selectedGrade, setSelectedGrade] = useState('1');
+  const grade = [
     {key: '1', value: 'MANAGER'},
     {key: '2', value: 'DRIVER'},
   ];
+
+  const [region, setRegion] = useState(null);
   const regionDrop = [
     {key: '1', value: '서울대학교'},
     {key: '2', value: '연세대학교'},
@@ -38,6 +41,7 @@ const SignUp = () => {
   // id(email), password, passwordConfirm
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   // message state
@@ -58,6 +62,17 @@ const SignUp = () => {
   const ref_input4 = useRef();
   const ref_input5 = useRef();
 
+  // 회원가입 API props
+  const signupAPI = join; // 회원가입 API sign이라는 변수에 할당 // 안하면 undefined!
+  const joinProps = {
+    email: id,
+    password: password,
+    name: name,
+    grade: grade[selectedGrade].value,
+    phone: phoneNumber,
+    region: parseInt(region),
+  };
+
   // !! event.nativeEvent.text -> react.js의 event.target.value !!
   // 아이디(이메일) 유효성 검사
   const onChangeId = event => {
@@ -76,7 +91,7 @@ const SignUp = () => {
   // 비밀번호 유효성 검사
   const onChangePw = event => {
     const PW = event.nativeEvent.text;
-    if (isPassword(password)) {
+    if (isPassword(PW)) {
       // 유효성 통과 시 true 반환
       setPwMessage('올바른 비밀번호입니다.');
       setPassword(PW);
@@ -92,21 +107,21 @@ const SignUp = () => {
   // 비밀번호 확인 유효성 검사(password랑 confirmPassword가 같은지 만 확인)
   const onChangePwConfirm = event => {
     const CONFIRM = event.nativeEvent.text;
-    setConfirmPassword(CONFIRM);
     // console.log(CONFIRM === password);
     if (CONFIRM === password) {
-      setPwConfirmMessage('비밀번호가 일치합니다.');
+      setConfirmPassword(CONFIRM);
       setIsPasswordConfirm(true);
+      setPwConfirmMessage('비밀번호가 일치합니다.');
     } else {
-      setPwConfirmMessage('비밀번호가 일치하지 않습니다.');
       setIsPasswordConfirm(false);
+      setPwConfirmMessage('비밀번호가 일치하지 않습니다.');
     }
     // console.log(isPasswordConfirm, '-', pwConfirmMessage);
   };
   const onChangePhoneNum = event => {
     const NUMBER = event.nativeEvent.text;
-    setPhoneNumber(event.nativeEvent.text);
     if (isPhoneNumber(NUMBER)) {
+      setPhoneNumber(NUMBER);
       setPhoneNumMessage('올바른 전화번호입니다.');
       setIsPhoneNum(true);
     } else {
@@ -114,6 +129,11 @@ const SignUp = () => {
       setPhoneNumMessage('000-0000-0000 형식으로 입력해주세요.');
     }
   };
+  const onChangeName = event => {
+    const NAME = event.nativeEvent.text;
+    setName(NAME);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -141,16 +161,26 @@ const SignUp = () => {
             onSubmitEditing={() => ref_input3.current.focus()}
             ref={ref_input2}
           />
+          <Text>{pwMessage}</Text>
           <TextInput
             style={styles.inputArea}
             placeholder="비밀번호를 한번 더 입력하세요."
             onChange={onChangePwConfirm}
             ref={ref_input3}
+            returnKeyType="next"
+            onSubmitEditing={() => ref_input4.current.focus()}
           />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.infoTitle}>이름</Text>
-          <TextInput style={styles.inputArea} placeholder="배부릉" />
+          <TextInput
+            style={styles.inputArea}
+            placeholder="배부릉"
+            onChange={onChangeName}
+            ref={ref_input4}
+            returnKeyType="next"
+            onSubmitEditing={() => ref_input5.current.focus()}
+          />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.infoTitle}>전화번호</Text>
@@ -158,6 +188,7 @@ const SignUp = () => {
             style={styles.inputArea}
             placeholder="010-1234-5678"
             onChange={onChangePhoneNum}
+            ref={ref_input5}
           />
         </View>
 
@@ -166,7 +197,6 @@ const SignUp = () => {
           <SelectList
             setSelected={setRegion}
             data={regionDrop}
-            onSelect={() => alert(region)}
             search={false}
             placeholder="지역을 선택하세요."
           />
@@ -174,18 +204,23 @@ const SignUp = () => {
         <View style={styles.inputContainer}>
           <Text style={styles.infoTitle}>회원 유형</Text>
           <SelectList
-            setSelected={setSelected}
-            data={dropdown}
-            onSelect={() => alert(selected)}
+            setSelected={setSelectedGrade}
+            onSelect={() => {
+              console.log(selectedGrade);
+            }}
+            data={grade}
             search={false}
             placeholder="유형을 선택하세요"
           />
         </View>
         <View style={styles.btnArea}>
-          <CustomButton style={styles.btn}>
+          <CustomButton style={styles.btn} onPress={signupAPI} data={joinProps}>
             <Text>회원가입</Text>
           </CustomButton>
         </View>
+        <Pressable onPress={() => console.log(joinProps)}>
+          <Text>데이터 보기</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

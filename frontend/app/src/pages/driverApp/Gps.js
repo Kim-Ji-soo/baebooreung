@@ -3,6 +3,8 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {requestLocationPermission} from '../../utils/permission';
 import Map from '../../components/Map';
+import {sendGps} from '../../api/kafka';
+
 const Gps = () => {
   const [location, setLocation] = useState(null);
   const [rtlocation, setRTLocation] = useState(false);
@@ -36,7 +38,6 @@ const Gps = () => {
               .split('.')[0]; // 2022-10-31T01:26:37
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-
             const data = {
               timestamp: date,
               latitude: latitude,
@@ -61,11 +62,26 @@ const Gps = () => {
   const initLocation = () => {
     setLocation(null);
   };
+  // useEffect(() => {
+  //   if (location !== false) {
+  //     getLocation();
+  //   }
+  // }, []);
+  const kafka = {
+    userId: 2,
+    latitude: rtlocation.latitude,
+    longitude: rtlocation.longitude,
+    requestDateTime: String(rtlocation.timestamp),
+  };
   useEffect(() => {
-    if (location !== false) {
-      getLocation();
-    }
+    getRTLocation();
   }, []);
+
+  useEffect(() => {
+    sendGps(kafka);
+    console.log(kafka);
+  }, [rtlocation]);
+
   return (
     <View style={styles.container}>
       {location ? (
