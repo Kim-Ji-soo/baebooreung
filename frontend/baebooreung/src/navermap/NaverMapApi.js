@@ -17,7 +17,7 @@ export default function NaverMapApi() {
 
   const headers = {
     "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID,
-    "X-NCP-APIGW-API-KEY" : X_NCP_APIGW_API_KEY
+    "X-NCP-APIGW-API-KEY": X_NCP_APIGW_API_KEY
   }
   const [start, setStart] = useState("126.8950,35.1790") // 출발지
   const waypoints1 = "126.8982,35.1786" // 킹스샌드
@@ -31,12 +31,12 @@ export default function NaverMapApi() {
   const waypoints9 = "126.9101,35.1813" // 생핼관4동입구
   const waypoints10 = "126.9109,35.1802" // 생핼관6동입구
   const waypoints11 = "126.8997,35.1765" // 8동생활관콜라자판기옆
-  
+
   let waypoints = []
 
   function make_waypoints() {
-    for (let i = 1 ; i <= 11 ; i ++) {
-      waypoints.push(eval('waypoints'+i))
+    for (let i = 1; i <= 11; i++) {
+      waypoints.push(eval('waypoints' + i))
     }
     waypoints = waypoints.join('|') + ':'
   }
@@ -57,8 +57,8 @@ export default function NaverMapApi() {
     }).then((res) => {
       console.log(res.data.route)
       const path = res.data.route.traoptimal[0].path
-      for (let i = 0; i <= path.length-1; i ++) {
-        course.push({lat:path[i][1],lng:path[i][0]})
+      for (let i = 0; i <= path.length - 1; i++) {
+        course.push({ lat: path[i][1], lng: path[i][0] })
       }
     })
     setTestCourse(course)
@@ -68,8 +68,8 @@ export default function NaverMapApi() {
       headers: headers
     }).then((res) => {
       const path_now = res.data.route.traoptimal[0].path
-      for (let j = 0; j <= path_now.length-1; j ++) {
-        course_now.push({lat:path_now[j][1],lng:path_now[j][0]})
+      for (let j = 0; j <= path_now.length - 1; j++) {
+        course_now.push({ lat: path_now[j][1], lng: path_now[j][0] })
       }
     })
     setTestCourseNow(course_now)
@@ -77,71 +77,74 @@ export default function NaverMapApi() {
 
   function translate_coordinate_lat_lng(payload) {
     const path = payload.split(',')
-    return {lat:parseFloat(path[1], 10),lng:parseFloat(path[0], 10)}
+    return { lat: parseFloat(path[1], 10), lng: parseFloat(path[0], 10) }
   }
 
   useEffect(() => {
+    console.log('asdfasdf')
     cal_course()
   }, [start])
 
-  return <div className={styles.App}>
-    <div className={styles.app_width}>
-      <div className={styles.app_color}>
-        <div className={styles.app_color_height}>
-          <div className={styles.app_color_white}>
-            <div>출발지좌표</div>
-            <input type="text" value={start} onChange={(e)=>{
-              setStart(e.target.value)
-            }} />
+  return <div>
+    <div className={styles.App}>
+      <div className={styles.app_width}>
+        <div className={styles.app_color}>
+          <div className={styles.app_color_height}>
+            <div className={styles.app_color_white}>
+              <div>출발지좌표</div>
+              <input type="text" value={start} onChange={(e) => {
+                setStart(e.target.value)
+              }} />
+            </div>
+            <div>{start}</div>
           </div>
-          <div>{start}</div>
         </div>
-      </div>
-      <NaverMap 
-        id='maps-examples-polyline'
-        style={{
-          width: '80%',
-          height: '100vh',
-        }}
-        center={translate_coordinate_lat_lng(start)}
-        zoom={16}
+        <NaverMap
+          id='maps-examples-polyline'
+          style={{
+            width: '100%',
+            height: '100vh',
+          }}
+          center={translate_coordinate_lat_lng(start)}
+          zoom={16}
         >
-        <Marker 
-          position={translate_coordinate_lat_lng(start)}
-          animation={1}
+          <Marker
+            position={translate_coordinate_lat_lng(start)}
+            animation={1}
           />
-        <Marker position={translate_coordinate_lat_lng(waypoints1)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints2)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints3)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints4)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints5)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints6)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints7)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints8)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints9)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints10)}/>
-        <Marker position={translate_coordinate_lat_lng(waypoints11)}/>
-        <Marker 
-          position={translate_coordinate_lat_lng(goal)}
-          animation={1}
+          <Marker position={translate_coordinate_lat_lng(waypoints1)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints2)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints3)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints4)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints5)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints6)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints7)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints8)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints9)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints10)} />
+          <Marker position={translate_coordinate_lat_lng(waypoints11)} />
+          <Marker
+            position={translate_coordinate_lat_lng(goal)}
+            animation={1}
           />
-        <Polyline 
-          path = {test_course}
-          strokeColor={'#000000'}
-          strokeStyle={'solid'}
-          strokeLineCap={'round'}
-          strokeOpacity={0.5}
-          strokeWeight={10}        
+          <Polyline
+            path={test_course}
+            strokeColor={'#000000'}
+            strokeStyle={'solid'}
+            strokeLineCap={'round'}
+            strokeOpacity={0.5}
+            strokeWeight={10}
           />
-        <Polyline
-          path = {test_course_now}
-          strokeColor={'red'}
-          strokeStyle={'solid'}
-          strokeLineCap={'round'}
-          strokeOpacity={1}
-          strokeWeight={10}        
+          <Polyline
+            path={test_course_now}
+            strokeColor={'red'}
+            strokeStyle={'solid'}
+            strokeLineCap={'round'}
+            strokeOpacity={1}
+            strokeWeight={10}
           />
-      </NaverMap>
+        </NaverMap>
+      </div>
     </div>
   </div>
 }
