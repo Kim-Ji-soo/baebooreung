@@ -8,7 +8,7 @@ FROM nginx:stable-alpine as production-stage
 
 COPY --from=build-stage /var/jenkins_home/workspace/baebooreung/frontend/baebooreung/build usr/share/nginx/html
 COPY --from=build-stage /var/jenkins_home/workspace/baebooreung/frontend/baebooreung/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-stage /var/jenkins_home/workspace/baebooreung/frontend/baebooreung/fullchain3.pem /etc/letsencrypt/live/k7c207.p.ssafy.io/fullchain3.pem
+COPY --from=build-stage /var/jenkins_home/workspace/baebooreung/frontend/baebooreung/fullchain3.pem /etc/letsencrypt/live/k7c207.p.ssafy.io/fullchain.pem
 
 EXPOSE 80
 ENTRYPOINT ["nginx", "-g","daemon off;"]
