@@ -1,11 +1,12 @@
 import React from 'react';
 
+import styles from './DashBoard.module.css'
+
 const DashBoard = () => {
   return (
-    <div>
-      대시보드입니다.
+    <div className={styles.background}>
     </div>
-  )
+  );
 }
 
 export default DashBoard;
