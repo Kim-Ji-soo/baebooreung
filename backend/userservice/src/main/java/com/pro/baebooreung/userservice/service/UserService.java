@@ -14,4 +14,6 @@ public interface UserService extends UserDetailsService {
     ResponseUser getUserById(int id);
 
     UserDto getUserDetailsByEmail(String userName);
+
+    ResponseUser setUsertoDriver(int id);
 }
