@@ -18,7 +18,7 @@ export default function App() {
           {/* <Route path="/" element={< />}/> */}
           
           {/* 로그인 + 비로그인 */}
-          <Route path="/" element={<MainPage/>}/>
+          {/* <Route path="/" element={<MainPage/>}/> */}
           <Route path="/admin/naver" element={<NaverMapApi/>}/>
           
           {/* 로그인  */}
