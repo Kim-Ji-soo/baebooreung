@@ -1,0 +1,11 @@
+.main_component {
+  background-color: blue;
+  color:white;
+  display: flex;
+}
+
+.menu_header {
+  background-color:"#0094EE";
+  margin:"20px";
+  margin-left:"0px";
+}
