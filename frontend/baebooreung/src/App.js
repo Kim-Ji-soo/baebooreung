@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import NaverMapApi from './navermap/NaverMapApi';
 import Page404 from './Page404';
-// import Main from './mainpage/Main';
+import MainPage from './mainpage/MainPage';
 
 export default function App() {
   
@@ -18,8 +18,8 @@ export default function App() {
           {/* <Route path="/" element={< />}/> */}
           
           {/* 로그인 + 비로그인 */}
-          {/* <Route path="/" element={<Main/>}/> */}
-          <Route path="/" element={<NaverMapApi/>}/>
+          <Route path="/" element={<MainPage/>}/>
+          <Route path="/admin/naver" element={<NaverMapApi/>}/>
           
           {/* 로그인  */}
 
