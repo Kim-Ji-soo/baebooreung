@@ -1,5 +1,7 @@
 package com.pro.baebooreung.apigatewayservice.filter;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -12,6 +14,8 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.Date;
 
 @Component
 @Slf4j
@@ -62,17 +66,19 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         boolean returnValue = true;
 
         String subject = null; // jwt에서 원했던 데이터 타입이 정상적인지 확인하는 것
-
+        Date expiration = null; // 만료일자내에 있는지 확인하는 것
         try {
             //subject 값 얻기
-            subject = Jwts.parser().setSigningKey(env.getProperty("token.secret"))
-                    .parseClaimsJws(jwt).getBody()
-                    .getSubject();
+            Claims claims = Jwts.parser().setSigningKey(env.getProperty("token.secret"))
+                    .parseClaimsJws(jwt).getBody();
+            subject = claims.getSubject();
+            expiration = claims.getExpiration();
+
         } catch (Exception ex) {
             returnValue = false;
         }
 
-        if (subject == null || subject.isEmpty()) { //null이거나 속이 비어있는지 확인
+        if (subject == null || subject.isEmpty() || expiration.before(new Date())) { //null이거나 속이 비어있거나 만료일자가 지나면 false
             returnValue = false;
         }
         //userId와 같은 값인지도 확인하면 좋음
