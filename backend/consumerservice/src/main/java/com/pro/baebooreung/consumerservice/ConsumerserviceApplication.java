@@ -20,14 +20,12 @@ public class ConsumerserviceApplication {
 
 	@KafkaListener(topics = "gps-kafka", groupId = "testgroups", containerFactory = "kafkaListener")
 	public void consume(GpsSaveDto gpsSaveDto){
-//		System.out.println("=========================");
-//		System.out.println(gpsSaveDto.toString());
-//		System.out.println("Received Message = "+ gpsSaveDto.toString());
-//		try {
-//			//kafkaConsumerService.consume(gpsSaveDto);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		System.out.println("Received Message = "+ gpsSaveDto.toString());
+		try {
+			kafkaConsumerService.consume(gpsSaveDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
