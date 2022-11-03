@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Page404 from './Page404';
 // import MainPage from './mainpagesub/MainPage';
 // import Testpage from './testpage';
-import Login from './loginpage/login';
+// import Login from './loginpage/login';
 
 function App() {
 
@@ -16,7 +16,8 @@ function App() {
 
   return (
     <div className="App" style={{ height: "100%" }}>
-      <Login></Login>
+      안녕하세요? 빌드 테스트
+      {/* <Login></Login> */}
       {/* <BrowserRouter> */}
       {/* <Routes> */}
       {/* <Route path="/" element={< />}/> */}
