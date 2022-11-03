@@ -57,7 +57,7 @@ const MainFrame = ({ SetMainId }) => {
             &nbsp;&nbsp;&nbsp;채팅
           </button>
         </div>
-        <div className={styles.main_display_flex_direction_col}>
+        <div>
           <button className={styles.button_style}>
             <img
               className={styles.main_frame_logo_image}
@@ -67,6 +67,9 @@ const MainFrame = ({ SetMainId }) => {
             &nbsp;&nbsp;&nbsp;내 이름
             <img className={styles.main_frame_logo_image} src={logout} alt="" />
           </button>
+          <a href="#" class={styles.btn5}>
+            Button 5
+          </a>
         </div>
       </div>
     </div>
