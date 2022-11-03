@@ -1,12 +1,5 @@
-.main_logo_image {
-  width:200px;
-  height:200px;
-}
-
-.main {
-  display:flex;
-}
-
-.main_content {
-  background-color: aqua;
+.main_component {
+  background-color: blue;
+  color:white;
+  display: flex;
 }

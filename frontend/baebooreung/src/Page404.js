@@ -1,4 +1,8 @@
+import styles from'./Page404.module.css'
+
 const Page404 = () => {
-return <div className="page404">404 Page</div>;
+return <div className={styles.page404}>
+    404 Page
+  </div>;
 };
 export default Page404;
