@@ -69,7 +69,6 @@ const MainFrame = ({ SetMainId }) => {
           </button>
         </div>
       </div>
-      <div className={styles.main_content}></div>
     </div>
   );
 };

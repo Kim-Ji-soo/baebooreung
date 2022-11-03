@@ -22,11 +22,11 @@
 .main_frame_logo_image {
   width:30px;
   height:30px;
+  justify-content: center;
 }
 
 .main_display_flex {
   display:flex;
-  font-family: "BMJUA";
 }
 
 .main_display_flex_direction_col {
