@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import NaverMapApi from './navermap/NaverMapApi';
+// import NaverMapApi from './navermap/NaverMapApi';
 import Page404 from './Page404';
-import MainPage from './mainpagesub/MainPage';
+// import MainPage from './mainpagesub/MainPage';
+import Testpage from './testpage';
 
 function App() {
   
@@ -18,8 +19,9 @@ function App() {
           {/* <Route path="/" element={< />}/> */}
           
           {/* 로그인 + 비로그인 */}
-          <Route path="/" element={<MainPage/>}/>
-          <Route path="/admin/naver" element={<NaverMapApi/>}/>
+          {/* <Route path="/" element={<MainPage/>}/> */}
+          <Route path="/" element={<Testpage></Testpage>}></Route>
+          {/* <Route path="/admin/naver" element={<NaverMapApi/>}/> */}
           
           {/* 로그인  */}
 
@@ -27,7 +29,7 @@ function App() {
           {/* 비로그인  */}
           
           
-          <Route path="*" element={<Page404/>}/>
+          {/* <Route path="*" element={<Page404/>}/> */}
         </Routes>
       </BrowserRouter> 
 
