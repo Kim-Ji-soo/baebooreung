@@ -16,19 +16,20 @@ function App() {
 
   return (
     <div className="App" style={{ height: "100%" }}>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="/" element={< />}/> */}
-          <Route path="/" element={<Login />} />
-          {/* 로그인 + 비로그인 */}
-          {/* <Route path="/main" element={<MainPage />} /> */}
-          {/* <Route path="/" element={<Testpage></Testpage>}></Route> */}
-          {/* <Route path="/admin/naver" element={<NaverMapApi />} /> */}
-          {/* 로그인  */}
-          {/* 비로그인  */}
-          <Route path="*" element={<Page404 />} />
-        </Routes>
-      </BrowserRouter>
+      <Login></Login>
+      {/* <BrowserRouter> */}
+      {/* <Routes> */}
+      {/* <Route path="/" element={< />}/> */}
+      {/* <Route path="/" element={<Login />} /> */}
+      {/* 로그인 + 비로그인 */}
+      {/* <Route path="/main" element={<MainPage />} /> */}
+      {/* <Route path="/" element={<Testpage></Testpage>}></Route> */}
+      {/* <Route path="/admin/naver" element={<NaverMapApi />} /> */}
+      {/* 로그인  */}
+      {/* 비로그인  */}
+      {/* <Route path="*" element={<Page404 />} /> */}
+      {/* </Routes> */}
+      {/* </BrowserRouter> */}
     </div>
   );
 }
