@@ -1,4 +1,5 @@
 .main_component {
-  display:flex;
-  flex-direction: row;
+  background-color: blue;
+  color:white;
+  display: flex;
 }

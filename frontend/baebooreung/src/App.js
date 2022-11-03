@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import NaverMapApi from './NaverMap/NaverMapApi';
+import NaverMapApi from './navermap/NaverMapApi';
 import Page404 from './Page404';
-import Main from './MainPage/Main';
+import Main from './mainpage/Main';
 
 export default function App() {
   
@@ -19,7 +19,7 @@ export default function App() {
           
           {/* 로그인 + 비로그인 */}
           <Route path="/" element={<Main/>}/>
-          <Route path="/naver" element={<NaverMapApi/>}/>
+          <Route path="/admin/naver" element={<NaverMapApi/>}/>
           
           {/* 로그인  */}
 
@@ -27,7 +27,7 @@ export default function App() {
           {/* 비로그인  */}
           
           
-          <Route path="/page404" element={<Page404/>}/>
+          <Route path="*" element={<Page404/>}/>
         </Routes>
       </BrowserRouter> 
 
