@@ -1,7 +1,7 @@
 import styles from "./MainFrame.module.css";
 import "../assets/styles/font.css";
 
-import React, { useEffect } from "react";
+import React, { useEffect, Link } from "react";
 
 import logo from "../assets/images/logo_short_stroke.png";
 import dashboard from "../assets/images/dashboard.png";
@@ -11,7 +11,7 @@ import chat from "../assets/images/chat.png";
 import logout from "../assets/images/logout.png";
 import profile from "../assets/images/profile.png";
 
-const MainFrame = ({ setMainId }) => {
+const MainFrame = ({ setMainId, changeMenuHeader }) => {
 
   function changeBackground(id) {
     document.getElementById('button_1').className=styles.button_style
@@ -25,12 +25,13 @@ const MainFrame = ({ setMainId }) => {
     <div className={styles.main_display_flex} style={{ height: "100%" }}>
       <div className={styles.main_justify_content_space_between}>
         <div className={styles.main_display_flex_direction_col}>
-          <img className={styles.main_logo_image} src={logo} alt="" />
+          <a href="/"><img className={styles.main_logo_image} src={logo} alt="" /></a>
           <button id="button_1"
-            className={styles.button_style}
+            className={styles.button_style_pick}
             onClick={() => {
               setMainId(0);
               changeBackground('button_1');
+              changeMenuHeader(0);
             }}
           >
             <img
@@ -45,6 +46,7 @@ const MainFrame = ({ setMainId }) => {
             onClick={() => {
               setMainId(1);
               changeBackground('button_2');
+              changeMenuHeader(1);
             }}
           >
             <img className={styles.main_frame_logo_image} src={map} alt="" />
@@ -55,6 +57,7 @@ const MainFrame = ({ setMainId }) => {
             onClick={() => {
               setMainId(2);
               changeBackground('button_3');
+              changeMenuHeader(2);
             }}
           >
             <img className={styles.main_frame_logo_image} src={notice} alt="" />
@@ -65,6 +68,7 @@ const MainFrame = ({ setMainId }) => {
             onClick={() => {
               setMainId(3);
               changeBackground('button_4');
+              changeMenuHeader(3);
             }}
           >
             <img className={styles.main_frame_logo_image} src={chat} alt="" />
@@ -80,9 +84,6 @@ const MainFrame = ({ setMainId }) => {
             />
             &nbsp;&nbsp;&nbsp;내 이름
             <img className={styles.main_frame_logo_image} src={logout} alt="" />
-          </button>
-          <button class={styles.btn5}>
-            Button 5
           </button>
         </div>
       </div>
