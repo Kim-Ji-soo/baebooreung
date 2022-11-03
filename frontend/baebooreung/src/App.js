@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import NaverMapApi from './navermap/NaverMapApi';
 import Page404 from './Page404';
-import MainPage from './mainpage/MainPage';
+import MainPage from './mainpagesub/MainPage';
 
-export default function App() {
+function App() {
   
   // useEffect(() => {
   //   document.body.style.height = document.body.scrollHeight < window.innerHeight ? window.innerHeight + 'px' : document.body.scrollHeight + 'px'
@@ -18,7 +18,7 @@ export default function App() {
           {/* <Route path="/" element={< />}/> */}
           
           {/* 로그인 + 비로그인 */}
-          {/* <Route path="/" element={<MainPage/>}/> */}
+          <Route path="/" element={<MainPage/>}/>
           <Route path="/admin/naver" element={<NaverMapApi/>}/>
           
           {/* 로그인  */}
@@ -34,3 +34,4 @@ export default function App() {
     </div>
   );
 }
+export default App;
