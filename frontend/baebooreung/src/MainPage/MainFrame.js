@@ -2,6 +2,7 @@ import styles from "./MainFrame.module.css";
 import "../assets/styles/font.css";
 
 import React, { useEffect } from "react";
+
 import logo from "../assets/images/logo_short_stroke.png";
 import dashboard from "../assets/images/dashboard.png";
 import notice from "../assets/images/notice.png";
