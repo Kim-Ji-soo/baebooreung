@@ -88,7 +88,7 @@ export default function NaverMapApi() {
   return <div>
     <div className={styles.App}>
       <div className={styles.app_width}>
-        <div className={styles.app_color}>
+        {/* <div className={styles.app_color}>
           <div className={styles.app_color_height}>
             <div className={styles.app_color_white}>
               <div>출발지좌표</div>
@@ -98,12 +98,12 @@ export default function NaverMapApi() {
             </div>
             <div>{start}</div>
           </div>
-        </div>
+        </div> */}
         <NaverMap
           id='maps-examples-polyline'
           style={{
-            width: '100%',
-            height: '100vh',
+            width: '80%',
+            height: '80vh',
           }}
           center={translate_coordinate_lat_lng(start)}
           zoom={16}
