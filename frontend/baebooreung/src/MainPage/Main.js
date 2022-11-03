@@ -1,31 +1,37 @@
-import styles from '../MainPage/Main.module.css';
+import styles from './Main.module.css';
 
 import { useState } from 'react';
 
 import MainFrame from "./MainFrame";
 import DashBoard from "./DashBoard";
 import Chatting from "./Chatting";
-import DriverPosition from "./DriverPosition";
+import Notice from "./Notice";
+import NaverMapApi from '../navermap/NaverMapApi';
 
 const Main = () => {
+  // console.log('')
   const [MainId, setactiveId] = useState(0);
   const clickhandler = (Id) => {
-    setactiveId(Id); 
+    setactiveId(Id);
   }
 
   const contents = {
     0: <DashBoard />,
-    1: <Chatting />,
-    2: <DriverPosition />,
+    1: <NaverMapApi />,
+    2: <Notice />,
+    3: <Chatting />
   }
 
   return (
-    <div className={styles.main_component} style={{height:"100%"}}>
-      <div>
-        <MainFrame SetMainId={clickhandler}/>
-      </div>
-      <div>
-        {contents[MainId]}
+    <div style={{ height: "100%" }}>
+      <div style={{ display: "flex" }}>
+        <div>
+          <MainFrame SetMainId={clickhandler} />
+        </div>
+        <div style={{ width: "100%" }}>
+          <div style={{backgroundColor:"aqua", margin:"30px", marginLeft:"0px"}}>안녕하세요?</div>
+          {contents[MainId]}
+        </div>
       </div>
     </div>
   );
