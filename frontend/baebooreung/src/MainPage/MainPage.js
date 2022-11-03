@@ -1,4 +1,4 @@
-import styles from './Main.module.css';
+import styles from './MainPage.module.css';
 
 import { useState } from 'react';
 
@@ -8,7 +8,7 @@ import Chatting from "./Chatting";
 import Notice from "./Notice";
 import NaverMapApi from '../navermap/NaverMapApi';
 
-const Main = () => {
+const MainPage = () => {
   // console.log('')
   const [MainId, setactiveId] = useState(0);
   const clickhandler = (Id) => {
@@ -40,4 +40,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainPage;
