@@ -31,6 +31,9 @@ const Main = () => {
         <div style={{ width: "100%" }}>
           <div style={{backgroundColor:"aqua", margin:"30px", marginLeft:"0px"}}>안녕하세요?</div>
           {contents[MainId]}
+          <a href="#" class={styles.btn5}>
+            Button 5
+          </a>
         </div>
       </div>
     </div>
