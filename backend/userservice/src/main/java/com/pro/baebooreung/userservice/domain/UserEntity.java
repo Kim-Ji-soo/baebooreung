@@ -21,13 +21,15 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String userId; // bearer token을 위한 랜덤값
 
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
+
     @Column(nullable = false, unique = true)
     private String encryptedPwd; // 암호화된 비밀번호
 
     private String profile;
 
-    @Enumerated(EnumType.STRING)
-    private Grade grade;
+
 
     private String phone;
 
