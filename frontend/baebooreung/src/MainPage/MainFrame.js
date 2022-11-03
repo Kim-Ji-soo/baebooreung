@@ -67,9 +67,7 @@ const MainFrame = ({ SetMainId }) => {
             &nbsp;&nbsp;&nbsp;내 이름
             <img className={styles.main_frame_logo_image} src={logout} alt="" />
           </button>
-          <a href="#" class={styles.btn5}>
-            Button 5
-          </a>
+
         </div>
       </div>
     </div>
