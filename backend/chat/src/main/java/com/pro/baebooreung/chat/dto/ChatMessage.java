@@ -33,5 +33,5 @@ public class ChatMessage {
     private String roomId; //방번호
     private String sender; //메시지 보낸 사람
     private String message; // 메시지
-    private long userCount; //채팅방 인원 수, 채팅방 내에서 미시지가 전달될때 인원수 갱신시 사용
+    private long userCount; //채팅방 인원 수, 채팅방 내에서 메시지가 전달될때 인원수 갱신시 사용
 }
