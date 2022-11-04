@@ -1,9 +1,11 @@
 package com.pro.baebooreung.userservice.service;
 
+import com.pro.baebooreung.userservice.client.BusinessServiceClient;
 import com.pro.baebooreung.userservice.domain.Grade;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.UserDto;
+import com.pro.baebooreung.userservice.vo.ResponseRoute;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,34 +37,39 @@ public class UserServiceImpl implements UserService {
 
     Environment env;
 //    RestTemplate restTemplate;
-//    OrderServiceClient orderServiceClient;
+    BusinessServiceClient businessServiceClient;
 //    CircuitBreakerFactory circuitBreakerFactory;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder passwordEncoder,
-                           Environment env
+                           Environment env,
 //                           RestTemplate restTemplate,
-//                           OrderServiceClient orderServiceClient,
+                              BusinessServiceClient businessServiceClient
 //                           CircuitBreakerFactory circuitBreakerFactory
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
 //        this.restTemplate = restTemplate;
-//        this.orderServiceClient = orderServiceClient;
+        this.businessServiceClient=businessServiceClient;
 //        this.circuitBreakerFactory = circuitBreakerFactory;
     }
 
-    public ResponseUser getUserById(int id) {
+    public UserDto getUserById(int id) {
         UserEntity userEntity = userRepository.findById(id);
 
         if (userEntity == null) throw new UsernameNotFoundException(id + ": not found");
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        ResponseUser responseUser = mapper.map(userEntity, ResponseUser.class);
-        return responseUser;
+        UserDto response = mapper.map(userEntity, UserDto.class);
+
+        /* feign client */
+        List<ResponseRoute> routeList = businessServiceClient.getRouteByUserNDate(id);
+        response.setRouteList(routeList);
+
+        return response;
     }
 
 
