@@ -45,9 +45,8 @@ export default function NaverMapApi() {
 
   const goal = "126.9108,35.1804" // 생활관5동입구
 
-  // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
-  const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
-  const url2 = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  // const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
 
   const [test_course, setTestCourse] = useState([])
@@ -55,7 +54,6 @@ export default function NaverMapApi() {
 
   async function cal_course() {
     const course = []
-    const course2 = []
     await axios.get(url, {
       headers: headers
     }).then((res) => {
@@ -68,19 +66,6 @@ export default function NaverMapApi() {
       console.log(course)
     })
     setTestCourse(course)
-
-    await axios.get(url2, {
-      headers: headers
-    }).then((res) => {
-      console.log(res)
-      console.log(res.data.route)
-      const path2 = res.data.route.traoptimal[0].path
-      for (let i = 0; i <= path2.length - 1; i++) {
-        course2.push({ lat: path2[i][1], lng: path2[i][0] })
-      }
-      console.log(course2)
-    })
-    
 
     const course_now = []
     await axios.get(url_now, {
