@@ -1,5 +1,6 @@
 package com.pro.baebooreung.businessservice.service;
 
+import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.domain.repository.RouteRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,10 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public void getRouteByUserNDate(int userId, Data date){
-//        routeRepository.findByUserId
+    public Iterable<Route> getRouteByUserNDate(int userId){//}, Data date){
+        Iterable<Route> routeEntityList = routeRepository.findByUserId(userId);
 
-
+        return routeEntityList;
+//        routeEntityList.forEach();
     }
 }

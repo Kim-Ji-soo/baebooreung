@@ -4,6 +4,7 @@ import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.service.UserService;
 import com.pro.baebooreung.userservice.vo.Greeting;
+import com.pro.baebooreung.userservice.vo.RequestNaverMap;
 import com.pro.baebooreung.userservice.vo.RequestUser;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
 import org.modelmapper.ModelMapper;
@@ -44,9 +45,12 @@ public class UserController {
     RestTemplate restTemplate;
 
     @GetMapping("/map")
-    public ResponseEntity<Object> getData() {
+    public ResponseEntity<Object> getData(@RequestBody RequestNaverMap request) {
         String url =
-                "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=126.8982,35.1786&goal=126.9108,35.1804&waypoints=126.8982,35.1786|126.9043,35.1777|126.903,35.1777|126.9028,35.1779|126.9021,35.1774|126.9011,35.1779|126.9012,35.1798|126.9029,35.1807|126.9101,35.1813|126.9109,35.1802|126.8997,35.1765:&option=%22trafast%22";
+                "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start="+request.getStart()
+                        +"&goal="+request.getGoal()
+                        +"&option="+request.getOption()
+                        +"&waypoints="+request.getWaypoints();
         //Spring restTemplate
         HashMap<String, Object> result = new HashMap<String, Object>();
         ResponseEntity<Object> resultMap = new ResponseEntity<>(null,null,200);
@@ -131,9 +135,9 @@ public class UserController {
 
     @GetMapping("/user/{id}") //회원정보 얻어오기
     public ResponseEntity<ResponseUser> getUser(@PathVariable int id) {
-        ResponseUser user = userService.getUserById(id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        UserDto user = userService.getUserById(id);
+        ResponseUser result = new ModelMapper().map(user,ResponseUser.class);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 //    @GetMapping("/api/logout")
