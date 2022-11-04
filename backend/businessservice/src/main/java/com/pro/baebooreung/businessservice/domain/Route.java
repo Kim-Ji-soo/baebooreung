@@ -25,7 +25,7 @@ public class Route {
 //    private User user;
 
     @Column(name = "user_id")
-    private int user_id; //사용자 id(토큰관련아니고 리얼 id)
+    private int userId; //사용자 id(토큰관련아니고 리얼 id)
 
     @Column(name = "delivery_datetime", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
