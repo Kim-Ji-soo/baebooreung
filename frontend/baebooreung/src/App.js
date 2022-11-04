@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 // import NaverMapApi from './navermap/NaverMapApi';
 // import Page404 from './Page404';
@@ -18,7 +18,6 @@ function App() {
     <div className="App" style={{ height: "100%" }}>
       안녕하세요? 여긴 App.js
       <Login></Login>
-      {/* <BrowserRouter> */}
       {/* <Routes> */}
       {/* <Route path="/" element={< />}/> */}
       {/* <Route path="/" element={<Login />} /> */}
@@ -30,7 +29,6 @@ function App() {
       {/* 비로그인  */}
       {/* <Route path="*" element={<Page404 />} /> */}
       {/* </Routes> */}
-      {/* </BrowserRouter> */}
     </div>
   );
 }
