@@ -45,8 +45,8 @@ export default function NaverMapApi() {
 
   const goal = "126.9108,35.1804" // 생활관5동입구
 
-  const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
-  // const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
 
   const [test_course, setTestCourse] = useState([])
@@ -63,7 +63,6 @@ export default function NaverMapApi() {
       for (let i = 0; i <= path.length - 1; i++) {
         course.push({ lat: path[i][1], lng: path[i][0] })
       }
-      console.log(course)
     })
     setTestCourse(course)
 
@@ -75,7 +74,6 @@ export default function NaverMapApi() {
       for (let j = 0; j <= path_now.length - 1; j++) {
         course_now.push({ lat: path_now[j][1], lng: path_now[j][0] })
       }
-      console.log(course_now)
     })
     setTestCourseNow(course_now)
   }
