@@ -8,6 +8,11 @@ group = 'com.pro.baebooreung'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+bootJar {
+	archivesBaseName = 'businessService'
+	archiveFileName = 'businessService.jar'
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -26,10 +31,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'mysql:mysql-connector-java'
+
+	//discovery service에 내가 클라이언트라고 등록하기 위함
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//다른 ms와 통신하기 위함
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
+	//매핑을 간편하게 하기 위함
+	implementation 'org.modelmapper:modelmapper:3.1.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

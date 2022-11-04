@@ -35,6 +35,11 @@ public class Route {
     @Enumerated(EnumType.STRING)
     private RouteType routeType;
 
+    @Column(name = "route_name", nullable = false)
+    private String routeName;
+
+    private boolean done; //완료된 업무인지 체크
+
     @Builder.Default
     @OneToMany(mappedBy = "delivery",cascade = CascadeType.ALL)
     private List<Delivery> deliveryList = new ArrayList<>();
