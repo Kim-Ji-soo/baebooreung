@@ -1,8 +1,11 @@
 import React from "react";
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { NaverMap, Polyline, Marker } from 'react-naver-maps'
+import { RenderAfterNavermapsLoaded, NaverMap, Polyline, Marker } from 'react-naver-maps'
 import styles from './NaverMapApi.module.css'
+import axios from 'axios';
+import jsonpAdapter from 'axios-jsonp';
+
+
 
 // 출발지 | 1, 2, 3, 4, 5 ~ 11번까지 경유지 | 도착지가 있음
 // 출발지에서 출발하다가, 다음 경유지에 도달(root(x*2+y*2) <= 오차범위)하면 다음 목적지는 체크된다.
@@ -10,10 +13,10 @@ import styles from './NaverMapApi.module.css'
 // goal에 도달하면 특정 이벤트 발생
 
 export default function NaverMapApi() {
-  // const X_NCP_APIGW_API_KEY_ID = "i3oq00t777"
-  // const X_NCP_APIGW_API_KEY = "SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG"
-  const X_NCP_APIGW_API_KEY_ID = "g05t2a43ik"
-  const X_NCP_APIGW_API_KEY = "K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt"
+  const X_NCP_APIGW_API_KEY_ID = "i3oq00t777"
+  const X_NCP_APIGW_API_KEY = "SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG"
+  // const X_NCP_APIGW_API_KEY_ID = "g05t2a43ik"
+  // const X_NCP_APIGW_API_KEY = "K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt"
 
   const headers = {
     "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID,
@@ -44,7 +47,9 @@ export default function NaverMapApi() {
 
   const goal = "126.9108,35.1804" // 생활관5동입구
 
-  const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
+  const url = `https://naveropenapi.apigw.ntruss.com//map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
 
   const [test_course, setTestCourse] = useState([])
@@ -52,9 +57,12 @@ export default function NaverMapApi() {
 
   async function cal_course() {
     const course = []
-    await axios.get(url, {
-      headers: headers
+    axios({
+      url: url,
+      headers:headers,
+      adaptor: jsonpAdapter,
     }).then((res) => {
+      console.log(res)
       console.log(res.data.route)
       const path = res.data.route.traoptimal[0].path
       for (let i = 0; i <= path.length - 1; i++) {
@@ -63,16 +71,29 @@ export default function NaverMapApi() {
     })
     setTestCourse(course)
 
-    const course_now = []
-    await axios.get(url_now, {
-      headers: headers
-    }).then((res) => {
-      const path_now = res.data.route.traoptimal[0].path
-      for (let j = 0; j <= path_now.length - 1; j++) {
-        course_now.push({ lat: path_now[j][1], lng: path_now[j][0] })
-      }
-    })
-    setTestCourseNow(course_now)
+    // await axios.get(url, {
+    //   headers: headers
+    // }).then((res) => {
+    //   console.log(res)
+    //   console.log(res.data.route)
+    //   const path = res.data.route.traoptimal[0].path
+    //   for (let i = 0; i <= path.length - 1; i++) {
+    //     course.push({ lat: path[i][1], lng: path[i][0] })
+    //   }
+    //   console.log(process.env.REACT_APP_DB_HOST)
+    // })
+    // setTestCourse(course)
+
+    // const course_now = []
+    // await axios.get(url_now, {
+    //   headers: headers
+    // }).then((res) => {
+    //   const path_now = res.data.route.traoptimal[0].path
+    //   for (let j = 0; j <= path_now.length - 1; j++) {
+    //     course_now.push({ lat: path_now[j][1], lng: path_now[j][0] })
+    //   }
+    // })
+    // setTestCourseNow(course_now)
   }
 
   function translate_coordinate_lat_lng(payload) {
@@ -81,37 +102,36 @@ export default function NaverMapApi() {
   }
 
   useEffect(() => {
-    console.log('asdfasdf')
     cal_course()
   }, [start])
 
   return <div>
     <div className={styles.App}>
       <div className={styles.app_width}>
-        <div className={styles.app_color}>
+        {/* <div className={styles.app_color}>
           <div className={styles.app_color_height}>
-            <div className={styles.app_color_white}>
-              <div>출발지좌표</div>
-              <input type="text" value={start} onChange={(e) => {
-                setStart(e.target.value)
-              }} />
-            </div>
-            <div>{start}</div>
+          <div className={styles.app_color_white}>
+          <div>출발지좌표</div>
+          <input type="text" value={start} onChange={(e) => {
+            setStart(e.target.value)
+          }} />
           </div>
-        </div>
+          <div>{start}</div>
+          </div>
+        </div> */}
         <NaverMap
           id='maps-examples-polyline'
           style={{
-            width: '100%',
-            height: '100vh',
+            width: '80%',
+            height: '80vh',
           }}
           center={translate_coordinate_lat_lng(start)}
           zoom={16}
-        >
+          >
           <Marker
             position={translate_coordinate_lat_lng(start)}
             animation={1}
-          />
+            />
           <Marker position={translate_coordinate_lat_lng(waypoints1)} />
           <Marker position={translate_coordinate_lat_lng(waypoints2)} />
           <Marker position={translate_coordinate_lat_lng(waypoints3)} />
@@ -126,7 +146,7 @@ export default function NaverMapApi() {
           <Marker
             position={translate_coordinate_lat_lng(goal)}
             animation={1}
-          />
+            />
           <Polyline
             path={test_course}
             strokeColor={'#000000'}
@@ -134,7 +154,7 @@ export default function NaverMapApi() {
             strokeLineCap={'round'}
             strokeOpacity={0.5}
             strokeWeight={10}
-          />
+            />
           <Polyline
             path={test_course_now}
             strokeColor={'red'}
@@ -142,9 +162,10 @@ export default function NaverMapApi() {
             strokeLineCap={'round'}
             strokeOpacity={1}
             strokeWeight={10}
-          />
+            />
         </NaverMap>
       </div>
     </div>
   </div>
+
 }
