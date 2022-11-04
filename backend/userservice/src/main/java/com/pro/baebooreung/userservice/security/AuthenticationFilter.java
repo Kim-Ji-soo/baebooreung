@@ -71,7 +71,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User)authResult.getPrincipal()).getUsername(); // 사용자 userName 추출
         UserDto userDetails = userService.getUserDetailsByEmail(userName);
         String token = Jwts.builder()
-                .setSubject(userDetails.getUserId()) //이걸 갖고 토큰 만들 것임
+                .setSubject(userDetails.getSpecialKey()) //이걸 갖고 토큰 만들 것임
                 .setExpiration(new Date(System.currentTimeMillis() +
                         Long.parseLong(env.getProperty("token.expiration_time")))) // 하루짜리 토큰(properties에 써았음
                         // application에 써있는 건 전부 String 형으로 가져오기 떄문에 Long으로 parse 해줌
@@ -79,7 +79,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         response.addHeader("token", token); // 헤더에 위에 만들어진 토큰을 token이란 이름으로 넣을 것
-        response.addHeader("userId", userDetails.getUserId()); //토큰 확인을 위해 userId 같이 넣음
+        response.addHeader("specialKey", userDetails.getSpecialKey()); //토큰 확인을 위해 userId 같이 넣음
         response.addIntHeader("id",userDetails.getId()); // 사람 id 값 헤더에 같이 보내주기
 
     }
