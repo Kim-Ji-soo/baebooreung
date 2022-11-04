@@ -19,7 +19,7 @@ public class UserEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String userId; // bearer token을 위한 랜덤값
+    private String specialKey; // bearer token을 위한 랜덤값
 
     @Enumerated(EnumType.STRING)
     private Grade grade;
