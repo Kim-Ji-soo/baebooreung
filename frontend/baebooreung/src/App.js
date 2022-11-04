@@ -18,10 +18,10 @@ function App() {
     <div className="App" style={{ height: "100%" }}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<MainPage />} />
           {/* <Route path="/" element={< />}/> */}
           {/* 로그인 + 비로그인 */}
-          <Route path="/main" element={<MainPage />} />
+          {/* <Route path="/main" element={<MainPage />} /> */}
           {/* <Route path="/" element={<Testpage></Testpage>}></Route> */}
           <Route path="/admin/naver" element={<NaverMapApi />} />
           {/* 로그인  */}
