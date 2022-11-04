@@ -7,7 +7,7 @@ public class ResponseUser {
     private String id;
     private String email;
     private String name;
-    private String userId;
+    private String specialKey;
     private String grade;
 
 }
