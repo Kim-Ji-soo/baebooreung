@@ -31,6 +31,7 @@ public class RedisConfig {
     public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory,
                                                               MessageListenerAdapter listenerAdapter,
                                                               ChannelTopic channelTopic){
+        System.out.println("Redis에 발행(publish)된 메시지 처리를 위한 리스너 설정");
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.addMessageListener(listenerAdapter, channelTopic);
@@ -42,6 +43,7 @@ public class RedisConfig {
      */
     @Bean
     public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber){
+        System.out.println("실제 메시지를 처리하는 subscriber 설정 추가");
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 
@@ -50,6 +52,7 @@ public class RedisConfig {
      */
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory){
+        System.out.println("Redis pub/sub 메시지를 처리하는 listener 설정");
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         return container;
