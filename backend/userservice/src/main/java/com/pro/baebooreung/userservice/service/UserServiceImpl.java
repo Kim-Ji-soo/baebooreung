@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        userDto.setUserId(UUID.randomUUID().toString());
+        userDto.setSpecialKey(UUID.randomUUID().toString());
 
         //길게 set하지 않고 간편하게 쓰는 법
         ModelMapper mapper = new ModelMapper();
