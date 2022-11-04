@@ -24,7 +24,7 @@ public class ChatController {
     @ApiOperation(value = "메시지를 보낸다.",notes = "채팅방에 구독되어 있는 사용자들에게 메시지를 보낸다.")
     @MessageMapping("/chat/message")
     public void message(ChatMessage message){
-
+        System.out.println("메세지 보냄");
         //채팅방 인원수 세팅
         message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
         //web socket에 발행된 메시지를 redis로 발행(publish)

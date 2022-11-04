@@ -45,6 +45,7 @@ public class ChatRoomRepository {
     public ChatRoom createChatRoom(String name){
             ChatRoom chatRoom = ChatRoom.create(name);
             hashOpsChatroom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+            System.out.println("채팅방 생성됨");
             return chatRoom;
      }
 
@@ -52,6 +53,7 @@ public class ChatRoomRepository {
      * 유저가 입장한 채팅방 id와 유저 세션 id 맵핑 정보 저장
      */
     public void setUserEnterInfo(String sessionId, String roomId){
+        System.out.println("set user enter info");
         hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);
     }
 
