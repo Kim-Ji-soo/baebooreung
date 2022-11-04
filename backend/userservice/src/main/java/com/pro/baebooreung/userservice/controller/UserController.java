@@ -10,12 +10,17 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -27,11 +32,62 @@ public class UserController {
     private Environment env;
     private UserService userService;
 
+
+
     @Autowired //이건 생성자로 따로 빼서 하는게 좋음. 바로 @Autowired쓰기보다는.
     public UserController(Environment env, UserService userService) {
         this.env = env;
         this.userService = userService;
     }
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @GetMapping("/map")
+    public ResponseEntity<Object> getData() {
+        String url =
+                "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=126.8982,35.1786&goal=126.9108,35.1804&waypoints=126.8982,35.1786|126.9043,35.1777|126.903,35.1777|126.9028,35.1779|126.9021,35.1774|126.9011,35.1779|126.9012,35.1798|126.9029,35.1807|126.9101,35.1813|126.9109,35.1802|126.8997,35.1765:&option=%22trafast%22";
+        //Spring restTemplate
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        ResponseEntity<Object> resultMap = new ResponseEntity<>(null,null,200);
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders header = new HttpHeaders();
+            header.add("X-NCP-APIGW-API-KEY-ID","i3oq00t777");
+            header.add("X-NCP-APIGW-API-KEY","SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG");
+            HttpEntity<?> entity = new HttpEntity<>(header);
+
+            UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
+
+            resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Object.class);
+
+            result.put("statusCode", resultMap.getStatusCodeValue()); //http status code를 확인
+            result.put("header", resultMap.getHeaders()); //헤더 정보 확인
+            result.put("body", resultMap.getBody()); //실제 데이터 정보 확인
+
+            //에러처리해야댐
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            result.put("statusCode", e.getRawStatusCode());
+            result.put("body"  , e.getStatusText());
+            System.out.println("error");
+            System.out.println(e.toString());
+
+            return resultMap;
+        }
+        catch (Exception e) {
+            result.put("statusCode", "999");
+            result.put("body"  , "excpetion오류");
+            System.out.println(e.toString());
+
+            return resultMap;
+
+        }
+
+        return resultMap;
+    }
+
 
     @GetMapping("/welcome")
     public String welcome(){
