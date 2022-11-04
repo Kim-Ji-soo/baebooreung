@@ -1,12 +1,10 @@
 import styles from './login.module.css'
 import new_logo from '../assets/images/new_logo.png'
 
-console.log('다슬이바보')
-
 const Login = () => {
   return <div className={styles.login_page}>
     <img src={new_logo} alt="" />
-    로그인 페이지
+    안녕하세요? 여긴 로그인 페이지
   </div>
 }
 
