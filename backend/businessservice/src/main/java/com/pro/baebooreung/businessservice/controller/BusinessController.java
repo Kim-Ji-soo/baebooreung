@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/business-service")
+@RequestMapping("/")
 public class BusinessController {
 
     RouteService routeService;
