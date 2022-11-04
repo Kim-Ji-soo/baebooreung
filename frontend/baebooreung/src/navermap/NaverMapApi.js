@@ -1,8 +1,10 @@
 import React from "react";
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { RenderAfterNavermapsLoaded, NaverMap, Polyline, Marker } from 'react-naver-maps'
 import styles from './NaverMapApi.module.css'
+import axios from 'axios';
+import jsonpAdapter from 'axios-jsonp';
+
 
 
 // 출발지 | 1, 2, 3, 4, 5 ~ 11번까지 경유지 | 도착지가 있음
@@ -47,7 +49,7 @@ export default function NaverMapApi() {
 
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
-  const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  const url = `https://naveropenapi.apigw.ntruss.com//map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
 
   const [test_course, setTestCourse] = useState([])
@@ -55,8 +57,10 @@ export default function NaverMapApi() {
 
   async function cal_course() {
     const course = []
-    await axios.get(url, {
-      headers: headers
+    axios({
+      url: url,
+      headers:headers,
+      adaptor: jsonpAdapter,
     }).then((res) => {
       console.log(res)
       console.log(res.data.route)
@@ -67,16 +71,29 @@ export default function NaverMapApi() {
     })
     setTestCourse(course)
 
-    const course_now = []
-    await axios.get(url_now, {
-      headers: headers
-    }).then((res) => {
-      const path_now = res.data.route.traoptimal[0].path
-      for (let j = 0; j <= path_now.length - 1; j++) {
-        course_now.push({ lat: path_now[j][1], lng: path_now[j][0] })
-      }
-    })
-    setTestCourseNow(course_now)
+    // await axios.get(url, {
+    //   headers: headers
+    // }).then((res) => {
+    //   console.log(res)
+    //   console.log(res.data.route)
+    //   const path = res.data.route.traoptimal[0].path
+    //   for (let i = 0; i <= path.length - 1; i++) {
+    //     course.push({ lat: path[i][1], lng: path[i][0] })
+    //   }
+    //   console.log(process.env.REACT_APP_DB_HOST)
+    // })
+    // setTestCourse(course)
+
+    // const course_now = []
+    // await axios.get(url_now, {
+    //   headers: headers
+    // }).then((res) => {
+    //   const path_now = res.data.route.traoptimal[0].path
+    //   for (let j = 0; j <= path_now.length - 1; j++) {
+    //     course_now.push({ lat: path_now[j][1], lng: path_now[j][0] })
+    //   }
+    // })
+    // setTestCourseNow(course_now)
   }
 
   function translate_coordinate_lat_lng(payload) {
