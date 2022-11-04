@@ -46,6 +46,7 @@ export default function NaverMapApi() {
   const goal = "126.9108,35.1804" // 생활관5동입구
 
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
+  // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
   const url = `/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
 
