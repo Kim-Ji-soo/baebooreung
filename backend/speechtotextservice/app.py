@@ -10,9 +10,8 @@ def hello_world():
 def run_quickstart(audio_file):
     # [START speech_quickstart]
     import io
-    #import os
-
-    #os.environ['GOOGLE_APPLICATION_CREDENTIALS']="/jenkins/baebooreung-credential.json"
+    import os
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS']="/jenkins/baebooreung-credential.json"
     # Imports the Google Cloud client library
     # [START migration_import]
     from google.cloud import speech
@@ -25,7 +24,7 @@ def run_quickstart(audio_file):
 
     # The name of the audio file to transcribe
     file_name = os.path.join(
-        "/var/jenkins_home/baebooreung-credential.json",
+        os.path.dirname(__file__),
         '.',
         'voice.mp3')
 
