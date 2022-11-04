@@ -1,7 +1,8 @@
 package com.pro.baebooreung.businessservice.service;
 
+import com.pro.baebooreung.businessservice.domain.Route;
 import lombok.Data;
 
 public interface RouteService {
-    public void getRouteByUserNDate(int userId, Data date);
+    public Iterable<Route> getRouteByUserNDate(int userId);//, Data date);
 }
