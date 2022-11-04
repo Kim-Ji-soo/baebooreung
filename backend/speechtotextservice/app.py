@@ -11,7 +11,7 @@ def run_quickstart(audio_file):
     # [START speech_quickstart]
     import io
     import os
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS']="/jenkins/baebooreung-credential.json"
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS']="/var/jenkins_home/baebooreung-credential.json"
     # Imports the Google Cloud client library
     # [START migration_import]
     from google.cloud import speech
