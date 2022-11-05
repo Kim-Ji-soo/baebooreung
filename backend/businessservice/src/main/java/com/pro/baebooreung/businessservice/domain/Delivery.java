@@ -1,16 +1,14 @@
 package com.pro.baebooreung.businessservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "delivery")
 public class Delivery {
     @Id
@@ -37,10 +35,22 @@ public class Delivery {
     private boolean checkIn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(referencedColumnName = "id",name = "routeId")
     private Route route;
 
-    @Builder.Default
+//    @Builder.Default
     @OneToMany(mappedBy = "delivery",cascade = CascadeType.ALL)
     private List<Order> orderList = new ArrayList<>();
+
+    //builder에 id 안넣음
+    @Builder
+    public Delivery(String address, double latitude, double longitude, int sequence, Type type, boolean checkIn, Route route) {
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.sequence = sequence;
+        this.type = type;
+        this.checkIn = checkIn;
+        this.route = route;
+    }
 }
