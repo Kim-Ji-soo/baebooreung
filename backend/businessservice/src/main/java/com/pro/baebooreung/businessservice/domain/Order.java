@@ -1,9 +1,6 @@
 package com.pro.baebooreung.businessservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -12,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@NoArgsConstructor
-@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "order")
 public class Order {
     @Id
@@ -47,12 +43,22 @@ public class Order {
     private LocalDateTime pickupTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(referencedColumnName = "id",name = "deliveryId")
     private Delivery delivery;
 
-    @Builder.Default
+//    @Builder.Default
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderMenu> orderMenuList = new ArrayList<>();
 
-
+    @Builder
+    public Order(String customerId, String customerName, String customerPhone, Restaurant restaurant, String address, LocalDateTime deliveryTime, LocalDateTime pickupTime, Delivery delivery) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.restaurant = restaurant;
+        this.address = address;
+        this.deliveryTime = deliveryTime;
+        this.pickupTime = pickupTime;
+        this.delivery = delivery;
+    }
 }
