@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "route")
 public class Route {
     @Id
@@ -40,7 +38,16 @@ public class Route {
 
     private boolean done; //완료된 업무인지 체크
 
-    @Builder.Default
+//    @Builder.Default
     @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
     private List<Delivery> deliveryList = new ArrayList<>();
+
+    @Builder
+    public Route(int userId, LocalDateTime deliveryDateTime, RouteType routeType, String routeName, boolean done) {
+        this.userId = userId;
+        this.deliveryDateTime = deliveryDateTime;
+        this.routeType = routeType;
+        this.routeName = routeName;
+        this.done = done;
+    }
 }

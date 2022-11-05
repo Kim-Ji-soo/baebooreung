@@ -1,16 +1,12 @@
 package com.pro.baebooreung.businessservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-//@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "restaurant")
 public class Restaurant {
     @Id
@@ -32,4 +28,13 @@ public class Restaurant {
 
     @Column(name = "phone", nullable = false)
     private String phone;
+
+    @Builder
+    public Restaurant(String name, double latitude, double longitude, String address, String phone) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.phone = phone;
+    }
 }

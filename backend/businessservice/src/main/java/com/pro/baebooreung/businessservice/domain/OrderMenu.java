@@ -1,16 +1,12 @@
 package com.pro.baebooreung.businessservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "ordermenu")
 public class OrderMenu {
     @Id
@@ -19,7 +15,7 @@ public class OrderMenu {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(referencedColumnName = "id",name = "orderId")
     private Order order;
 
     @Column(name="menu", nullable = false)
@@ -27,4 +23,11 @@ public class OrderMenu {
 
     @Column(name="number", nullable = false)
     private int number;
+
+    @Builder
+    public OrderMenu(Order order, String menu, int number) {
+        this.order = order;
+        this.menu = menu;
+        this.number = number;
+    }
 }
