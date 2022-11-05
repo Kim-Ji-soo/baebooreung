@@ -28,7 +28,7 @@ public class Route {
     private int userId; //사용자 id(토큰관련아니고 리얼 id)
 
     @Column(name = "delivery_datetime", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime deliveryDateTime;
 
     @Column(name = "route_type", nullable = false)
@@ -41,6 +41,6 @@ public class Route {
     private boolean done; //완료된 업무인지 체크
 
     @Builder.Default
-    @OneToMany(mappedBy = "delivery",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
     private List<Delivery> deliveryList = new ArrayList<>();
 }
