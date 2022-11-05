@@ -40,7 +40,7 @@ public class Route {
 
     private boolean done; //완료된 업무인지 체크
 
-    @Builder.Default
-    @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
-    private List<Delivery> deliveryList = new ArrayList<>();
+//    @Builder.Default
+//    @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
+//    private List<Delivery> deliveryList = new ArrayList<>();
 }
