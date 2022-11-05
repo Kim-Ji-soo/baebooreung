@@ -44,6 +44,6 @@ public class Delivery {
     private Route route;
 
     @Builder.Default
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "delivery",cascade = CascadeType.ALL)
     private List<Order> orderList = new ArrayList<>();
 }

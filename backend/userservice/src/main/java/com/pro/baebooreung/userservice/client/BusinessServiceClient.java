@@ -10,6 +10,6 @@ import java.util.List;
 @FeignClient(name = "business-service")
 public interface BusinessServiceClient {
 
-    @GetMapping("/business-service/{userId}/routes")
+    @GetMapping("/{userId}/routes")
     List<ResponseRoute> getRouteByUserNDate(@PathVariable("userId") int userId);
 }
