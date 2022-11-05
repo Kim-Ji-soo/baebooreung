@@ -40,7 +40,7 @@ public class Delivery {
     private boolean checkIn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "route_id")
+    @JoinColumn(name = "id")
     private Route route;
 
     @Builder.Default
