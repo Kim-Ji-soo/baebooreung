@@ -38,6 +38,7 @@ public class BusinessController {
         routeList.forEach(v ->{
             result.add(new ModelMapper().map(v,ResponseRoute.class));
         });
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>without bootjar");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

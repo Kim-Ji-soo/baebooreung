@@ -40,15 +40,15 @@ public class Order {
     private String address;
 
     @Column(name="delivery_time", nullable = false)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deliveryTime;
 
     @Column(name="pickup_time", nullable = false)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime pickupTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_id")
+    @JoinColumn(name = "id")
     private Delivery delivery;
 
     @Builder.Default
