@@ -40,18 +40,20 @@ public class Order {
     private String address;
 
     @Column(name="delivery_time", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deliveryTime;
 
     @Column(name="pickup_time", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime pickupTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
-    private Delivery deliver;
+    private Delivery delivery;
 
     @Builder.Default
-    @OneToMany(mappedBy = "ordermenu",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderMenu> orderMenuList = new ArrayList<>();
+
+
 }
