@@ -3,17 +3,16 @@ package com.pro.baebooreung.businessservice.controller;
 import com.netflix.discovery.converters.Auto;
 import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.service.RouteService;
+import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
 import com.pro.baebooreung.businessservice.vo.ResponseRoute;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +37,15 @@ public class BusinessController {
         routeList.forEach(v ->{
             result.add(new ModelMapper().map(v,ResponseRoute.class));
         });
-        System.out.println("----------------------------------without bootjar");
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     //한 루트
     //드라이버의 모든 루트들?
 
+//    @PostMapping("/check-in/{userId}")
+//    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckIn requestCheckIn){
+//        //userId를 받아서 그 사람의 userId에다가
+//    }
 }
