@@ -24,8 +24,9 @@ public class StompHandler implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-
+        System.out.println("presend");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        System.out.println("acceesor.getCommand = " + accessor.getCommand());
         if(StompCommand.CONNECT == accessor.getCommand()){ //웹 소켓 연결 요청
             System.out.println("웹 소켓 연결 요청");
         } else if(StompCommand.SUBSCRIBE == accessor.getCommand()){ // 채팅룸 구독 요청
