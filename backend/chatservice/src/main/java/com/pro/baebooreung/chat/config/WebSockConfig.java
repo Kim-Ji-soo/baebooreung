@@ -17,14 +17,14 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/sub");
-        config.setApplicationDestinationPrefixes("/pub");
+        config.enableSimpleBroker("/chat-service/sub");
+        config.setApplicationDestinationPrefixes("/chat-service/pub");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         System.out.println("register stomp end points");
-        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/chat-service/ws-stomp").setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override
