@@ -28,8 +28,21 @@ public class BusinessController {
         this.routeService=routeService;
     }
 
-    //드라이버의 해당하는 날짜의 루트들
+   //유저의 모든 루트들 가져오기
     @GetMapping("/{userId}/routes") ///{date}
+    public ResponseEntity<List<ResponseRoute>> getRouteByUser(@PathVariable("userId") int userId){//}, @PathVariable("date") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate dateTime){
+        List<ResponseRoute> routeList = routeService.getRouteByUser(userId);
+
+//        List<ResponseRoute> result = new ArrayList<>();
+//        routeList.forEach(v ->{
+//            result.add(new ModelMapper().map(v,ResponseRoute.class));
+//        });
+
+        return ResponseEntity.status(HttpStatus.OK).body(routeList);
+    }
+
+    //드라이버의 해당하는 날짜(?or 오늘???)의 루트들
+    @GetMapping("/{userId}/routes/today/done") ///{date}
     public ResponseEntity<List<ResponseRoute>> getRouteByUserNDate(@PathVariable("userId") int userId){//}, @PathVariable("date") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate dateTime){
         Iterable<Route> routeList = routeService.getRouteByUserNDate(userId);
 
@@ -40,7 +53,6 @@ public class BusinessController {
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
     //한 루트
     //드라이버의 모든 루트들?
 

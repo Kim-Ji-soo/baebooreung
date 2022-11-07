@@ -31,6 +31,7 @@ public class Delivery {
     private int sequence;
 
     @Column(name="type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     @Column(name="check", nullable = false)
