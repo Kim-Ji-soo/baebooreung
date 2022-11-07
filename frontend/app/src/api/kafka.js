@@ -17,6 +17,6 @@ export const sendGps = props => {
       console.log(res.data);
     })
     .catch(err => {
-      console.log(err);
+      console.log('src/api/kafka catch error => ', err);
     });
 };

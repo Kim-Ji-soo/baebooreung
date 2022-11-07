@@ -9,10 +9,9 @@ import {
 } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import SelectList from 'react-native-dropdown-select-list';
-import {isEmail, isPhoneNumber} from '../../utils/auth';
-import {isPassword} from '../../utils/auth';
-import {join} from '../../api/auth';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import {isEmail, isPhoneNumber} from '../../utils/inputCheck';
+import {isPassword} from '../../utils/inputCheck';
+import {user} from '../../api/api';
 
 const SignUp = () => {
   // grade 관련 state,
@@ -62,23 +61,32 @@ const SignUp = () => {
   const ref_input4 = useRef();
   const ref_input5 = useRef();
 
-  // 회원가입 API props
-  const signupAPI = join; // 회원가입 API sign이라는 변수에 할당 // 안하면 undefined!
-  const joinProps = {
-    email: id,
-    password: password,
-    name: name,
-    grade: grade[selectedGrade].value,
-    phone: phoneNumber,
-    region: parseInt(region),
+  // 회원가입 API
+  const join = async () => {
+    await axios({
+      method: 'POST',
+      url: user.join(),
+      data: {
+        email: id,
+        password: password,
+        name: name,
+        grade: grade[selectedGrade].value,
+        phone: phoneNumber,
+        region: parseInt(region), // type : int
+      },
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
-
   // !! event.nativeEvent.text -> react.js의 event.target.value !!
   // 아이디(이메일) 유효성 검사
   const onChangeId = event => {
     const ID = event.nativeEvent.text;
     if (isEmail(ID)) {
-      // 유효성 통과 시 true 반환
       setId(ID);
       setIdMessage('올바른 이메일 형식입니다.');
       setIsId(true);
@@ -86,13 +94,11 @@ const SignUp = () => {
       setIdMessage('이메일 형식으로 입력해주세요.');
       setIsId(false);
     }
-    // console.log(isId, '-', idMessage);
   };
   // 비밀번호 유효성 검사
   const onChangePw = event => {
     const PW = event.nativeEvent.text;
     if (isPassword(PW)) {
-      // 유효성 통과 시 true 반환
       setPwMessage('올바른 비밀번호입니다.');
       setPassword(PW);
       setIsPw(true);
@@ -102,12 +108,10 @@ const SignUp = () => {
       );
       setIsPw(false);
     }
-    // console.log(isPw, '-', pwMessage);
   };
   // 비밀번호 확인 유효성 검사(password랑 confirmPassword가 같은지 만 확인)
   const onChangePwConfirm = event => {
     const CONFIRM = event.nativeEvent.text;
-    // console.log(CONFIRM === password);
     if (CONFIRM === password) {
       setConfirmPassword(CONFIRM);
       setIsPasswordConfirm(true);
@@ -116,7 +120,6 @@ const SignUp = () => {
       setIsPasswordConfirm(false);
       setPwConfirmMessage('비밀번호가 일치하지 않습니다.');
     }
-    // console.log(isPasswordConfirm, '-', pwConfirmMessage);
   };
   const onChangePhoneNum = event => {
     const NUMBER = event.nativeEvent.text;
