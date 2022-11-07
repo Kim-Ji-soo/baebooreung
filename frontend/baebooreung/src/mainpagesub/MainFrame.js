@@ -3,7 +3,7 @@ import "../assets/styles/font.css";
 
 import React, { useEffect, Link } from "react";
 
-import logo from "../assets/images/logo_short_stroke.png";
+import logo from "../assets/images/new_logo_2.png";
 import dashboard from "../assets/images/dashboard.png";
 import notice from "../assets/images/notice.png";
 import map from "../assets/images/map.png";
