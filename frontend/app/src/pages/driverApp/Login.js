@@ -7,26 +7,53 @@ import {
   View,
   Pressable,
 } from 'react-native';
+
+// axios
+import axios from 'axios';
+import {user} from '../../api/api';
+// redux
+import {useDispatch} from 'react-redux';
+import {setUserInfo} from '../../redux/auth';
+//component and function
 import CustomButton from '../../components/CustomButton';
-import {login} from '../../api/auth';
-import {isEmail, isPassword} from '../../utils/auth';
+import {isEmail, isPassword} from '../../utils/inputCheck';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [idMessage, setIdMessage] = useState('');
   const [pwMessage, setPwMessage] = useState('');
-  const [isId, setIsId] = useState(false);
-  const [isPw, setIsPw] = useState(false);
-  const loginAPI = login;
-  const loginProps = {
-    email: id,
-    password: password,
+  // const [isId, setIsId] = useState(false);
+  // const [isPw, setIsPw] = useState(false);
+
+  const login = async () => {
+    await axios({
+      method: 'POST',
+      url: user.login(),
+      data: {
+        email: id,
+        password: password,
+      },
+    })
+      .then(res => {
+        //redux
+        dispatch(
+          setUserInfo({
+            id: res.headers.id,
+            accessToken: res.headers.token,
+            specialkey: res.headers.specialkey,
+          }),
+        );
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
+  // id 유효성 검사
   const onChangeId = event => {
     const ID = event.nativeEvent.text;
     if (isEmail(ID)) {
-      // 유효성 통과 시 true 반환
       setId(ID);
       setIdMessage('올바른 이메일 형식입니다.');
       setIsId(true);
@@ -34,13 +61,11 @@ const Login = () => {
       setIdMessage('이메일 형식으로 입력해주세요.');
       setIsId(false);
     }
-    // console.log(isId, '-', idMessage);
   };
   // 비밀번호 유효성 검사
   const onChangePw = event => {
     const PW = event.nativeEvent.text;
     if (isPassword(PW)) {
-      // 유효성 통과 시 true 반환
       setPwMessage('올바른 비밀번호입니다.');
       setPassword(PW);
       setIsPw(true);
@@ -50,7 +75,6 @@ const Login = () => {
       );
       setIsPw(false);
     }
-    // console.log(isPw, '-', pwMessage);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -84,7 +108,7 @@ const Login = () => {
         </View>
       </View>
       <View style={styles.btnArea}>
-        <CustomButton onPress={loginAPI} data={loginProps}>
+        <CustomButton onPress={login}>
           <Text>로그인</Text>
         </CustomButton>
       </View>
@@ -111,7 +135,6 @@ const styles = StyleSheet.create({
     height: '30%',
     width: '80%',
     marginBottom: 5,
-    // borderWidth: 1,
   },
   infoTitle: {
     fontWeight: '800',
