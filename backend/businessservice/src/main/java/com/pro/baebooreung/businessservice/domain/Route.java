@@ -43,11 +43,12 @@ public class Route {
     private List<Delivery> deliveryList = new ArrayList<>();
 
     @Builder
-    public Route(int userId, LocalDateTime deliveryDateTime, RouteType routeType, String routeName, boolean done) {
+    public Route(int userId, LocalDateTime deliveryDateTime, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
         this.userId = userId;
         this.deliveryDateTime = deliveryDateTime;
         this.routeType = routeType;
         this.routeName = routeName;
         this.done = done;
+        this.deliveryList = deliveryList;
     }
 }
