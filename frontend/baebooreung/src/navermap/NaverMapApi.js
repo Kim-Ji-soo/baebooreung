@@ -70,12 +70,13 @@ export default function NaverMapApi() {
     // })
     setTestCourse(course)
 
-    await axios.get("http://k7c207.p.ssafy.io:8000/user-service/map", {
+    await axios.get("https://k7c207.p.ssafy.io:8000/user-service/map", {
       data: {
         start:start,
         goal:goal,
         option:"trafast",
         waypoints:waypoints,
+
       }
     }).then((res) => {
       console.log(res)
