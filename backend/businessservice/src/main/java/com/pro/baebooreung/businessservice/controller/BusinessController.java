@@ -44,12 +44,12 @@ public class BusinessController {
     //드라이버의 해당하는 날짜(?or 오늘???)의 루트들
     @GetMapping("/{userId}/routes/today/done") ///{date}
     public ResponseEntity<List<ResponseRoute>> getRouteByUserNDate(@PathVariable("userId") int userId){//}, @PathVariable("date") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate dateTime){
-        Iterable<ResponseRoute> routeList = routeService.getRouteByUserNDate(userId);
+        List<ResponseRoute> result = routeService.getRouteByUserNDate(userId);
 
-        List<ResponseRoute> result = new ArrayList<>();
-        routeList.forEach(v ->{
-            result.add(new ModelMapper().map(v,ResponseRoute.class));
-        });
+//        List<ResponseRoute> result = new ArrayList<>();
+//        routeList.forEach(v ->{
+//            result.add(new ModelMapper().map(v,ResponseRoute.class));
+//        });
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
