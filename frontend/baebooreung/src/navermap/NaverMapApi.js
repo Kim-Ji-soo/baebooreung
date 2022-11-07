@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { RenderAfterNavermapsLoaded, NaverMap, Polyline, Marker } from 'react-naver-maps'
 import styles from './NaverMapApi.module.css'
 import axios from 'axios';
-import jsonpAdapter from 'axios-jsonp';
+// import jsonpAdapter from 'axios-jsonp';
 
 
 
@@ -13,15 +13,15 @@ import jsonpAdapter from 'axios-jsonp';
 // goal에 도달하면 특정 이벤트 발생
 
 export default function NaverMapApi() {
-  const X_NCP_APIGW_API_KEY_ID = "i3oq00t777"
-  const X_NCP_APIGW_API_KEY = "SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG"
+  // const X_NCP_APIGW_API_KEY_ID = "i3oq00t777"
+  // const X_NCP_APIGW_API_KEY = "SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG"
   // const X_NCP_APIGW_API_KEY_ID = "g05t2a43ik"
   // const X_NCP_APIGW_API_KEY = "K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt"
 
-  const headers = {
-    "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID,
-    "X-NCP-APIGW-API-KEY": X_NCP_APIGW_API_KEY
-  }
+  // const headers = {
+  //   "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID,
+  //   "X-NCP-APIGW-API-KEY": X_NCP_APIGW_API_KEY
+  // }
   const [start, setStart] = useState("126.8950,35.1790") // 출발지
   const waypoints1 = "126.8982,35.1786" // 킹스샌드
   const waypoints2 = "126.9043,35.1777" // 알촌
@@ -49,27 +49,43 @@ export default function NaverMapApi() {
 
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
-  const url = `https://naveropenapi.apigw.ntruss.com//map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
-  const url_now = `/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
-
+  const url = `http://k7c207.p.ssafy.io:8000/user-service/map`
+  
   const [test_course, setTestCourse] = useState([])
   const [test_course_now, setTestCourseNow] = useState([])
 
   async function cal_course() {
     const course = []
-    axios({
-      url: url,
-      headers:headers,
-      adaptor: jsonpAdapter,
+    // axios({
+    //   url: url,
+    //   headers:headers,
+    //   // adaptor: jsonpAdapter,
+    // }).then((res) => {
+    //   console.log(res)
+    //   console.log(res.data.route)
+      // const path = res.data.route.traoptimal[0].path
+      // for (let i = 0; i <= path.length - 1; i++) {
+      //   course.push({ lat: path[i][1], lng: path[i][0] })
+      // }
+    // })
+    setTestCourse(course)
+
+    await axios.get("https://k7c207.p.ssafy.io:8000/user-service/map", {
+      data: {
+        start:start,
+        goal:goal,
+        option:"trafast",
+        waypoints:waypoints,
+
+      }
     }).then((res) => {
       console.log(res)
-      console.log(res.data.route)
       const path = res.data.route.traoptimal[0].path
       for (let i = 0; i <= path.length - 1; i++) {
         course.push({ lat: path[i][1], lng: path[i][0] })
       }
+      setTestCourse(course)
     })
-    setTestCourse(course)
 
     // await axios.get(url, {
     //   headers: headers
