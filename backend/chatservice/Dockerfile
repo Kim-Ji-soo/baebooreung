@@ -1,5 +1,5 @@
 FROM openjdk:11-jdk
-WORKDIR /var/jenkins_home/workspace/baebooreung/backend/chat
+WORKDIR /var/jenkins_home/workspace/baebooreung/backend/chatservice
 # EXPOSE 8080
 CMD ["./gradlew", "clean", "build"]
 VOLUME /tmp
