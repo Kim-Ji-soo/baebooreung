@@ -18,6 +18,10 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	set('springCloudVersion', "2021.0.4")
+}
+
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
@@ -47,7 +51,23 @@ dependencies {
 
 	// Swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+	//MSA
+	//discovery service에 내가 클라이언트라고 등록하기 위함
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//다른 ms와 통신하기 위함
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
+	//매핑을 간편하게 하기 위함
+	implementation 'org.modelmapper:modelmapper:3.1.0'
+
 }
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()

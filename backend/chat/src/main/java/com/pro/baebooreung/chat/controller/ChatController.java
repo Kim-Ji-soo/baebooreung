@@ -19,7 +19,7 @@ public class ChatController {
     private final ChatService chatService;
 
     /**
-     * web socket "/api/pub/chat/messgage"로 들어오는 메시징을 처리한다.
+     * web socket "/CHAT/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @ApiOperation(value = "메시지를 보낸다.",notes = "채팅방에 구독되어 있는 사용자들에게 메시지를 보낸다.")
     @MessageMapping("/chat/message")
