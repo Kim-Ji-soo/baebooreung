@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/api/chat")
+@RequestMapping("/")
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -26,7 +26,7 @@ public class ChatRoomController {
 
     //모든 채팅방 목록 반환
     @ApiOperation(value = "모든 채탕방의 목록을 반환한다.",notes = "생성되어 있는 모든 채팅방의 리스트를 출력한다.")
-    @GetMapping("/rooms")
+    @GetMapping("/chat/rooms")
     @ResponseBody
     public List<ChatRoom> room(){
         List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
@@ -36,7 +36,7 @@ public class ChatRoomController {
 
     //채팅방 생성
     @ApiOperation(value = "채팅방을 생성한다.",notes = "채팅방의 name을 입력해 채팅방을 생성한다.")
-    @PostMapping("/room")
+    @PostMapping("/chat/room")
     @ResponseBody
     public ChatRoom createRoom(@RequestParam String name){
         return chatRoomRepository.createChatRoom(name);
@@ -52,7 +52,7 @@ public class ChatRoomController {
 
     //특정 채팅방 조회
     @ApiOperation(value = "특정 채팅방을 조회한다.",notes = "roomId에 해당하는 채팅방을 조회한다.")
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/chat/room/{roomId}")
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable String roomId){
         return chatRoomRepository.findRoomById(roomId);
