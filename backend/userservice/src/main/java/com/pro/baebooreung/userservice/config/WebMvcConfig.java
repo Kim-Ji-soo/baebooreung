@@ -12,8 +12,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${resources.location}")
     private String resourcesLocation;
-    @Value("${resources.uri_path:}")
-    private String resourcesUriPath;
+//    @Value("${resources.uri_path:}")
+//    private String resourcesUriPath;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
