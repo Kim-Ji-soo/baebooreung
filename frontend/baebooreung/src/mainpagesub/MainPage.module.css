@@ -1,31 +1,91 @@
-.main_component {
-  background-color: blue;
-  color:white;
-  display: flex;
+.menu_header_before {
+  position:absolute;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  top:0px;
+  left:0px;
+  margin-top:10px;
+  padding-right:20px;
+  padding-top: 20px;
+  padding-bottom:20px;
+  padding-left: 0px;
+  width:0%;
+  box-shadow: inset 0px 0px 0px #F5CC1F;
+  border-radius: 0px 20px 20px 0px;
+  /* margin: 0px 15px 15px 0px; */
+  color:gray;
+  font-family: "BMJUA";
+  font-size:30px;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu_header_after {
-  box-shadow: inset 100rem 0px 0px #0094EE;
+  position:absolute;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  top:0px;
+  left:0px;
+  margin-top:10px;
+  margin-right:100px;
+  padding-right:20px;
+  padding-top: 20px;
+  padding-bottom:20px;
+  padding-left: 280px;
+  /* 접기 */
+  /* padding-left: 20px; */
+  width:97%;
+  /* -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%; */
+  box-shadow: inset 1700px 0px 0px #F5CC1F;
+  /* 좌상, 우상, 우하, 좌하 */
   border-radius: 0px 20px 20px 0px;
-  padding:20px;
-  margin: 15px 30px 15px 0px;
-  color:white;
+  /* 상 우 하 좌 */
+  /* padding: 20px 0px 20px 20px;
+  margin: 0px 0px 0px 0px; */
+  color:black;
   font-family: "BMJUA";
   font-size:30px;
   align-items: center;
   justify-content: center;
-  -webkit-transition: all 2s cubic-bezier(.5, .24, 0, 1);
-  transition: all 2s cubic-bezier(.5, .24, 0, 1);
+  -webkit-transition: all 3s cubic-bezier(.5, .24, 0, 1);
+  transition: all 3s cubic-bezier(.5, .24, 0, 1);
 }
 
-.menu_header_before {
-  box-shadow: inset 0px 0px 0px #0094EE;
-  border-radius: 0px 20px 20px 0px;
-  padding:20px;
-  margin: 15px 30px 15px 0px;
-  color:white;
-  font-family: "BMJUA";
-  font-size:30px;
-  align-items: center;
-  justify-content: center;
+
+.menu_content {
+  /* 상 우 하 좌 */
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%;
+  height:100%;
+  padding-right: 3%;
+  padding-top: 110px;
+  padding-left: 280px;
+  /* 접기 처리 */
+  /* padding-left: 20px; */
+
+  background-color: white;
+}
+
+
+.fold_button {
+  position:absolute;
+  top:45%;
+  left:260px;
+  background-color: #0F1839;
+  background-color: #0F1839;
+  padding-top:10px;
+  padding-bottom:10px;
+  padding-right:5px;
+  padding-left:0px;
+  border-radius: 0px 10px 10px 0px;
+  opacity: 0.3;
+  cursor:pointer;
+  margin:0px;
+}
+
+.fold_button:hover {
+  opacity: 1;
 }
