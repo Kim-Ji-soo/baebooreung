@@ -56,14 +56,14 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public Iterable<ResponseRoute> getRouteByUserNDate(int userId){//}, Data date){
+    public List<ResponseRoute> getRouteByUserNDate(int userId){//}, Data date){
         //드라이버의 해당하는 날짜(?or 오늘???)의 done이 아닌 루트들
         Iterable<Route> routeEntityList = routeRepository.findByUserId(userId);
         List<ResponseRoute> responseRoutes = new ArrayList<>();
 
-        routeEntityList.forEach(v -> {
-            if(v.getDeliveryDateTime()==)
-        });
+//        routeEntityList.forEach(v -> {
+//            if(v.getDeliveryDateTime()==)
+//        });
 
 
         return responseRoutes;

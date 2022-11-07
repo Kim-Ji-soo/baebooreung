@@ -7,6 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 public interface RouteService {
-    public Iterable<Route> getRouteByUserNDate(int userId);//, Data date);
+//    public Iterable<Route> getRouteByUserNDate(int userId);//, Data date);
+    public List<ResponseRoute> getRouteByUserNDate(int userId);//, Data date);
     public List<ResponseRoute> getRouteByUser(int userId);
 }
