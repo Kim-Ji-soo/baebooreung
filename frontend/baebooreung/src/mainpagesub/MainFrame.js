@@ -3,12 +3,12 @@ import "../assets/styles/font.css";
 
 import React, { useEffect, Link } from "react";
 
-import logo from "../assets/images/logo_short_stroke.png";
+import logo from "../assets/images/new_logo_2.png";
 import dashboard from "../assets/images/dashboard.png";
 import notice from "../assets/images/notice.png";
 import map from "../assets/images/map.png";
 import chat from "../assets/images/chat.png";
-import logout from "../assets/images/logout.png";
+import logout from "../assets/images/logout_white.png";
 import profile from "../assets/images/profile.png";
 
 const MainFrame = ({ setMainId, changeMenuHeader }) => {
@@ -76,15 +76,17 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
           </button>
         </div>
         <div>
-          <button className={styles.button_style}>
+          <div className={styles.profile}>
             <img
               className={styles.main_frame_logo_image}
               src={profile}
               alt=""
             />
-            &nbsp;&nbsp;&nbsp;내 이름
-            <img className={styles.main_frame_logo_image} src={logout} alt="" />
-          </button>
+            &nbsp;&nbsp;&nbsp;내 이름&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button className={styles.button_style_profile}>
+              <img style={{width:"30px", height:"30px"}} src={logout} alt="" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
