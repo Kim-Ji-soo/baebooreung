@@ -16,6 +16,8 @@ public class Delivery {
     @Column(name = "id", nullable = false)
     private int id;
 
+    @Column(name = "del_name", nullable = true)
+    private String delName;
     @Column(name = "address", nullable = false)
     private String address;
 
@@ -25,14 +27,15 @@ public class Delivery {
     @Column(name ="longitude", nullable = false)
     private double longitude;
 
-    @Column(name = "seqeunce", nullable = false)
+    @Column(name = "sequence", nullable = false)
     private int sequence;
 
     @Column(name="type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Column(name="check_in", nullable = false)
-    private boolean checkIn;
+    @Column(name="check", nullable = false)
+    private boolean check;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id",name = "routeId")
@@ -44,13 +47,13 @@ public class Delivery {
 
     //builder에 id 안넣음
     @Builder
-    public Delivery(String address, double latitude, double longitude, int sequence, Type type, boolean checkIn, Route route) {
+    public Delivery(String address, double latitude, double longitude, int sequence, Type type, boolean check, Route route) {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
         this.sequence = sequence;
         this.type = type;
-        this.checkIn = checkIn;
+        this.check = check;
         this.route = route;
     }
 }
