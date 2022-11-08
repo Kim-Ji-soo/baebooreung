@@ -33,10 +33,10 @@ public class ChatService {
         chatMessage.setUserCount(chatRoomRepository.getUserCount(chatMessage.getRoomId()));
         if(ChatMessage.MessageType.ENTER.equals(chatMessage.getType())){
 //            chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
-            chatMessage.setSender("[알림]");
+            chatMessage.setSender(chatMessage.getSender());
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())){
 //            chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
-            chatMessage.setSender("[알림]");
+            chatMessage.setSender(chatMessage.getSender());
         }
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
