@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/")
+//@RequestMapping("/")
 public class ChatController {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatService chatService;
 
     /**
-     * web socket "/CHAT/pub/chat/message"로 들어오는 메시징을 처리한다.
+     * web socket "/api/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @ApiOperation(value = "메시지를 보낸다.",notes = "채팅방에 구독되어 있는 사용자들에게 메시지를 보낸다.")
     @MessageMapping("/chat/message")
