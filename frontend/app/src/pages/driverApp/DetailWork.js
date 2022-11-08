@@ -1,19 +1,13 @@
 import {React, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  Pressable,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {getLocationPermission} from '../../utils/permission';
 import {sendGps} from '../../api/kafka';
-import Map from '../../components/Map';
+import NaverMapView, {Marker} from 'react-native-nmap';
+import ScrollBottom from '../../components/ScrollBottom';
 
 const Gps = () => {
+  const watchId = null;
   const [watchLocation, setWatchLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(false);
   const setKafka = () => {
@@ -25,7 +19,6 @@ const Gps = () => {
     };
     return kafka;
   };
-  const watchId = null;
   // <------------------------current position-------------------------->
   const getCurrentLocation = () => {
     console.log('getCurrentLocation is running...');
@@ -105,100 +98,35 @@ const Gps = () => {
   }, [watchLocation]);
 
   return (
-    <SafeAreaView style={styles.gpsContainer}>
-      <View style={styles.mapContainer}>
-        {watchLocation ? (
-          <View style={styles.map}>
-            <Map
-              width="100%"
-              height="100%"
-              borderRadius="30"
-              coords={{
-                latitude: watchLocation.latitude,
-                longitude: watchLocation.longitude,
-              }}></Map>
-          </View>
-        ) : (
-          <View style={styles.map}>
-            <Text>Loading...</Text>
-          </View>
-        )}
+    <SafeAreaView style={styles.DetailRootContainer}>
+      <NaverMapView style={styles.map}></NaverMapView>
+      <View style={styles.DetailInfo}>
+        <ScrollBottom />
       </View>
-      <Text style={styles.workListHeader}> 배송 리스트 </Text>
-      <ScrollView style={styles.workContainer}>
-        <Pressable style={styles.work}>
-          <Text style={styles.leftWorkText}>초돈 12 : 10</Text>
-          <Text style={styles.rightWorkText}>5건</Text>
-        </Pressable>
-        <Pressable style={styles.work}>
-          <Text style={styles.leftWorkText}>초돈 12 : 10</Text>
-          <Text style={styles.rightWorkText}>5건</Text>
-        </Pressable>
-        <Pressable style={styles.work}>
-          <Text style={styles.leftWorkText}>초돈 12 : 10</Text>
-          <Text style={styles.rightWorkText}>5건</Text>
-        </Pressable>
-      </ScrollView>
-      <View style={styles.gpsButtonContainer}>
-        <Button
-          title="KILL watchLocation"
-          onPress={() => {
-            killWatchLocation();
-          }}
-          style={{height: 50}}></Button>
-        <Button
-          title="START watchLocation"
-          onPress={() => {
-            getWatchLocation();
-          }}></Button>
-      </View>
+      {/* <Button
+        title="KILL watchLocation"
+        onPress={() => {
+          killWatchLocation();
+        }}
+        style={{height: 50}}></Button>
+      <Button
+        title="START watchLocation"
+        onPress={() => {
+          getWatchLocation();
+        }}></Button> */}
     </SafeAreaView>
   );
 };
 
 export default Gps;
 const styles = StyleSheet.create({
-  gpsContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
-    padding: 8,
-    // backgroundColor: '#232122',
-  },
-  mapContainer: {
-    flex: 3,
-    justifyContent: 'center',
-    borderRadius: 16,
-  },
-  gpsButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 8,
-  },
-  workContainer: {
-    flex: 2,
-  },
-  work: {
-    flexDirection: 'row',
+  DetailRootContainer: {
+    zIndex: 3,
     borderWidth: 1,
-    borderRadius: 8,
-    padding: 8,
-    marginVertical: 5,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 60,
   },
-  leftWorkText: {
-    fontSize: 20,
-  },
-  rightWorkText: {
-    color: 'red',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  workListHeader: {
-    fontSize: 25,
-    marginTop: 15,
-    // borderWidth: 1,
-    fontWeight: 'bold',
+  map: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
   },
 });
