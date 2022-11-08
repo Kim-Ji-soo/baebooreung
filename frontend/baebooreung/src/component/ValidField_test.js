@@ -22,36 +22,38 @@ const styles = (theme) => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200,
+    width: 2000,
   },
 
   cssLabel: {
-    color: 'red !important',
+    color: '#4e8aff ',
   },
 
   cssOutlinedInput: {
     '&$cssFocused $notchedOutline': {
-      borderColor: `red !important`,
+      borderColor: `#4e8aff`,
+      borderWidth: '1px',
     },
   },
 
-  cssFocused: {},
+  cssFocused: {
+  },
 
   notchedOutline: {
     borderWidth: '1px',
-    borderColor: 'red !important',
+    borderColor: '#4e8aff',
   },
 });
 
 
 class ValidField2 extends React.Component {
   state = {
-    name: 'InputMode',
+    name: '',
   };
 
-  validation =()=>{
+  validation = (name)=>{
     let check = /[~!@#$%^&*()_+|<>?:{}.,/;='"ㄱ-ㅎ | ㅏ-ㅣ |가-힣]/;
-    return check.test();
+    return check.test(name);
   }
   
   handleChange = (name) => (event) => {
@@ -74,7 +76,8 @@ class ValidField2 extends React.Component {
           onChange={this.handleChange('name')}
           margin="normal"
           variant="outlined"
-          helperText={this.validation() ? "특수기호나 한글은 입력 하실 수 없습니다.":""}
+          error={this.validation(this.state.name)}
+          helperText={this.validation(this.state.name) ? "특수기호나 한글은 입력 하실 수 없습니다.":""}
 
           InputLabelProps={{
             classes: {
