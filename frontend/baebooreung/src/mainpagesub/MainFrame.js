@@ -125,7 +125,7 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
             }}
           >
             <img className={styles.main_frame_logo_image} src={map} alt="" />
-            &nbsp;&nbsp;&nbsp;네이버지도테스트
+            &nbsp;&nbsp;&nbsp;네이버지도
           </button>
         </div>
         <div>
