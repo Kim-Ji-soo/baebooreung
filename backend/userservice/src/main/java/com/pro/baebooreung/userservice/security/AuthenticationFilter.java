@@ -84,6 +84,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.addIntHeader("id",userDetails.getId()); // 사람 id 값 헤더에 같이 보내주기
         response.addHeader("name",userDetails.getName());
         response.addHeader("check","hey");
-        response.addHeader("Acccess-Control-Allow-Origin","*");
+//        response.addHeader("Acccess-Control-Allow-Origin","*");
     }
 }

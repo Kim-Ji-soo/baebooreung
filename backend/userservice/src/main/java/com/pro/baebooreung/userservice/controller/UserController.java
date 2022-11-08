@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
-@CrossOrigin(originPatterns = "https://localhost:3000, http://localhost:3000, https://k7c207.p.ssafy.io, http://k7c207.p.ssafy.io, https://k7c207.p.ssafy.io:8000, http://k7c207.p.ssafy.io:8000")
+@CrossOrigin(originPatterns = "https://localhost:3000, http://localhost:3000, https://k7c207.p.ssafy.io, http://k7c207.p.ssafy.io, https://k7c207.p.ssafy.io:8000, http://k7c207.p.ssafy.io:8000",maxAge=3600)
 public class UserController {
 
     @Autowired
