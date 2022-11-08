@@ -15,16 +15,16 @@ function App() {
   // }, [])
 
   return (
-    <div className="App" style={{ height: "100%" }}>
-      <BrowserRouter>
-        <Routes>
+    <div className="App" style={{ height: "100%", width:"100%" }}>
+      <BrowserRouter style={{ height: "100%", width:"100%" }}>
+        <Routes style={{ height: "100%", width:"100%" }}>
           <Route path="/" element={<MainPage />} />
           {/* <Route path="/" element={< />}/> */}
           <Route path="/login" element={<Login />}/>
           {/* 로그인 + 비로그인 */}
           {/* <Route path="/main" element={<MainPage />} /> */}
           {/* <Route path="/" element={<Testpage></Testpage>}></Route> */}
-          <Route path="/admin/naver" element={<NaverMapApi />} />
+          <Route style={{ height: "100%", width:"100%" }} path="/admin/naver" element={<NaverMapApi />} />
           {/* 로그인  */}
           {/* 비로그인  */}
           {/* <Route path="*" element={<Page404 />} /> */}
