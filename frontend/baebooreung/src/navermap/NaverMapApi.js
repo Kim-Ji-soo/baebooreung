@@ -82,10 +82,10 @@ export default function NaverMapApi() {
       url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
       method: 'get',
       data : {
-          start: start,
-          goal: goal,
-          option: 'trafast',
-          waypoints: waypoints
+        "start": start,
+        "goal": goal,
+        "option": 'trafast',
+        "waypoints": waypoints
       }
     })
     .then((res) => {
