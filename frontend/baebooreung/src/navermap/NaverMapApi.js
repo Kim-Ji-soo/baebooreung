@@ -22,6 +22,8 @@ export default function NaverMapApi() {
   //   "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID,
   //   "X-NCP-APIGW-API-KEY": X_NCP_APIGW_API_KEY
   // }
+  
+  // waypoints 만들기
   const [start, setStart] = useState("126.8950,35.1790") // 출발지
   const waypoints1 = "126.8982,35.1786" // 킹스샌드
   const waypoints2 = "126.9043,35.1777" // 알촌
@@ -35,17 +37,19 @@ export default function NaverMapApi() {
   const waypoints10 = "126.9109,35.1802" // 생핼관6동입구
   const waypoints11 = "126.8997,35.1765" // 8동생활관콜라자판기옆
 
-  let waypoints = []
+  // let waypoints = []
 
-  function make_waypoints() {
-    for (let i = 1; i <= 11; i++) {
-      waypoints.push(eval('waypoints' + i))
-    }
-    waypoints = waypoints.join('|') + ':'
-  }
-  make_waypoints()
+  // function make_waypoints() {
+  //   for (let i = 1; i <= 11; i++) {
+  //     waypoints.push(eval('waypoints' + i))
+  //   }
+  //   waypoints = waypoints.join('|') + ':'
+  // }
+  // make_waypoints()
 
   const goal = "126.9108,35.1804" // 생활관5동입구
+
+  const waypoints = "126.9153,35.1810" // 근처입니다.
 
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
@@ -86,16 +90,15 @@ export default function NaverMapApi() {
     })
     .then((res) => {
       console.log(res);
+      const path = res.data.route.traoptimal[0].path
+      for (let i = 0; i <= path.length - 1; i++) {
+        course.push({ lat: path[i][1], lng: path[i][0] })
+      }
+      setTestCourse(course)
     })
     .catch((error) => {
       console.log(error);
     })
-      // const path = res.data.route.traoptimal[0].path
-      // for (let i = 0; i <= path.length - 1; i++) {
-      //   course.push({ lat: path[i][1], lng: path[i][0] })
-      // }
-      // setTestCourse(course)
-    // })
 
     // await axios.get(url, {
     //   headers: headers
