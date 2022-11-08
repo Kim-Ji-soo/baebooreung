@@ -50,6 +50,10 @@ export default function NaverMapApi() {
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
   const url = `http://k7c207.p.ssafy.io:8000/user-service/map`
+
+  const config = {"Content-Type": 'application/json'};
+
+
   
   const [test_course, setTestCourse] = useState([])
   const [test_course_now, setTestCourseNow] = useState([])
@@ -76,8 +80,7 @@ export default function NaverMapApi() {
         goal:goal,
         option:"trafast",
         waypoints:waypoints,
-
-      }
+      }, config
     }).then((res) => {
       console.log(res)
       const path = res.data.route.traoptimal[0].path
@@ -121,7 +124,7 @@ export default function NaverMapApi() {
     cal_course()
   }, [start])
 
-  return <div>
+  return <div style={{ height: "100%", width:"100%" }}>
     <div className={styles.App}>
       <div className={styles.app_width}>
         {/* <div className={styles.app_color}>
@@ -137,9 +140,9 @@ export default function NaverMapApi() {
         </div> */}
         <NaverMap
           id='maps-examples-polyline'
-          style={{
-            width: '80%',
-            height: '80vh',
+          style={{ 
+            width: '100%',
+            height: '100%',
           }}
           center={translate_coordinate_lat_lng(start)}
           zoom={16}
