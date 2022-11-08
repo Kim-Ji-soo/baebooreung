@@ -51,7 +51,7 @@ export default function NaverMapApi() {
   // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
   const url = `http://k7c207.p.ssafy.io:8000/user-service/map`
 
-  const config = {"Content-Type": 'application/json'};
+  // const config = {"Content-Type": 'application/json'};
 
 
   
@@ -74,20 +74,27 @@ export default function NaverMapApi() {
     // })
     setTestCourse(course)
 
-    await axios.get("https://k7c207.p.ssafy.io:8000/user-service/map", {
-      data: {
-        start:start,
-        goal:goal,
-        option:"trafast",
-        waypoints:waypoints,
-      }, config
-    }).then((res) => {
-      console.log(res)
-      const path = res.data.route.traoptimal[0].path
-      for (let i = 0; i <= path.length - 1; i++) {
-        course.push({ lat: path[i][1], lng: path[i][0] })
+    await axios({
+      url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
+      method: 'get',
+      data : {
+          start: start,
+          goal: goal,
+          option: 'trafast',
+          waypoints: waypoints
       }
-      setTestCourse(course)
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+      // const path = res.data.route.traoptimal[0].path
+      // for (let i = 0; i <= path.length - 1; i++) {
+      //   course.push({ lat: path[i][1], lng: path[i][0] })
+      // }
+      // setTestCourse(course)
     })
 
     // await axios.get(url, {
