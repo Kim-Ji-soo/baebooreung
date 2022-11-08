@@ -1,8 +1,10 @@
 package com.pro.baebooreung.businessservice.domain;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,12 @@ public class Delivery {
 
     @Column(name="check", nullable = false)
     private boolean check;
+
+    @Column(name="delivery_time", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime deliveryTime;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id",name = "routeId")

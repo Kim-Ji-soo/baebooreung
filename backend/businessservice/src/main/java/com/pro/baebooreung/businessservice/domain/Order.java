@@ -34,13 +34,13 @@ public class Order {
     @Column(name="address", nullable = false)
     private String address;
 
-    @Column(name="delivery_time", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime deliveryTime;
-
-    @Column(name="pickup_time", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime pickupTime;
+//    @Column(name="delivery_time", nullable = false)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    private LocalDateTime deliveryTime;
+//
+//    @Column(name="pickup_time", nullable = false)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    private LocalDateTime pickupTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id",name = "deliveryId")

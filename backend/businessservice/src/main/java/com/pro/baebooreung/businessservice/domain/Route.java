@@ -29,6 +29,7 @@ public class Route {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime deliveryDateTime;
 
+
     @Column(name = "route_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private RouteType routeType;
@@ -42,6 +43,7 @@ public class Route {
 //    @Builder.Default
     @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
     private List<Delivery> deliveryList = new ArrayList<>();
+
 
     @Builder
     public Route(int userId, LocalDateTime deliveryDateTime, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
