@@ -58,7 +58,7 @@
 .button_style:hover {
   border-radius: 0px 10px 10px 0px;
   margin-right:20px;
-  box-shadow: inset 300px 0px 0px white;
+  box-shadow: inset 200px 0px 0px white;
   color:black;
   font-weight: bold;
 }
@@ -71,7 +71,7 @@
   background-color : transparent;
   border-radius: 0px 10px 10px 0px;
   margin-right:20px;
-  box-shadow: inset 300px 0px 0px #F5CC1F;
+  box-shadow: inset 200px 0px 0px #F5CC1F;
   color:black;
   font-weight: bold;
   border: 0;
