@@ -95,7 +95,7 @@ export default function NaverMapApi() {
       //   course.push({ lat: path[i][1], lng: path[i][0] })
       // }
       // setTestCourse(course)
-    })
+    // })
 
     // await axios.get(url, {
     //   headers: headers
