@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
-@CrossOrigin(originPatterns = "https://localhost:3000, http://localhost:3000, https://k7c207.p.ssafy.io, http://k7c207.p.ssafy.io")
+//@CrossOrigin(originPatterns = "https://localhost:3000, http://localhost:3000, https://k7c207.p.ssafy.io, http://k7c207.p.ssafy.io")
 public class UserController {
 
     @Autowired
@@ -97,6 +97,7 @@ public class UserController {
     @GetMapping("/welcome")
     public String welcome(){
 //        return env.getProperty("greeting.message");
+        System.out.println("????????????????????????????????");
         return greeting.getMessage();
     }
 
