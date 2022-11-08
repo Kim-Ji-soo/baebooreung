@@ -22,7 +22,7 @@ import {Provider} from 'react-redux';
 import store from './src/redux/store';
 
 // <-- driver App pages -->
-import Gps from './src/pages/driverApp/Gps';
+import DetailWork from './src/pages/driverApp/DetailWork';
 import MainScreen from './src/pages/driverApp/MainScreen';
 import TestMap from './src/pages/driverApp/TestMap';
 import Login from './src/pages/driverApp/Login';
@@ -141,12 +141,12 @@ export default function App() {
             </Tab.Navigator>
           ) : (
             // <-- driver 로그인 시-->
-            <Tab.Navigator initialRouteName="Gps">
+            <Tab.Navigator initialRouteName="home">
               <Tab.Screen
                 name="Gps"
-                component={Gps}
+                component={DetailWork}
                 options={{
-                  title: 'Gps',
+                  title: 'DetailWork',
                   headerStyle: {
                     backgroundColor: '#29b6f6',
                   },
