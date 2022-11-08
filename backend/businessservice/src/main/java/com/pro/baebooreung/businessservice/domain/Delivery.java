@@ -39,11 +39,13 @@ public class Delivery {
     @Column(name="check", nullable = false)
     private boolean check;
 
-    @Column(name="delivery_time", nullable = false)
+    @Column(name="scheduled_time", nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime deliveryTime;
+    private LocalDateTime scheduledTime; //픽업지든 배송지든 그 장소에 도착해야할 시간
 
-
+    @Column(name="actual_time", nullable = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime actualTime; // 실제로 도착한 시간
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id",name = "routeId")

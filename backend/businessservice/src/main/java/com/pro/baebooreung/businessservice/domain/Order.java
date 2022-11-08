@@ -51,14 +51,14 @@ public class Order {
     private List<OrderMenu> orderMenuList = new ArrayList<>();
 
     @Builder
-    public Order(String customerId, String customerName, String customerPhone, Restaurant restaurant, String address, LocalDateTime deliveryTime, LocalDateTime pickupTime, Delivery delivery) {
+    public Order(String customerId, String customerName, String customerPhone, Restaurant restaurant, String address, Delivery delivery) { //, LocalDateTime deliveryTime, LocalDateTime pickupTime
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
         this.restaurant = restaurant;
         this.address = address;
-        this.deliveryTime = deliveryTime;
-        this.pickupTime = pickupTime;
+//        this.deliveryTime = deliveryTime;
+//        this.pickupTime = pickupTime;
         this.delivery = delivery;
     }
 }
