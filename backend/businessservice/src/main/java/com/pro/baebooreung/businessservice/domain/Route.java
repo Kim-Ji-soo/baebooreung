@@ -37,6 +37,7 @@ public class Route {
     private String routeName;
 
     private boolean done; //완료된 업무인지 체크
+    // 이거를 enum으로 해서 ready, start, end로 해야할지 고민
 
 //    @Builder.Default
     @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)

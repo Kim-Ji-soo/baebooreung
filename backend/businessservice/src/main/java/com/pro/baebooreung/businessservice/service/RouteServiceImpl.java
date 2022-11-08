@@ -64,21 +64,26 @@ public class RouteServiceImpl implements RouteService {
 
         List<ResponseRoute> responseRoutes = new ArrayList<>();
         routeEntityList.forEach(route -> {
-            route.builder().deliveryList(deliveryRepository.findByRouteId(route.getId())).build();
-            ResponseRoute r = new ResponseRoute();
 
-            List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
-            route.getDeliveryList().forEach(v ->{
-                responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
-            });
+            if(!route.isDone()){ //완료하지 않았다면
+                //deliverylist 받아와서 넣어주기
+                route.builder().deliveryList(deliveryRepository.findByRouteId(route.getId())).build();
 
-            responseRoutes.add(r.builder()
-                    .id(route.getId())
-                    .routeName(route.getRouteName())
-                    .deliveryList(responseDeliveryList)
-                    .build());
+                ResponseRoute r = new ResponseRoute();
+
+                List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
+                route.getDeliveryList().forEach(v ->{
+                    responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
+                });
+
+                responseRoutes.add(r.builder()
+                        .id(route.getId())
+                        .routeName(route.getRouteName())
+                        .deliveryList(responseDeliveryList)
+                        .build());
+            }
+
         });
-
 
         return responseRoutes;
 
