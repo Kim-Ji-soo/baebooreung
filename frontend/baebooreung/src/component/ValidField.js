@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 
 function ValidField () {
+  
   const [value, setValue] = useState('');
 
   const onChange = (e)=> {
@@ -14,36 +15,15 @@ function ValidField () {
   }
 
   return (
-    <form noValidate autoComplete="off">
-      <TextField
-        id="standard-name"
-        label="Name"
-        variant="outlined"
-        value={value}
-        onChange={onChange}
-
-        InputLabelProps={{
-          classes: {
-            root: {
-              color: 'red !important',
-            },
-          },
-        }}
-        InputProps={{
-          classes: {
-            root: {
-              '&$cssFocused $notchedOutline': {
-                borderColor: `red !important`,
-              },
-            },
-            notchedOutline: {
-              borderWidth: '3px',
-              borderColor: 'red !important',
-            },
-          },
-        }}
-      />
-    </form>
+    <TextField
+      id="standard-name"
+      label="ID"
+      variant="outlined"
+      value={value}
+      onChange={onChange}
+      error={validation()}
+      helperText={validation() ? "특수기호나 한글은 입력 하실 수 없습니다.":""}
+    />
   );
 }
 
