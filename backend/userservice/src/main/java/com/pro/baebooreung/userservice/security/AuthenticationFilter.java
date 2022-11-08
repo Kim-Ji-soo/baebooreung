@@ -78,9 +78,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))//암호화(알고리즘방식,키조합)
                 .compact();
 
+//        log.warn(">>>>>>>>여기 있니????????????");
         response.addHeader("token", token); // 헤더에 위에 만들어진 토큰을 token이란 이름으로 넣을 것
         response.addHeader("specialKey", userDetails.getSpecialKey()); //토큰 확인을 위해 userId 같이 넣음
         response.addIntHeader("id",userDetails.getId()); // 사람 id 값 헤더에 같이 보내주기
         response.addHeader("name",userDetails.getName());
+        response.addHeader("check","hey");
     }
 }
