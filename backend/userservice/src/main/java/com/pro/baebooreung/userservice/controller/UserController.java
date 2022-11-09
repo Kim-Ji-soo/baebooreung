@@ -1,6 +1,7 @@
 package com.pro.baebooreung.userservice.controller;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
+import com.pro.baebooreung.userservice.dto.CheckinDto;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.service.UserService;
@@ -166,6 +167,19 @@ public class UserController {
         ResponseUser responseUser = mapper.map(response, ResponseUser.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+    }
+
+    @PutMapping("/checkIn")
+    public ResponseEntity<String> checkIn(@RequestBody RequestCheckInUser requestCheckInUser){
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        CheckinDto checkinDto = mapper.map(requestCheckInUser, CheckinDto.class);
+
+        userService.setCheckIn(checkinDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("체크인 성공");
     }
 }
 
