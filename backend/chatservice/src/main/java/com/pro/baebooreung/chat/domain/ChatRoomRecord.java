@@ -21,7 +21,7 @@ public class ChatRoomRecord {
     @Column(name="chatroom_id")
     private String roomId;
 
-    @Column(name="record_datetime")
+    @Column(name="create_time")
     private LocalDate createTime;
 
 
