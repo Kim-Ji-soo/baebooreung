@@ -23,16 +23,14 @@ ext {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 //	compile group: 'it.ozimov', name : 'embedded-redis', version: '0.7.2'
-	implementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple"}
+//	implementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple"}
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 //	implementation 'org.webjars:socketjs-client:1.1.2'
@@ -59,6 +57,11 @@ dependencies {
 //	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
 	//매핑을 간편하게 하기 위함
 //	implementation 'org.modelmapper:modelmapper:3.1.0'
+
+
+	//JPA
+	implementation 'mysql:mysql-connector-java'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 }
 
