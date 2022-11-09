@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @Entity
 @Table(name = "chatroom_record")
 public class ChatRoomRecord {
@@ -26,8 +25,7 @@ public class ChatRoomRecord {
     private String roomName;
 
 
-    public ChatRoomRecord(int id, String roomId, LocalDateTime createTime, String roomName) {
-        this.id = id;
+    public ChatRoomRecord(String roomId, LocalDateTime createTime, String roomName) {
         this.roomId = roomId;
         this.createTime = createTime;
         this.roomName = roomName;
