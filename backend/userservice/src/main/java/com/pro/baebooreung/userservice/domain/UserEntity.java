@@ -30,8 +30,6 @@ public class UserEntity {
 
     private String profile;
 
-
-
     private String phone;
 
     private Integer region;
