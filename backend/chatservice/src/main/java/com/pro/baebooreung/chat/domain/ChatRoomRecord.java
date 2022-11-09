@@ -1,14 +1,11 @@
 package com.pro.baebooreung.chat.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Entity
 @Data
 @Builder
 @Table(name = "chatroom_record")
@@ -22,9 +19,13 @@ public class ChatRoomRecord {
     private String roomId;
 
     @Column(name="create_time")
-    private LocalDate createTime;
+    private LocalDateTime createTime;
 
-
+    public ChatRoomRecord(int id, String roomId, LocalDateTime createTime) {
+        this.id = id;
+        this.roomId = roomId;
+        this.createTime = createTime;
+    }
 }
 
 
