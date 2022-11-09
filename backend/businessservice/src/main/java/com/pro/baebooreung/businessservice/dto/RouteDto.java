@@ -2,12 +2,13 @@ package com.pro.baebooreung.businessservice.dto;
 
 import com.pro.baebooreung.businessservice.domain.RouteType;
 import com.pro.baebooreung.businessservice.vo.ResponseDelivery;
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+@Data
 public class RouteDto {
     private int id;
     private String routeName;
@@ -19,10 +20,10 @@ public class RouteDto {
 
     private List<DeliveryDto> deliveryList;
 
-    @Builder
-    public RouteDto(int id, String routeName, List<DeliveryDto> deliveryList) {
-        this.id = id;
-        this.routeName = routeName;
-        this.deliveryList = deliveryList;
-    }
+//    @Builder
+//    public RouteDto(int id, String routeName, List<DeliveryDto> deliveryList) {
+//        this.id = id;
+//        this.routeName = routeName;
+//        this.deliveryList = deliveryList;
+//    }
 }
