@@ -153,6 +153,12 @@ public class UserServiceImpl implements UserService {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto responseUser = mapper.map(findUser, UserDto.class);
+
+        /* feign client */
+        List<ResponseRoute> routeList = new ArrayList<>();
+        routeList.add(businessServiceClient.getRoute(startDto.getRouteId()));
+        responseUser.setRouteList(routeList);
+
         return responseUser;
     }
 }
