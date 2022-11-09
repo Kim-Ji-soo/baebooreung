@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Column(nullable = false, length = 50, unique = true)
@@ -23,16 +24,15 @@ public class User {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String userId; // bearer token을 위한 랜덤값
+    private String specialKey; // bearer token을 위한 랜덤값
+
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     @Column(nullable = false, unique = true)
     private String encryptedPwd; // 암호화된 비밀번호
 
-
     private String profile;
-
-    @Enumerated(EnumType.STRING)
-    private Grade grade;
 
     private String phone;
 
@@ -46,5 +46,21 @@ public class User {
 
     @Column(name = "delivery_id",nullable = true)
     private Integer deliveryId;
+
+    @Builder
+    public UserEntity(int id, String email, String name, String specialKey, Grade grade, String encryptedPwd, String profile, String phone, Integer region, WorkStatus workStatus, Integer routeId, Integer deliveryId) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.specialKey = specialKey;
+        this.grade = grade;
+        this.encryptedPwd = encryptedPwd;
+        this.profile = profile;
+        this.phone = phone;
+        this.region = region;
+        this.workStatus = workStatus;
+        this.routeId = routeId;
+        this.deliveryId = deliveryId;
+    }
 
 }

@@ -17,9 +17,8 @@ public class Gps {
     @Column(name = "id")
     private int id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private User user;
 
     @Column(name = "latitude")
