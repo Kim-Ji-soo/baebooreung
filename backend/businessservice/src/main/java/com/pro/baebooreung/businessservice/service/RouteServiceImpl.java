@@ -58,32 +58,32 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public List<ResponseRoute> getRouteByUserNDate(int userId){//}, Data date){
-        //드라이버의 해당하는 날짜(?or 오늘???)의 done이 아닌 루트들
-        LocalDate today =LocalDate.now();
-        Iterable<Route> routeEntityList = routeRepository.findByUserIdAndDeliveryDateTime(userId,today);
-
+//        //드라이버의 해당하는 날짜(?or 오늘???)의 done이 아닌 루트들
+//        LocalDate today =LocalDate.now();
+//        Iterable<Route> routeEntityList = routeRepository.findByUserIdAndDeliveryDateTime(userId,today);
+//
         List<ResponseRoute> responseRoutes = new ArrayList<>();
-        routeEntityList.forEach(route -> {
-
-            if(!route.isDone()){ //완료하지 않았다면
-                //deliverylist 받아와서 넣어주기
-                route.builder().deliveryList(deliveryRepository.findByRouteId(route.getId())).build();
-
-                ResponseRoute r = new ResponseRoute();
-
-                List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
-                route.getDeliveryList().forEach(v ->{
-                    responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
-                });
-
-                responseRoutes.add(r.builder()
-                        .id(route.getId())
-                        .routeName(route.getRouteName())
-                        .deliveryList(responseDeliveryList)
-                        .build());
-            }
-
-        });
+//        routeEntityList.forEach(route -> {
+//
+//            if(!route.isDone()){ //완료하지 않았다면
+//                //deliverylist 받아와서 넣어주기
+//                route.builder().deliveryList(deliveryRepository.findByRouteId(route.getId())).build();
+//
+//                ResponseRoute r = new ResponseRoute();
+//
+//                List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
+//                route.getDeliveryList().forEach(v ->{
+//                    responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
+//                });
+//
+//                responseRoutes.add(r.builder()
+//                        .id(route.getId())
+//                        .routeName(route.getRouteName())
+//                        .deliveryList(responseDeliveryList)
+//                        .build());
+//            }
+//
+//        });
 
         return responseRoutes;
 

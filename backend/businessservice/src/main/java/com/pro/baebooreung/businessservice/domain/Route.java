@@ -4,7 +4,9 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +27,20 @@ public class Route {
     @Column(name = "user_id")
     private int userId; //사용자 id(토큰관련아니고 리얼 id)
 
-    @Column(name = "delivery_datetime", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime deliveryDateTime;
+//    @Column(name = "delivery_datetime", nullable = false)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//    private LocalDateTime deliveryDateTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
+    @Column(name="scheduled_start_time", nullable = true)
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime ScheduledStartTime; //업무를 시작해야할 시간
+
+    @Column(name="actual_start_time", nullable = true)
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime ActualStartTime; // 업무를 실제로 시작한 시간
 
 
     @Column(name = "route_type", nullable = false)
@@ -46,9 +59,8 @@ public class Route {
 
 
     @Builder
-    public Route(int userId, LocalDateTime deliveryDateTime, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
+    public Route(int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
         this.userId = userId;
-        this.deliveryDateTime = deliveryDateTime;
         this.routeType = routeType;
         this.routeName = routeName;
         this.done = done;

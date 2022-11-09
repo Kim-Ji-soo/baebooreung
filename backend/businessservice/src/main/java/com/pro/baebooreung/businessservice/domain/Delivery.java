@@ -4,7 +4,9 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Delivery {
 
     @Column(name = "del_name", nullable = true)
     private String delName;
+
     @Column(name = "address", nullable = false)
     private String address;
 
@@ -39,13 +42,16 @@ public class Delivery {
     @Column(name="check", nullable = false)
     private boolean check;
 
-    @Column(name="scheduled_time", nullable = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime scheduledTime; //픽업지든 배송지든 그 장소에 도착해야할 시간
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
-    @Column(name="actual_time", nullable = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime actualTime; // 실제로 도착한 시간
+    @Column(name="del_scheduled_time", nullable = true)
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime delScheduledTime; //픽업지든 배송지든 그 장소에 도착해야할 시간
+
+    @Column(name="del_actual_time", nullable = true)
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime delActualTime; // 실제로 도착한 시간
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id",name = "routeId")

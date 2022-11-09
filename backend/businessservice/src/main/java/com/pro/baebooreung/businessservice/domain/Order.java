@@ -34,6 +34,9 @@ public class Order {
     @Column(name="address", nullable = false)
     private String address;
 
+    @Column(name="drop_id", nullable = false)
+    private String dropId;
+
 //    @Column(name="delivery_time", nullable = false)
 //    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 //    private LocalDateTime deliveryTime;
