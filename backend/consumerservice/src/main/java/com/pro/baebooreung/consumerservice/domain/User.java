@@ -32,6 +32,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String encryptedPwd; // 암호화된 비밀번호
 
+    @Column(name = "profile",nullable = true)
     private String profile;
 
     private String phone;
