@@ -16,7 +16,7 @@ spring:
     username: baebooreung
     password: baebooreung93pro
   application:
-    name: business-service
+    name: gps-service
 server:
   port: 0
 
