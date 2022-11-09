@@ -1,5 +1,6 @@
 package com.pro.baebooreung.chat.controller;
 
+import com.pro.baebooreung.chat.domain.ChatRoomRecord;
 import com.pro.baebooreung.chat.dto.ChatRoom;
 import com.pro.baebooreung.chat.repository.ChatRoomRepository;
 import io.swagger.annotations.ApiOperation;
@@ -25,12 +26,20 @@ public class ChatRoomController {
 //    }
 
     //모든 채팅방 목록 반환
+//    @ApiOperation(value = "모든 채탕방의 목록을 반환한다.",notes = "생성되어 있는 모든 채팅방의 리스트를 출력한다.")
+//    @GetMapping("/rooms")
+//    @ResponseBody
+//    public List<ChatRoom> room(){
+//        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
+//        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+//        return chatRooms;
+//    }
+
     @ApiOperation(value = "모든 채탕방의 목록을 반환한다.",notes = "생성되어 있는 모든 채팅방의 리스트를 출력한다.")
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room(){
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+    public List<ChatRoomRecord> room(){
+        List<ChatRoomRecord> chatRooms = chatRoomRepository.findAllRoom();
         return chatRooms;
     }
 
@@ -51,10 +60,24 @@ public class ChatRoomController {
 
 
     //특정 채팅방 조회
+//    @ApiOperation(value = "특정 채팅방을 조회한다.",notes = "roomId에 해당하는 채팅방을 조회한다.")
+//    @GetMapping("/room/{roomId}")
+//    @ResponseBody
+//    public ChatRoom roomInfo(@PathVariable String roomId){
+//        return chatRoomRepository.findRoomById(roomId);
+//    }
+
+//    @ApiOperation(value = "특정 채팅방을 조회한다.",notes = "roomId에 해당하는 채팅방을 조회한다.")
+//    @GetMapping("/room/{roomId}")
+//    @ResponseBody
+//    public ChatRoom roomInfo(@PathVariable String roomId){
+//        return chatRoomRepository.findRoomById(roomId);
+//    }
+
     @ApiOperation(value = "특정 채팅방을 조회한다.",notes = "roomId에 해당하는 채팅방을 조회한다.")
     @GetMapping("/room/{roomId}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId){
+    public ChatRoomRecord roomInfo(@PathVariable String roomId){
         return chatRoomRepository.findRoomById(roomId);
     }
 }

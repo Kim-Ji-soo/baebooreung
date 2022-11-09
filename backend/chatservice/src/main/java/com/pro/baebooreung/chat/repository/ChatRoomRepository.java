@@ -1,5 +1,6 @@
 package com.pro.baebooreung.chat.repository;
 
+import com.pro.baebooreung.chat.domain.ChatRoomRecord;
 import com.pro.baebooreung.chat.dto.ChatRoom;
 import com.pro.baebooreung.chat.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,21 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class ChatRoomRepository {
 
-     //Redis CacheKeys
+    @PersistenceContext
+    private final EntityManager em;
+
+
+    //Redis CacheKeys
      private static final String CHAT_ROOMS = "CHAT_ROOM"; //채팅룸 저장
      private static final String USER_COUNT = "USER_COUNT"; //채팅룸에 입장한 클라이언트 수 저장
      private static final String ENTER_INFO = "ENTER_INFO"; //채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
@@ -31,13 +40,25 @@ public class ChatRoomRepository {
      @Resource(name = "redisTemplate")
      private ValueOperations<String, String> valueOps;
 
-     public List<ChatRoom> findAllRoom(){
-         return hashOpsChatroom.values(CHAT_ROOMS);
+//     public List<ChatRoom> findAllRoom(){
+//         return hashOpsChatroom.values(CHAT_ROOMS);
+//     }
+
+     public List<ChatRoomRecord> findAllRoom(){
+         List<ChatRoomRecord> chatRoomRecords = em.createQuery("select cr from ChatRoomRecord cr")
+                 .getResultList();
+         return chatRoomRecords;
      }
 
-     public ChatRoom findRoomById(String id){
-            return hashOpsChatroom.get(CHAT_ROOMS, id);
-        }
+//     public ChatRoom findRoomById(String id){
+//            return hashOpsChatroom.get(CHAT_ROOMS, id);
+//        }
+
+
+    public ChatRoomRecord findRoomById(String id){
+         ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, id);
+         return chatRoomRecord;
+    }
 
     /**
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
@@ -45,6 +66,10 @@ public class ChatRoomRepository {
     public ChatRoom createChatRoom(String name){
             ChatRoom chatRoom = ChatRoom.create(name);
             hashOpsChatroom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+
+            ChatRoomRecord chatRoomRecord = ChatRoomRecord.builder().roomId(chatRoom.getRoomId()).createTime(LocalDate.now()).build();
+            em.persist(chatRoomRecord);
+
             System.out.println("채팅방 생성됨");
             return chatRoom;
      }
