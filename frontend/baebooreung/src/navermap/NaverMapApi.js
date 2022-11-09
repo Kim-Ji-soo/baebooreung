@@ -68,8 +68,8 @@ export default function NaverMapApi() {
     const course = []
     await axios({
       url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
-      method: 'post',
-      data: data
+      method: 'get',
+      params: data
     })
       .then((res) => {
         console.log(res);
@@ -88,7 +88,7 @@ export default function NaverMapApi() {
     await axios({
       url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
       method: 'post',
-      data: data_now
+      params: data_now
     })
       .then((res) => {
         console.log(res);
