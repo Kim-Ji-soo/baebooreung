@@ -48,17 +48,17 @@ export default function NaverMapApi() {
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${waypoints1}&goal=${goal}&waypoints=${waypoints}&option="trafast"`
   // const url = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=126.8950,35.1790&goal=126.9108,35.1804&waypoints=126.9153,35.1810&option=trafast`
   // const url_now = `https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${start}&goal=${waypoints1}&option="trafast"`
-  const url = `http://k7c207.p.ssafy.io:8000/user-service/map`
+  // const url = `https://k7c207.p.ssafy.io:8000/user-service/map`
   const data = {
-    "start": start,
-    "goal": goal,
-    "option": 'trafast',
-    "waypoints": waypoints
+    start: start,
+    goal: goal,
+    option: "trafast",
+    waypoints: waypoints
   }
   const data_now = {
-    "start": start,
-    "goal": waypoints1,
-    "option": 'trafast',
+    start: start,
+    goal: waypoints1,
+    option: "trafast",
   }
 
   const [test_course, setTestCourse] = useState([])
@@ -69,7 +69,7 @@ export default function NaverMapApi() {
     await axios({
       url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
       method: 'get',
-      params: data
+      data: data,
     })
       .then((res) => {
         console.log(res);
@@ -81,7 +81,6 @@ export default function NaverMapApi() {
       })
       .catch((error) => {
         console.log('에러', error);
-
       })
 
     const course_now = []
