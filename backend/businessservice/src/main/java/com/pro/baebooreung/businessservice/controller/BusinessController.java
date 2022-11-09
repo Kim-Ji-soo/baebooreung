@@ -69,6 +69,18 @@ public class BusinessController {
     }
 
 
+    // 업무 시작
+    @PostMapping("/business-service/{userId}/start/{routeId}")
+    public ResponseEntity<?> startWork(@PathVariable("userId") int userId,@PathVariable("routeId") int routeId){
+        // User에다가 routeId,deliveryId, workStatus 를 바꿔주고,
+        // Route의 actual_start_time에 현재 시간을 넣어줌
+
+
+
+    }
+
+
+
 
 //    @PostMapping("/check-in/{userId}")
 //    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckIn requestCheckIn){
