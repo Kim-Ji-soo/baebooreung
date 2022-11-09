@@ -3,6 +3,7 @@ package com.pro.baebooreung.userservice.service;
 import com.pro.baebooreung.userservice.client.BusinessServiceClient;
 import com.pro.baebooreung.userservice.domain.Grade;
 import com.pro.baebooreung.userservice.domain.UserEntity;
+import com.pro.baebooreung.userservice.domain.WorkStatus;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
@@ -147,6 +148,7 @@ public class UserServiceImpl implements UserService {
         findUser.builder()
                 .routeId(startDto.getRouteId())
                 .deliveryId(startDto.getDeliveryId())
+                .workStatus(WorkStatus.DRIVING)
                 .build();
         userRepository.save(findUser);
 
