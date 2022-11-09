@@ -15,5 +15,18 @@ spring:
     url: jdbc:mysql://k7c207.p.ssafy.io:3306/93pro?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=utf8
     username: baebooreung
     password: baebooreung93pro
+  application:
+    name: business-service
 server:
-  port: 8083
+  port: 0
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+    fetch-registry: 'true'
+    register-with-eureka: 'true'
+
+
