@@ -1,5 +1,6 @@
 package com.pro.baebooreung.chat.controller;
 
+import com.pro.baebooreung.chat.domain.ChatRoomCheck;
 import com.pro.baebooreung.chat.domain.ChatRoomRecord;
 import com.pro.baebooreung.chat.dto.ChatRoom;
 import com.pro.baebooreung.chat.repository.ChatRoomRepository;
@@ -47,8 +48,8 @@ public class ChatRoomController {
     @ApiOperation(value = "채팅방을 생성한다.",notes = "채팅방의 name을 입력해 채팅방을 생성한다.")
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name){
-        return chatRoomRepository.createChatRoom(name);
+    public ChatRoom createRoom(@RequestParam String name, @RequestParam String userId){
+        return chatRoomRepository.createChatRoom(name, userId);
     }
 
     //채팅방 입장 화면
@@ -80,4 +81,31 @@ public class ChatRoomController {
     public ChatRoomRecord roomInfo(@PathVariable String roomId){
         return chatRoomRepository.findRoomById(roomId);
     }
+
+    @ApiOperation(value = "구독 정보를 true로 바꿔준다.",notes = "해당 유저가 들어온 방의 구독을 true로 바꿔준다.")
+    @PutMapping("/room/update/subscribe/{roomId}/{userId}")
+    public void updateSub(@PathVariable String roomId, @PathVariable String userId){
+        chatRoomRepository.updateSub(roomId, userId);
+    }
+
+    @ApiOperation(value = "입장 정보를 true로 바꿔준다.",notes = "해당 유저가 들어온 방의 입장 정보를 true로 바꿔준다.")
+    @PutMapping("/room/update/enter/{roomId}/{userId}")
+    public void updateEnt(@PathVariable String roomId, @PathVariable String userId){
+        chatRoomRepository.updateEnt(roomId, userId);
+    }
+
+    @ApiOperation(value = "퇴장한다.",notes = "해당 채팅방을 나간다.")
+    @PutMapping("/room/delete/{roomId}/{userId}")
+    public void roomQuit(@PathVariable String roomId, @PathVariable String userId){
+        chatRoomRepository.roomQuit(roomId, userId);
+    }
+
+    @ApiOperation(value = "해당 유저에 대한 입장, 구독 정보를 보여준다.",notes = "해당 유저에 대한 입장과 구독 정보를 보여준다.")
+    @GetMapping("/room/user/info/{roomId}/{userId}")
+    @ResponseBody
+    public ChatRoomCheck userRoomCheck(@PathVariable String roomId, @PathVariable String userId){
+        return chatRoomRepository.userRoomCheck(roomId, userId);
+    }
+
+
 }
