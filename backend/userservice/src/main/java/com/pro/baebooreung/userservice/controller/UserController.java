@@ -46,7 +46,7 @@ public class UserController {
 
 //    public ResponseEntity<Object> getData() {
 //        String url = "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=126.8950,35.1790&goal=126.9108,35.1804&waypoints=126.9153,35.1810&option=trafast";
-    @PatchMapping("/map")
+    @PostMapping("/map")
     public ResponseEntity<Object> getData(@RequestBody RequestNaverMap request) {
         String url =
                 "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start="+request.getStart()
