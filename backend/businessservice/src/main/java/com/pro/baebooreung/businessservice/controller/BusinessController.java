@@ -73,7 +73,7 @@ public class BusinessController {
     // 업무 시작
     @PutMapping("/{userId}/start/{routeId}")
     public ResponseEntity<?> startWork(@PathVariable("userId") int userId,@PathVariable("routeId") int routeId){
-        // User에다가 routeId,deliveryId, workStatus 를 바꿔주고,
+        // User에다가 routeId,deliveryId,workStatus 를 바꿔주고,
         // Route의 actual_start_time에 현재 시간을 넣어줌
 
         RouteDto result = routeService.startWork(userId, routeId);
@@ -82,9 +82,17 @@ public class BusinessController {
 
 
 
+    //근데 이 체크인이 요청을 계속 보내주나.....?
+    @PatchMapping("/check-in/{userId}")
+    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckIn requestCheckIn){
+        //userId를 받아서 그 사람의 userId가 gps에서 어떤 위치에 있는지 반환받아서
+        // routeId 로 찾은 route의 delivery들 중에 (아마도 순서대로) 거리 내에 있고 머무는 시간이 좀 걸린다면 체크인+도착시간
 
-//    @PostMapping("/check-in/{userId}")
-//    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckIn requestCheckIn){
-//        //userId를 받아서 그 사람의 userId에다가
-//    }
+        //체크인 여부를 판단하는 기준
+        //- 음식점 주위에 이 사람이 지나치는지?
+        //- 약간 여기 좀 더 머무르는지?
+        //- 사진?
+        //- 체크인 모호한 경우 - 사진 찍도록 유도
+        return null;
+    }
 }
