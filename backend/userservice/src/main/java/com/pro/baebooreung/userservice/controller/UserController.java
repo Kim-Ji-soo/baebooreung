@@ -1,12 +1,10 @@
 package com.pro.baebooreung.userservice.controller;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
+import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.service.UserService;
-import com.pro.baebooreung.userservice.vo.Greeting;
-import com.pro.baebooreung.userservice.vo.RequestNaverMap;
-import com.pro.baebooreung.userservice.vo.RequestUser;
-import com.pro.baebooreung.userservice.vo.ResponseUser;
+import com.pro.baebooreung.userservice.vo.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,10 +148,23 @@ public class UserController {
 //    }
 
     @PutMapping("/authdriver/{id}") //관리자가 가입한 사람 드라이버라고 인증해주기
-    public ResponseEntity<ResponseUser> authDriver(@PathVariable int id) {
+    public ResponseEntity<ResponseUser> authDriver(@PathVariable("id") int id) {
         ResponseUser user = userService.setUsertoDriver(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @PutMapping("/start")
+    public ResponseEntity<ResponseUser> startWork(@RequestBody RequestStart start){//@PathVariable("id") int id){
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        StartDto startDto = mapper.map(start, StartDto.class);
+
+        UserDto response = userService.setStart(startDto);
+        //반환값 설정정
+        ResponseUser responseUser = mapper.map(response, ResponseUser.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 }
 

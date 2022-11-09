@@ -4,6 +4,7 @@ import com.pro.baebooreung.userservice.client.BusinessServiceClient;
 import com.pro.baebooreung.userservice.domain.Grade;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
+import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
@@ -98,8 +99,10 @@ public class UserServiceImpl implements UserService {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         //전달받은 userDto 값을 UserEntity로 변환
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
-        if(userEntity.getGrade()==Grade.DRIVER) userEntity.setGrade(Grade.UNAUTHORIZED); // 드라이버로 가입한 사람은 임시권한
-        userEntity.setEncryptedPwd(passwordEncoder.encode(userDto.getPassword())); // 비밀번호 암호화
+        if(userEntity.getGrade()==Grade.DRIVER) {
+            userEntity.builder().grade(Grade.UNAUTHORIZED).build();// 드라이버로 가입한 사람은 임시권한
+        }
+        userEntity.builder().encryptedPwd(passwordEncoder.encode(userDto.getPassword())).build(); // 비밀번호 암호화
 
         userRepository.save(userEntity);
 
@@ -129,12 +132,27 @@ public class UserServiceImpl implements UserService {
 
     public ResponseUser setUsertoDriver(int id){
         UserEntity findUser = userRepository.findById(id);
-        findUser.setGrade(Grade.DRIVER);
+        findUser.builder().grade(Grade.DRIVER).build();
         userRepository.save(findUser);
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         ResponseUser responseUser = mapper.map(findUser, ResponseUser.class);
+        return responseUser;
+    }
+
+    public UserDto setStart(StartDto startDto){
+        UserEntity findUser = userRepository.findById(startDto.getId());
+
+        findUser.builder()
+                .routeId(startDto.getRouteId())
+                .deliveryId(startDto.getDeliveryId())
+                .build();
+        userRepository.save(findUser);
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        UserDto responseUser = mapper.map(findUser, UserDto.class);
         return responseUser;
     }
 }

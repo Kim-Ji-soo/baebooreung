@@ -1,6 +1,7 @@
 package com.pro.baebooreung.userservice.service;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
+import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,4 +17,6 @@ public interface UserService extends UserDetailsService {
     UserDto getUserDetailsByEmail(String userName);
 
     ResponseUser setUsertoDriver(int id);
+
+    UserDto setStart(StartDto startDto);
 }
