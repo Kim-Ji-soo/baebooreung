@@ -56,7 +56,7 @@ public class BusinessController {
 
 
     //한 루트에 대한 정보 얻기
-    @GetMapping("/business-service/route/{routeId}") ///{date}
+    @GetMapping("/route/{routeId}") ///{date}
     public ResponseEntity<ResponseRoute> getRoute(@PathVariable("routeId") int routeId){
         ResponseRoute routeList = routeService.getRoute(routeId);
 
