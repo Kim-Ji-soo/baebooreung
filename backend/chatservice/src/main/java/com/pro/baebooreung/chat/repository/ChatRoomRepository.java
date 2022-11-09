@@ -1,5 +1,6 @@
 package com.pro.baebooreung.chat.repository;
 
+import com.pro.baebooreung.chat.domain.ChatRoomCheck;
 import com.pro.baebooreung.chat.domain.ChatRoomRecord;
 import com.pro.baebooreung.chat.dto.ChatRoom;
 import com.pro.baebooreung.chat.service.RedisSubscriber;
@@ -9,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
-@Service
+//@Service
+@Component
 public class ChatRoomRepository {
 
     @PersistenceContext
@@ -67,7 +70,7 @@ public class ChatRoomRepository {
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
      */
     @Transactional
-    public ChatRoom createChatRoom(String name){
+    public ChatRoom createChatRoom(String name, String userId){
             ChatRoom chatRoom = ChatRoom.create(name);
             hashOpsChatroom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
 
@@ -75,6 +78,8 @@ public class ChatRoomRepository {
             ChatRoomRecord chatRoomRecord = new ChatRoomRecord(chatRoom.getRoomId(), LocalDateTime.now(), name);
             em.persist(chatRoomRecord);
 
+            ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
+            em.persist(chatRoomCheck);
 
             System.out.println("채팅방 생성됨");
             return chatRoom;
@@ -123,8 +128,47 @@ public class ChatRoomRepository {
         return Optional.ofNullable(valueOps.decrement(USER_COUNT + "_" + roomId)).filter(count -> count > 0).orElse(0L);
     }
 
+    @Transactional
+    public void updateSub(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
+        ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
+                .setParameter("userId", userId)
+                .setParameter("roomId", chatRoomRecord.getId())
+                .getSingleResult();
+        chatRoomCheck.setIsSubscribe(true);
+        em.persist(chatRoomCheck);
+    }
+
+    @Transactional
+    public void updateEnt(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
+        ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
+                .setParameter("userId", userId)
+                .setParameter("roomId", chatRoomRecord.getId())
+                .getSingleResult();
+        chatRoomCheck.setIsEnter(true);
+        em.persist(chatRoomCheck);
+    }
 
 
+    @Transactional
+    public void roomQuit(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
+        em.createQuery("DELETE FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
+                .setParameter("userId", userId)
+                .setParameter("roomId", chatRoomRecord.getId())
+                        .executeUpdate();
+    }
+
+    @Transactional
+    public ChatRoomCheck userRoomCheck(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
+        ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
+                .setParameter("userId", userId)
+                .setParameter("roomId", chatRoomRecord.getId())
+                .getSingleResult();
+        return chatRoomCheck;
+    }
 
 
 }
