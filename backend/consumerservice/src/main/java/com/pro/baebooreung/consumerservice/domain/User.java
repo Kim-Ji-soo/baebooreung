@@ -47,20 +47,4 @@ public class User {
     @Column(name = "delivery_id",nullable = true)
     private Integer deliveryId;
 
-    @Builder
-    public UserEntity(int id, String email, String name, String specialKey, Grade grade, String encryptedPwd, String profile, String phone, Integer region, WorkStatus workStatus, Integer routeId, Integer deliveryId) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.specialKey = specialKey;
-        this.grade = grade;
-        this.encryptedPwd = encryptedPwd;
-        this.profile = profile;
-        this.phone = phone;
-        this.region = region;
-        this.workStatus = workStatus;
-        this.routeId = routeId;
-        this.deliveryId = deliveryId;
-    }
-
 }
