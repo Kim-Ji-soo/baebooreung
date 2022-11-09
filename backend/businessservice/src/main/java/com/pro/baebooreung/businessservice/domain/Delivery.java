@@ -63,7 +63,12 @@ public class Delivery {
 
     //builder에 id 안넣음
     @Builder
-    public Delivery(String address, double latitude, double longitude, int sequence, Type type, boolean check, Route route) {
+    public Delivery(int id, String delName,LocalDate date, LocalTime delScheduledTime, LocalTime delActualTime, String address, double latitude, double longitude, int sequence, Type type, boolean check, Route route) {
+        this.id = id;
+        this.delName = delName;
+        this.date = date;
+        this.delScheduledTime = delScheduledTime;
+        this.delActualTime = delActualTime;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;

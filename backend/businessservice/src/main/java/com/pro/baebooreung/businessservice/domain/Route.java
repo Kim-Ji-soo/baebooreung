@@ -36,11 +36,11 @@ public class Route {
 
     @Column(name="scheduled_start_time", nullable = true)
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime ScheduledStartTime; //업무를 시작해야할 시간
+    private LocalTime scheduledStartTime; //업무를 시작해야할 시간
 
     @Column(name="actual_start_time", nullable = true)
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime ActualStartTime; // 업무를 실제로 시작한 시간
+    private LocalTime actualStartTime; // 업무를 실제로 시작한 시간
 
 
     @Column(name = "route_type", nullable = false)
@@ -59,7 +59,11 @@ public class Route {
 
 
     @Builder
-    public Route(int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
+    public Route(int id, LocalDate date, LocalTime scheduledStartTime, LocalTime actualStartTime, int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
+        this.id = id;
+        this.date = date;
+        this.scheduledStartTime = scheduledStartTime;
+        this.actualStartTime = actualStartTime;
         this.userId = userId;
         this.routeType = routeType;
         this.routeName = routeName;

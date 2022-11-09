@@ -35,7 +35,7 @@ public class Order {
     private String address;
 
     @Column(name="drop_id", nullable = false)
-    private String dropId;
+    private int dropId;
 
 //    @Column(name="delivery_time", nullable = false)
 //    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -54,7 +54,7 @@ public class Order {
     private List<OrderMenu> orderMenuList = new ArrayList<>();
 
     @Builder
-    public Order(String customerId, String customerName, String customerPhone, Restaurant restaurant, String address, Delivery delivery) { //, LocalDateTime deliveryTime, LocalDateTime pickupTime
+    public Order(String customerId, String customerName, String customerPhone, Restaurant restaurant, String address, Delivery delivery, int dropId) { //, LocalDateTime deliveryTime, LocalDateTime pickupTime
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -63,5 +63,6 @@ public class Order {
 //        this.deliveryTime = deliveryTime;
 //        this.pickupTime = pickupTime;
         this.delivery = delivery;
+        this.dropId = dropId;
     }
 }
