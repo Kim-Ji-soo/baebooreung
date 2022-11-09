@@ -2,6 +2,7 @@ package com.pro.baebooreung.businessservice.controller;
 
 import com.netflix.discovery.converters.Auto;
 import com.pro.baebooreung.businessservice.domain.Route;
+import com.pro.baebooreung.businessservice.dto.RouteDto;
 import com.pro.baebooreung.businessservice.service.RouteService;
 import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
 import com.pro.baebooreung.businessservice.vo.ResponseRoute;
@@ -75,8 +76,8 @@ public class BusinessController {
         // User에다가 routeId,deliveryId, workStatus 를 바꿔주고,
         // Route의 actual_start_time에 현재 시간을 넣어줌
 
-
-
+        RouteDto result = routeService.startWork(userId, routeId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 

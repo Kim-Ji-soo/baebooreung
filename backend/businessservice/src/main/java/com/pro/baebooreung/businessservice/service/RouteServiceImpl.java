@@ -1,11 +1,15 @@
 package com.pro.baebooreung.businessservice.service;
 
+import com.pro.baebooreung.businessservice.client.UserServiceClient;
 import com.pro.baebooreung.businessservice.domain.Delivery;
 import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.businessservice.domain.repository.RouteRepository;
+import com.pro.baebooreung.businessservice.dto.RouteDto;
+import com.pro.baebooreung.businessservice.vo.RequestStart;
 import com.pro.baebooreung.businessservice.vo.ResponseDelivery;
 import com.pro.baebooreung.businessservice.vo.ResponseRoute;
+import com.pro.baebooreung.businessservice.vo.ResponseUser;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +30,16 @@ import java.util.Optional;
 public class RouteServiceImpl implements RouteService {
     RouteRepository routeRepository;
     DeliveryRepository deliveryRepository;
+    UserServiceClient userServiceClient;
     @PersistenceContext
     private final EntityManager em;
 
     @Autowired
-    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository){
+    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient){
         this.routeRepository = routeRepository;
         this.deliveryRepository = deliveryRepository;
         this.em = em;
+        this.userServiceClient = userServiceClient;
     }
 
     @Override
@@ -108,8 +115,28 @@ public class RouteServiceImpl implements RouteService {
         });
 
         return responseRoutes;
-
     }
 
+    public RouteDto startWork(int userId, int routId){
+        Optional<Delivery> findDelivery = deliveryRepository.findByRouteIdAndSequence(userId,1);
+        Optional<Route> findRoute = routeRepository.findById(routId);
+        /* feign client */
+        RequestStart requestStart = new RequestStart();
+        if(findDelivery.isPresent()){
+            requestStart = new RequestStart(userId,routId,findDelivery.get().getId());
+            ResponseUser responseUser = userServiceClient.startWork(requestStart);
+        }
+        LocalTime now = LocalTime.now();
+        findRoute.get().builder().actualStartTime(now).build();
+        routeRepository.save(findRoute.get());
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        RouteDto response = mapper.map(findRoute.get(), RouteDto.class);
+        //반환
+
+
+        return response;
+    }
 
 }
