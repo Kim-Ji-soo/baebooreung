@@ -26,7 +26,6 @@ public class ChatRoomRecord {
     @Column(name="chatroom_name")
     private String roomName;
 
-
     public ChatRoomRecord(String roomId, LocalDateTime createTime, String roomName) {
         this.roomId = roomId;
         this.createTime = createTime;
