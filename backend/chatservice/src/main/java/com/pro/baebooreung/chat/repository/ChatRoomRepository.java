@@ -45,6 +45,7 @@ public class ChatRoomRepository {
 //         return hashOpsChatroom.values(CHAT_ROOMS);
 //     }
 
+    @Transactional
      public List<ChatRoomRecord> findAllRoom(){
          List<ChatRoomRecord> chatRoomRecords = em.createQuery("select cr from ChatRoomRecord cr")
                  .getResultList();
@@ -56,6 +57,7 @@ public class ChatRoomRepository {
 //        }
 
 
+    @Transactional
     public ChatRoomRecord findRoomById(String id){
          ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, id);
          return chatRoomRecord;
