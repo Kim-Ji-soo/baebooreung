@@ -1,6 +1,7 @@
 package com.pro.baebooreung.userservice.service;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
+import com.pro.baebooreung.userservice.dto.CheckinDto;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
@@ -19,4 +20,6 @@ public interface UserService extends UserDetailsService {
     ResponseUser setUsertoDriver(int id);
 
     UserDto setStart(StartDto startDto);
+
+    public void setCheckIn(CheckinDto checkinDto);
 }

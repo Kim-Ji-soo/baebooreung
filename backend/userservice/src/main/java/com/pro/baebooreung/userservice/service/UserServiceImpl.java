@@ -5,6 +5,7 @@ import com.pro.baebooreung.userservice.domain.Grade;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.WorkStatus;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
+import com.pro.baebooreung.userservice.dto.CheckinDto;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
@@ -24,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -142,6 +144,7 @@ public class UserServiceImpl implements UserService {
         return responseUser;
     }
 
+    @Transactional
     public UserDto setStart(StartDto startDto){
         UserEntity findUser = userRepository.findById(startDto.getId());
 
@@ -162,6 +165,17 @@ public class UserServiceImpl implements UserService {
         responseUser.setRouteList(routeList);
 
         return responseUser;
+    }
+
+    @Transactional
+    public void setCheckIn(CheckinDto checkinDto){
+        UserEntity findUser = userRepository.findById(checkinDto.getId());
+
+        findUser.builder()
+                .routeId(checkinDto.getRouteId())
+                .deliveryId(checkinDto.getDeliveryId()).build();
+        userRepository.save(findUser);
+
     }
 }
 
