@@ -1,20 +1,22 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import Work from '../../components/Work';
+import BottomScrollSheet from '../../components/BottomScrollSheet';
 
 const MainScreen = () => {
   return (
     <View style={styles.MainRootContainer}>
+      <BottomScrollSheet title="상세보기" />
       <View style={styles.MainHeader}>
         <Text style={styles.MainHeaderText}>안녕하세요 username님!</Text>
         <Text style={styles.todayList}>오늘의 배송 목록</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
         <Work />
+        {/* <Work />
         <Work />
         <Work />
-        <Work />
-        <Work />
+        <Work /> */}
       </ScrollView>
     </View>
   );

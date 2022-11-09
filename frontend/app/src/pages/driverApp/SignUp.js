@@ -88,10 +88,10 @@ const SignUp = () => {
     const ID = event.nativeEvent.text;
     if (isEmail(ID)) {
       setId(ID);
-      setIdMessage('올바른 이메일 형식입니다.');
+      setIdMessage('* 올바른 이메일 형식입니다.');
       setIsId(true);
     } else {
-      setIdMessage('이메일 형식으로 입력해주세요.');
+      setIdMessage('* 이메일 형식으로 입력해주세요.');
       setIsId(false);
     }
   };
@@ -99,12 +99,12 @@ const SignUp = () => {
   const onChangePw = event => {
     const PW = event.nativeEvent.text;
     if (isPassword(PW)) {
-      setPwMessage('올바른 비밀번호입니다.');
+      setPwMessage('* 올바른 비밀번호입니다.');
       setPassword(PW);
       setIsPw(true);
     } else {
       setPwMessage(
-        '비밀번호는 영문자, 숫자, 특수기호를 포함하여  8 ~ 16자로 입력해주세요.',
+        '* 영문자, 숫자, 특수기호를 포함하여  8 ~ 16자로 입력해주세요.',
       );
       setIsPw(false);
     }
@@ -112,119 +112,127 @@ const SignUp = () => {
   // 비밀번호 확인 유효성 검사(password랑 confirmPassword가 같은지 만 확인)
   const onChangePwConfirm = event => {
     const CONFIRM = event.nativeEvent.text;
-    if (CONFIRM === password) {
+    if (CONFIRM === password && password.length > 0) {
       setConfirmPassword(CONFIRM);
       setIsPasswordConfirm(true);
-      setPwConfirmMessage('비밀번호가 일치합니다.');
+      setPwConfirmMessage('* 비밀번호가 일치합니다.');
     } else {
       setIsPasswordConfirm(false);
-      setPwConfirmMessage('비밀번호가 일치하지 않습니다.');
+      setPwConfirmMessage('* 비밀번호가 일치하지 않습니다.');
     }
   };
   const onChangePhoneNum = event => {
     const NUMBER = event.nativeEvent.text;
     if (isPhoneNumber(NUMBER)) {
       setPhoneNumber(NUMBER);
-      setPhoneNumMessage('올바른 전화번호입니다.');
+      setPhoneNumMessage('* 올바른 전화번호입니다.');
       setIsPhoneNum(true);
     } else {
       setIsPhoneNum(false);
-      setPhoneNumMessage('000-0000-0000 형식으로 입력해주세요.');
+      setPhoneNumMessage('* 000-0000-0000 형식으로 입력해주세요.');
     }
   };
   const onChangeName = event => {
     const NAME = event.nativeEvent.text;
     setName(NAME);
   };
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerFont}>배부릉</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>배부릉 회원가입</Text>
       </View>
-      <ScrollView style={styles.scroll}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.infoTitle}>아이디</Text>
-          <TextInput
-            style={styles.inputArea}
-            placeholder="아이디를 입력하세요."
-            onChange={onChangeId}
-            autoFocus={true}
-            returnKeyType="next"
-            onSubmitEditing={() => ref_input2.current.focus()}
-          />
+      <ScrollView>
+        <View style={styles.Scroll}>
+          <View style={styles.login}>
+            <Text style={styles.label}>아이디</Text>
+            <TextInput
+              style={styles.loginForm}
+              placeholder="아이디를 입력하세요."
+              onChange={onChangeId}
+              // autoFocus={true}
+              returnKeyType="next"
+              onSubmitEditing={() => ref_input2.current.focus()}
+            />
+            {idMessage ? (
+              <Text style={styles.checkMessage}>{idMessage}</Text>
+            ) : null}
+          </View>
+          <View style={styles.password}>
+            <Text style={styles.label}>비밀번호</Text>
+            <TextInput
+              style={styles.passwordForm}
+              placeholder="비밀번호를 입력하세요."
+              onChange={onChangePw}
+              returnKeyType="next"
+              onSubmitEditing={() => ref_input3.current.focus()}
+              ref={ref_input2}
+            />
+            {pwMessage ? (
+              <Text style={styles.checkMessage}>{pwMessage}</Text>
+            ) : null}
+            <TextInput
+              style={styles.passwordForm}
+              placeholder="비밀번호를 한번 더 입력하세요."
+              onChange={onChangePwConfirm}
+              ref={ref_input3}
+              returnKeyType="next"
+              onSubmitEditing={() => ref_input4.current.focus()}
+            />
+            {pwConfirmMessage ? (
+              <Text style={styles.checkMessage}>{pwConfirmMessage}</Text>
+            ) : null}
+          </View>
+          <View style={styles.extra}>
+            <Text style={styles.label}>이름</Text>
+            <TextInput
+              style={styles.nameForm}
+              placeholder="배부릉"
+              onChange={onChangeName}
+              ref={ref_input4}
+              returnKeyType="next"
+              onSubmitEditing={() => ref_input5.current.focus()}
+            />
+            <Text style={styles.label}>전화번호</Text>
+            <TextInput
+              style={styles.phoneNumberForm}
+              placeholder="010-1234-5678"
+              onChange={onChangePhoneNum}
+              ref={ref_input5}
+            />
+            {phoneNumMessage ? (
+              <Text style={styles.checkMessage}>{phoneNumMessage}</Text>
+            ) : null}
+          </View>
+          <View style={styles.extra2}>
+            <Text style={styles.label}>지역</Text>
+            <SelectList
+              setSelected={setRegion}
+              data={regionDrop}
+              search={false}
+              placeholder="지역을 선택하세요."
+            />
+          </View>
+          <View style={styles.extra2}>
+            <Text style={styles.label}>회원 유형</Text>
+            <SelectList
+              setSelected={setSelectedGrade}
+              onSelect={() => {
+                console.log(selectedGrade);
+              }}
+              data={grade}
+              search={false}
+              placeholder="유형을 선택하세요"
+            />
+          </View>
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.infoTitle}>비밀번호</Text>
-          <TextInput
-            style={styles.inputArea}
-            placeholder="비밀번호를 입력하세요."
-            onChange={onChangePw}
-            returnKeyType="next"
-            onSubmitEditing={() => ref_input3.current.focus()}
-            ref={ref_input2}
-          />
-          <Text>{pwMessage}</Text>
-          <TextInput
-            style={styles.inputArea}
-            placeholder="비밀번호를 한번 더 입력하세요."
-            onChange={onChangePwConfirm}
-            ref={ref_input3}
-            returnKeyType="next"
-            onSubmitEditing={() => ref_input4.current.focus()}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.infoTitle}>이름</Text>
-          <TextInput
-            style={styles.inputArea}
-            placeholder="배부릉"
-            onChange={onChangeName}
-            ref={ref_input4}
-            returnKeyType="next"
-            onSubmitEditing={() => ref_input5.current.focus()}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.infoTitle}>전화번호</Text>
-          <TextInput
-            style={styles.inputArea}
-            placeholder="010-1234-5678"
-            onChange={onChangePhoneNum}
-            ref={ref_input5}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.infoTitle}>지역</Text>
-          <SelectList
-            setSelected={setRegion}
-            data={regionDrop}
-            search={false}
-            placeholder="지역을 선택하세요."
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.infoTitle}>회원 유형</Text>
-          <SelectList
-            setSelected={setSelectedGrade}
-            onSelect={() => {
-              console.log(selectedGrade);
-            }}
-            data={grade}
-            search={false}
-            placeholder="유형을 선택하세요"
-          />
-        </View>
-        <View style={styles.btnArea}>
-          <CustomButton style={styles.btn} onPress={signupAPI} data={joinProps}>
+      </ScrollView>
+      <View style={styles.btnContainer}>
+        <View style={styles.signupBtn}>
+          <CustomButton style={styles.btn} onPress={join}>
             <Text>회원가입</Text>
           </CustomButton>
         </View>
-        <Pressable onPress={() => console.log(joinProps)}>
-          <Text>데이터 보기</Text>
-        </Pressable>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -232,62 +240,83 @@ const SignUp = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 5,
     justifyContent: 'center',
+    alignItem: 'center',
+  },
+  Scroll: {
+    // borderWidth: 1,
+  },
+  label: {
+    fontSize: 15,
+    fontWeight: '800',
+    marginBottom: 5,
+  },
+  headerContainer: {
+    marginVertical: 40,
     alignItems: 'center',
+    justifyContent: 'center',
+    // borderWidth: 2,
   },
   header: {
-    marginTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerFont: {
     fontSize: 20,
-    fontWeight: '800',
   },
-  scroll: {
-    width: '80%',
+  login: {
+    // borderWidth: 2,
+    marginBottom: 20,
   },
-  infoText: {
-    width: '100%',
+  loginForm: {
+    height: 45,
+    borderWidth: 1,
+    borderColor: 'gray',
+    paddingLeft: 20,
+    borderRadius: 8,
   },
-  infoTitle: {
-    fontWeight: '800',
-    fontSize: 15,
-    marginBottom: 8,
+  password: {
+    // borderWidth: 2,
+    marginBottom: 20,
   },
-  infoDescription: {
-    fontWeight: '300',
-    fontSize: 12,
-    color: '#999999',
-  },
-  inputContainer: {
+  passwordForm: {
+    height: 45,
+    paddingLeft: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
     marginBottom: 5,
   },
-  inputArea: {
-    width: '100%',
-    marginBottom: 15,
-    borderRadius: 8,
-    borderWidth: 0.8,
-    paddingHorizontal: 20,
+  extra: {
+    // borderWidth: 2,
+    marginBottom: 20,
   },
-  btnArea: {
-    marginTop: 25,
-    flexDirection: 'column',
-    alignItems: 'center',
+  extra2: {
+    marginBottom: 20,
+  },
+  nameForm: {
+    height: 45,
+    borderWidth: 1,
+    borderColor: 'gray',
+    paddingLeft: 20,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  phoneNumberForm: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    height: 45,
+    paddingLeft: 20,
+    borderRadius: 8,
+  },
+  signupBtn: {
+    width: '50%',
+  },
+  checkMessage: {
+    color: 'red',
+    paddingTop: 5,
+  },
+  btnContainer: {
+    marginBottom: 20,
     justifyContent: 'center',
-  },
-  number: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  numberArea: {
-    marginBottom: 5,
-    borderRadius: 8,
-    borderWidth: 0.8,
-    padding: 8,
-    marginRight: 20,
   },
 });
 export default SignUp;

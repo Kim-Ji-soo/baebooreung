@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderRadius: 16,
     overflow: 'hidden',
+    width: '100%',
   },
   buttonInnerContainer: {
     paddingVertical: 12,

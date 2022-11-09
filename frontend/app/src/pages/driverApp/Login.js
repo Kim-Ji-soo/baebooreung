@@ -78,39 +78,35 @@ const Login = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerFont}>배부릉</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>배부릉 로그인</Text>
       </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.infoTitle}>아이디</Text>
+      <View style={styles.Body}>
+        <Text style={styles.label}>아이디</Text>
         <TextInput
-          style={styles.inputArea}
+          style={styles.idForm}
           placeholder="아이디를 입력하세요."
           onChange={onChangeId}
         />
-        <Text style={styles.infoText}>{idMessage}</Text>
-        <Text style={styles.infoTitle}>비밀번호</Text>
+        <Text style={styles.label}>비밀번호</Text>
         <TextInput
-          style={styles.inputArea}
+          style={styles.passwordForm}
           placeholder="비밀번호를 입력하세요."
           onChange={onChangePw}
         />
-        <Text style={styles.infoText}>{pwMessage}</Text>
-        <View style={styles.signupArea}>
+        <View style={styles.needSignUp}>
           <Text>회원이 아니신가요?</Text>
-          <Pressable
-          // onPress={() => {
-          //   console.log('pressed');
-          // }}
-          >
+          <Pressable>
             <Text style={{color: 'blue'}}>회원가입</Text>
           </Pressable>
         </View>
       </View>
-      <View style={styles.btnArea}>
-        <CustomButton onPress={login}>
-          <Text>로그인</Text>
-        </CustomButton>
+      <View style={styles.footer}>
+        <View style={styles.btnContainer}>
+          <CustomButton onPress={login}>
+            <Text>로그인</Text>
+          </CustomButton>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -119,46 +115,62 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    justifyContent: 'center',
+    alignItem: 'center',
+    paddingHorizontal: 10,
+  },
+  headerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItem: 'center',
+    marginVertical: 10,
+    // borderWidth: 1,
   },
   header: {
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  Body: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItem: 'center',
+    marginBottom: 30,
+    // borderWidth: 1,
+  },
+  idForm: {
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 30,
+    paddingLeft: 20,
+  },
+  passwordForm: {
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    paddingLeft: 20,
+  },
+  needSignUp: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+    paddingHorizontal: 5,
+  },
+  btnContainer: {
+    width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 60,
   },
-  headerFont: {
-    fontSize: 20,
-    fontWeight: '800',
-  },
-  inputContainer: {
-    height: '30%',
-    width: '80%',
-    marginBottom: 5,
-  },
-  infoTitle: {
-    fontWeight: '800',
-    fontSize: 15,
-  },
-  inputArea: {
-    width: '100%',
-    marginBottom: 20,
-    borderRadius: 8,
-    borderWidth: 0.8,
-    paddingHorizontal: 20,
-  },
-  signupArea: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    paddingHorizontal: 5,
-    margin: 0,
-  },
-  btnArea: {
+  footer: {
     flex: 1,
-    marginTop: 25,
-    width: '40%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // borderWidth: 1,
   },
-  infoText: {},
+  label: {
+    marginBottom: 5,
+    fontSize: 15,
+    fontWeight: '800',
+  },
 });
 
 export default Login;
