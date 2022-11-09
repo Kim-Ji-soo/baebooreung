@@ -11,6 +11,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -63,6 +64,7 @@ public class ChatRoomRepository {
     /**
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
      */
+    @Transactional
     public ChatRoom createChatRoom(String name){
             ChatRoom chatRoom = ChatRoom.create(name);
             hashOpsChatroom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
