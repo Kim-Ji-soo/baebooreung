@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Entity
 @Table(name = "chatroom_record")
 public class ChatRoomRecord {
 
