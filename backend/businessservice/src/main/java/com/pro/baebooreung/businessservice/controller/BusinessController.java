@@ -53,8 +53,22 @@ public class BusinessController {
 
         return ResponseEntity.status(HttpStatus.OK).body(routeList);
     }
-    //한 루트
-    //드라이버의 모든 루트들?
+
+
+    //한 루트에 대한 정보 얻기
+    @GetMapping("/business-service/route/{routeId}") ///{date}
+    public ResponseEntity<ResponseRoute> getRoute(@PathVariable("routeId") int routeId){
+        ResponseRoute routeList = routeService.getRoute(routeId);
+
+//        List<ResponseRoute> result = new ArrayList<>();
+//        routeList.forEach(v ->{
+//            result.add(new ModelMapper().map(v,ResponseRoute.class));
+//        });
+
+        return ResponseEntity.status(HttpStatus.OK).body(routeList);
+    }
+
+
 
 //    @PostMapping("/check-in/{userId}")
 //    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckIn requestCheckIn){

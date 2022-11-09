@@ -7,7 +7,9 @@ import com.pro.baebooreung.businessservice.domain.repository.RouteRepository;
 import com.pro.baebooreung.businessservice.vo.ResponseDelivery;
 import com.pro.baebooreung.businessservice.vo.ResponseRoute;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,10 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Slf4j
 public class RouteServiceImpl implements RouteService {
     RouteRepository routeRepository;
     DeliveryRepository deliveryRepository;
@@ -50,10 +54,28 @@ public class RouteServiceImpl implements RouteService {
                                     .routeName(route.getRouteName())
                                     .deliveryList(responseDeliveryList)
                                     .build()); // deliverylist(delivery) -> list(responsedelivery)
-//            responseRoutes.add(new ModelMapper().map(route,ResponseRoute.class));
 
         });
         return responseRoutes;
+    }
+
+    @Override
+    public ResponseRoute getRoute(int routeId) {
+        Optional<Route> routeEntity = routeRepository.findById(routeId);
+        ResponseRoute responseRoute = new ResponseRoute();
+
+//        List<Route> nameList = Optional.ofNullable(getNames()).orElseGet(() -> new ArrayList<>());
+        log.info(">>routeEntity 존재안함");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        if(routeEntity.isPresent()){
+            System.out.println("OoooooooooooooooooooOOOOOOOOOOOOOOOOOOOO");
+            log.info(">>routeEntity 존재: " + routeEntity.toString());
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            responseRoute = mapper.map(routeEntity,ResponseRoute.class);
+        }
+
+        return responseRoute;
     }
 
     @Override

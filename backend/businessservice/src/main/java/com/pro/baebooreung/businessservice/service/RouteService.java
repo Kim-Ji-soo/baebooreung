@@ -14,4 +14,6 @@ public interface RouteService {
 
     public List<ResponseRoute> getRouteByUserNDate(int userId);//, Data date);
     public List<ResponseRoute> getRouteByUser(int userId);
+
+    public ResponseRoute getRoute(int routeId);
 }

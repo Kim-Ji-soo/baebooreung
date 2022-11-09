@@ -8,10 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface RouteRepository extends JpaRepository<Route,Integer> {
     Iterable<Route> findByUserId(int userId);
     @Query("SELECT r FROM Route as r WHERE r.userId = :userId and r.date = :date")
     Iterable<Route> findByUserIdAndDeliveryDateTime(@Param("userId") int userId, @Param("date")LocalDate date);
 
+//    @Override
+//    Optional<Route> findById(int id);
 }
