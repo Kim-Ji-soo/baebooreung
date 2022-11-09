@@ -178,8 +178,6 @@ public class UserController {
         CheckinDto checkinDto = mapper.map(requestCheckInUser, CheckinDto.class);
 
         userService.setCheckIn(checkinDto);
-//        //반환값 설정
-//        ResponseUser responseUser = mapper.map(response, ResponseUser.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("체크인 성공");
     }
