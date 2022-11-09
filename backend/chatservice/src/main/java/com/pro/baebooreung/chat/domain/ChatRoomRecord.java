@@ -21,10 +21,15 @@ public class ChatRoomRecord {
     @Column(name="create_time")
     private LocalDateTime createTime;
 
-    public ChatRoomRecord(int id, String roomId, LocalDateTime createTime) {
+    @Column(name="chatroom_name")
+    private String roomName;
+
+
+    public ChatRoomRecord(int id, String roomId, LocalDateTime createTime, String roomName) {
         this.id = id;
         this.roomId = roomId;
         this.createTime = createTime;
+        this.roomName = roomName;
     }
 }
 
