@@ -1,8 +1,79 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import line from '../assets/images/separator.png';
-
+import BottomScrollSheet from './BottomScrollSheet';
 const Work = () => {
+  const ButtonStyle = {
+    height: 30,
+    width: '100%',
+    backgroundColor: '#5d91de',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#8559da',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 4,
+  };
+  const TextStyle = {
+    color: 'white',
+    fontWeight: '600',
+  };
+
+  const [dummy, setDummy] = useState({
+    date: '2022-11-05',
+    workList: [
+      {
+        id: 1,
+        type: 'pickup',
+        store: '청화당',
+        time: '12:05',
+      },
+      {
+        id: 2,
+        type: 'pickup',
+        store: '김가네',
+        time: '12:15',
+      },
+      {
+        id: 3,
+        type: 'pickup',
+        store: '김밥천국',
+        time: '12:20',
+      },
+      {
+        id: 4,
+        type: 'pickup',
+        store: '이디야',
+        time: '12:25',
+      },
+      {
+        id: 5,
+        type: 'pickup',
+        store: '스타벅스',
+        time: '12:35',
+      },
+      {
+        id: 6,
+        type: 'delivery',
+        store: '행정동',
+        time: '12:40',
+      },
+      {
+        id: 7,
+        type: 'delivery',
+        store: '기숙사동',
+        time: '12:50',
+      },
+      {
+        id: 8,
+        type: 'delivery',
+        store: '체육관',
+        time: '13:00',
+      },
+    ],
+  });
   return (
     <View style={styles.workRootContainer}>
       <View style={styles.workContainer}>
@@ -28,7 +99,12 @@ const Work = () => {
           </View>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.footerText}>상세보기</Text>
+          <BottomScrollSheet
+            title="상세보기"
+            ButtonStyle={ButtonStyle}
+            TextStyle={TextStyle}
+            workData={dummy}
+          />
         </View>
       </View>
     </View>
@@ -40,6 +116,7 @@ const styles = StyleSheet.create({
   workRootContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    // borderWidth: 1,
   },
   workContainer: {
     flexDirection: 'column',
@@ -99,14 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   footer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#5d91de',
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-  },
-  footerText: {
-    fontSize: 15,
-    color: 'white',
+    marginBottom: 16,
+    width: '100%',
   },
 });
