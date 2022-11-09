@@ -71,8 +71,10 @@ public class ChatRoomRepository {
             ChatRoom chatRoom = ChatRoom.create(name);
             hashOpsChatroom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
 
-            ChatRoomRecord chatRoomRecord = ChatRoomRecord.builder().roomId(chatRoom.getRoomId()).createTime(LocalDateTime.now()).roomName(name).build();
+//            ChatRoomRecord chatRoomRecord = ChatRoomRecord.builder().roomId(chatRoom.getRoomId()).createTime(LocalDateTime.now()).roomName(name).build();
+            ChatRoomRecord chatRoomRecord = new ChatRoomRecord(chatRoom.getRoomId(), LocalDateTime.now(), name);
             em.persist(chatRoomRecord);
+
 
             System.out.println("채팅방 생성됨");
             return chatRoom;
