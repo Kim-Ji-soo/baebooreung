@@ -1,5 +1,6 @@
 package com.pro.baebooreung.businessservice.domain;
 
+import jdk.jshell.execution.LoaderDelegate;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -57,6 +58,10 @@ public class Route {
     @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
     private List<Delivery> deliveryList = new ArrayList<>();
 
+
+    public void setActualStartTime(LocalTime startTime){
+        this.actualStartTime = startTime;
+    }
 
     @Builder
     public Route(int id, LocalDate date, LocalTime scheduledStartTime, LocalTime actualStartTime, int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {

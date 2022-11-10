@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class RequestCheckIn {
-    private int routeId;
+    private int id;
     private int deliveryId;
 }

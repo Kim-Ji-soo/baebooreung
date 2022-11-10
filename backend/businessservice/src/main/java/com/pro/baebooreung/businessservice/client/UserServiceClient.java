@@ -1,5 +1,6 @@
 package com.pro.baebooreung.businessservice.client;
 
+import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
 import com.pro.baebooreung.businessservice.vo.RequestStart;
 import com.pro.baebooreung.businessservice.vo.ResponseUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,4 +13,7 @@ public interface UserServiceClient {
 
     @PutMapping("/start")
     public ResponseUser startWork(@RequestBody RequestStart start);
+
+    @PutMapping("/checkIn")
+    public ResponseEntity<String> checkIn(@RequestBody RequestCheckIn requestCheckIn);
 }
