@@ -130,22 +130,14 @@ public class ChatRoomRepository {
 
     @Transactional
     public void updateSub(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
-        ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
-                .setParameter("userId", userId)
-                .setParameter("roomId", chatRoomRecord.getId())
-                .getSingleResult();
+        ChatRoomCheck chatRoomCheck = userRoomCheck(roomId, userId);
         chatRoomCheck.setIsSubscribe(true);
         em.persist(chatRoomCheck);
     }
 
     @Transactional
     public void updateEnt(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
-        ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
-                .setParameter("userId", userId)
-                .setParameter("roomId", chatRoomRecord.getId())
-                .getSingleResult();
+        ChatRoomCheck chatRoomCheck = userRoomCheck(roomId, userId);
         chatRoomCheck.setIsEnter(true);
         em.persist(chatRoomCheck);
     }
@@ -153,7 +145,9 @@ public class ChatRoomRepository {
 
     @Transactional
     public void roomQuit(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
         em.createQuery("DELETE FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
                 .setParameter("userId", userId)
                 .setParameter("roomId", chatRoomRecord.getId())
@@ -162,7 +156,9 @@ public class ChatRoomRepository {
 
     @Transactional
     public ChatRoomCheck userRoomCheck(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, roomId);
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
         ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
                 .setParameter("userId", userId)
                 .setParameter("roomId", chatRoomRecord.getId())
