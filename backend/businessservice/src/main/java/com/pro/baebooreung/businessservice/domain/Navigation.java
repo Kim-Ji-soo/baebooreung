@@ -27,16 +27,10 @@ public class Navigation {
     private int routeId;
 
     @Builder
-    public Navigation(int id, double latitude, double longitude, int routeId){
-        this.id = id;
+    public Navigation(double latitude, double longitude, int routeId){
         this.latitude = latitude;
         this.longitude = longitude;
         this.routeId = routeId;
     }
 
-    public void saveNavigation(int routeId, double latitude, double longitude){
-        this.routeId = routeId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
 }
