@@ -66,6 +66,7 @@ public class Delivery {
     }
 
 
+
     //builder에 id 안넣음
     @Builder
     public Delivery(int id, String delName,LocalDate date, LocalTime delScheduledTime, LocalTime delActualTime, String address, double latitude, double longitude, int sequence, Type type, boolean check, Route route) {

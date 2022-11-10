@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.support.NullValue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,19 +122,18 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Transactional
-    public RouteDto startWork(int userId, int routId){
+    public RouteDto startWork(int userId, int routeId){
         Optional<Delivery> findDelivery = deliveryRepository.findByRouteIdAndSequence(userId,1);
-        Optional<Route> findRoute = routeRepository.findById(routId);
+        Optional<Route> findRoute = routeRepository.findById(routeId);
         /* feign client */
         RequestStart requestStart = new RequestStart();
         if(findDelivery.isPresent()){
-            requestStart = new RequestStart(userId,routId,findDelivery.get().getId());
+            requestStart = new RequestStart(userId,routeId,findDelivery.get().getId());
             ResponseUser responseUser = userServiceClient.startWork(requestStart);
         }
 
         LocalTime now = LocalTime.now();
         findRoute.get().setActualStartTime(now);
-//        findRoute.get().builder().actualStartTime(now).build();
         routeRepository.save(findRoute.get());
 
         ModelMapper mapper = new ModelMapper();
@@ -170,17 +170,31 @@ public class RouteServiceImpl implements RouteService {
         double diff_long = del_long - user_long;
 
         double distance = Math.sqrt(diff_lat*diff_lat + diff_long*diff_long);
+        ////////////
 
         findDelivery.get().updateDelActualTime(LocalTime.now());
-//        findDelivery.get().builder().delActualTime(LocalTime.now());
         deliveryRepository.save(findDelivery.get());
 
         // user에서 넣어주기 feign client 코드 작성
-        RequestCheckIn requestCheckIn = new RequestCheckIn();
-        requestCheckIn.setId(userId);
-        requestCheckIn.setDeliveryId(findDelivery.get().getId());
-        userServiceClient.checkIn(requestCheckIn);
+        userServiceClient.checkIn(new RequestCheckIn(userId,findDelivery.get().getId()));
+
+//        //if 끝이라면 work_status와 route_id,delivery_id 비어주기 (그럼 user에서 delivery_id만 넣어줘도 될듯..)
+//        Optional<Route> findRoute = routeRepository.findById(routeId);
+//        int listSize = findRoute.get().getDeliveryList().size();
+//        if(listSize == sequence){
+//            userServiceClient.checkIn(new RequestCheckIn(userId, 0,0));
+//            findRoute.get().updateDone(true);
+//            routeRepository.save(findRoute.get());
+//        }
+    }
+
+    public void endWork(int userId,int routeId){ //,int deliveryId
         //if 끝이라면 work_status와 route_id,delivery_id 비어주기 (그럼 user에서 delivery_id만 넣어줘도 될듯..)
+        Optional<Route> findRoute = routeRepository.findById(routeId);
+        findRoute.get().updateDone(true);
+        routeRepository.save(findRoute.get());
+        userServiceClient.endWork(userId);
 
     }
+
 }

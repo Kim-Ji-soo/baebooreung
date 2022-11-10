@@ -5,6 +5,7 @@ import com.pro.baebooreung.businessservice.vo.RequestStart;
 import com.pro.baebooreung.businessservice.vo.ResponseUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,4 +17,7 @@ public interface UserServiceClient {
 
     @PutMapping("/checkIn")
     public ResponseEntity<String> checkIn(@RequestBody RequestCheckIn requestCheckIn);
+
+    @PutMapping("/end/{userId}")
+    public ResponseEntity<String> endWork(@PathVariable("userId") int userId);
 }

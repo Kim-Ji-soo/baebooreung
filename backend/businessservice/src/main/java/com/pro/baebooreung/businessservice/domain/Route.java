@@ -63,6 +63,9 @@ public class Route {
         this.actualStartTime = startTime;
     }
 
+    public void updateDone(boolean done){
+        this.done = done;
+    }
     @Builder
     public Route(int id, LocalDate date, LocalTime scheduledStartTime, LocalTime actualStartTime, int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
         this.id = id;
