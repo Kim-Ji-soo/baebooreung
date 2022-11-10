@@ -138,10 +138,7 @@ public class UserServiceImpl implements UserService {
     public ResponseUser setUsertoDriver(int id){
         UserEntity findUser = userRepository.findById(id);
         findUser.updateGrade(Grade.DRIVER);
-//        findUser.builder().grade(Grade.DRIVER).build();
-        log.info(">>>>>>>>>>>>>>>"+findUser.toString());
         userRepository.save(findUser);
-        log.info(">>>>>>>>>>>>>>>222222"+findUser.toString());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         ResponseUser responseUser = mapper.map(findUser, ResponseUser.class);
@@ -151,18 +148,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto setStart(StartDto startDto){
         UserEntity findUser = userRepository.findById(startDto.getId());
-        log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
-        log.info(">>>>>>>>>>>>>>>before"+startDto.toString());
         findUser.updateStartEnd(startDto.getRouteId(), startDto.getDeliveryId(),WorkStatus.DRIVING);
-//        findUser.builder()
-//                .routeId(startDto.getRouteId())
-//                .deliveryId(startDto.getDeliveryId())
-//                .workStatus(WorkStatus.DRIVING)
-//                .build();
-        userRepository.save(findUser);
 
-        log.info("<<<<<<<<<<<<<<after"+findUser.toString());
-        System.out.println(">>>>>>>>>>"+findUser.toString());
+        userRepository.save(findUser);
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
