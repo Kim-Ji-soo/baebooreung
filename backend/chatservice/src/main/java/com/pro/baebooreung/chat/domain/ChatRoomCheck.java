@@ -21,7 +21,7 @@ public class ChatRoomCheck {
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="room_id")
+    @JoinColumn(name="chatroom_id")
     private ChatRoomRecord roomId;
 
     @Column(name="is_enter")
