@@ -149,7 +149,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto setStart(StartDto startDto){
         UserEntity findUser = userRepository.findById(startDto.getId());
-
+        log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
+        log.info(">>>>>>>>>>>>>>>before"+startDto.toString());
         findUser.builder()
                 .routeId(startDto.getRouteId())
                 .deliveryId(startDto.getDeliveryId())
@@ -157,7 +158,7 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(findUser);
 
-        log.info(">>>>>>>>>>>>>>>"+findUser.toString());
+        log.info("<<<<<<<<<<<<<<after"+findUser.toString());
         System.out.println(">>>>>>>>>>"+findUser.toString());
 
         ModelMapper mapper = new ModelMapper();
@@ -175,12 +176,13 @@ public class UserServiceImpl implements UserService {
 
     public void setCheckIn(CheckinDto checkinDto){
         UserEntity findUser = userRepository.findById(checkinDto.getId());
-
+        log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
+        log.info(">>>>>>>>>>>>>>>before"+checkinDto.toString());
         findUser.builder()
                 .routeId(checkinDto.getRouteId())
                 .deliveryId(checkinDto.getDeliveryId()).build();
 
-        log.info(">>>>>>>>>>>>>>>"+findUser.toString());
+        log.info("<<<<<<<<<<<<<<<after"+findUser.toString());
         System.out.println(">>>>>>>>>>"+findUser.toString());
 
         userRepository.save(findUser);
