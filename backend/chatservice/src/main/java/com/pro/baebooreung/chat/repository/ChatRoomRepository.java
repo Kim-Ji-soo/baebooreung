@@ -147,7 +147,7 @@ public class ChatRoomRepository {
 
     @Transactional
     public void roomQuit(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId.roomId = :roomId", ChatRoomRecord.class)
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
         em.createQuery("DELETE FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
@@ -158,7 +158,7 @@ public class ChatRoomRepository {
 
     @Transactional
     public ChatRoomCheck userRoomCheck(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId.roomId = :roomId", ChatRoomRecord.class)
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
         ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
@@ -170,7 +170,7 @@ public class ChatRoomRepository {
 
     @Transactional
     public void userInvite(String roomId, String userId) {
-        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId.roomId = :roomId", ChatRoomRecord.class)
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
 
