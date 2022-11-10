@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
         return responseUser;
     }
 
-    @Transactional
+
     public void setCheckIn(CheckinDto checkinDto){
         UserEntity findUser = userRepository.findById(checkinDto.getId());
 
