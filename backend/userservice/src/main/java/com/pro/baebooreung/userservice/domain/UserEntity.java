@@ -8,6 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name="user")
+@RequiredArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +43,21 @@ public class UserEntity {
 
     @Column(name = "delivery_id",nullable = true)
     private Integer deliveryId;
+
+    public void updateGrade(Grade grade) {
+        this.grade = grade;
+    }
+
+    public void updateStartEnd(int routeId,int deliveryId){
+        this.routeId = routeId;
+        this.deliveryId = deliveryId;
+        this.workStatus = WorkStatus.DRIVING;
+    }
+
+    public void updateDelivery(int deliveryId){
+        this.deliveryId = deliveryId;
+    }
+
 
     @Builder
     public UserEntity(int id, String email, String name, String specialKey, Grade grade, String encryptedPwd, String profile, String phone, Integer region, WorkStatus workStatus, Integer routeId, Integer deliveryId) {

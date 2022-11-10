@@ -137,7 +137,8 @@ public class UserServiceImpl implements UserService {
 
     public ResponseUser setUsertoDriver(int id){
         UserEntity findUser = userRepository.findById(id);
-        findUser.builder().grade(Grade.DRIVER).build();
+        findUser.updateGrade(Grade.DRIVER);
+//        findUser.builder().grade(Grade.DRIVER).build();
         log.info(">>>>>>>>>>>>>>>"+findUser.toString());
         userRepository.save(findUser);
         log.info(">>>>>>>>>>>>>>>222222"+findUser.toString());
@@ -152,11 +153,12 @@ public class UserServiceImpl implements UserService {
         UserEntity findUser = userRepository.findById(startDto.getId());
         log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
         log.info(">>>>>>>>>>>>>>>before"+startDto.toString());
-        findUser.builder()
-                .routeId(startDto.getRouteId())
-                .deliveryId(startDto.getDeliveryId())
-                .workStatus(WorkStatus.DRIVING)
-                .build();
+        findUser.updateStartEnd(startDto.getRouteId(), startDto.getDeliveryId());
+//        findUser.builder()
+//                .routeId(startDto.getRouteId())
+//                .deliveryId(startDto.getDeliveryId())
+//                .workStatus(WorkStatus.DRIVING)
+//                .build();
         userRepository.save(findUser);
 
         log.info("<<<<<<<<<<<<<<after"+findUser.toString());
@@ -179,12 +181,9 @@ public class UserServiceImpl implements UserService {
         UserEntity findUser = userRepository.findById(checkinDto.getId());
         log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
         log.info(">>>>>>>>>>>>>>>before"+checkinDto.toString());
-        findUser.builder()
-                .routeId(checkinDto.getRouteId())
-                .deliveryId(checkinDto.getDeliveryId()).build();
+        findUser.updateDelivery(checkinDto.getDeliveryId());
 
         log.info("<<<<<<<<<<<<<<<after"+findUser.toString());
-        System.out.println(">>>>>>>>>>"+findUser.toString());
 
         userRepository.save(findUser);
         log.info("<<<<<<<<<<<<<<<after22"+findUser.toString());
