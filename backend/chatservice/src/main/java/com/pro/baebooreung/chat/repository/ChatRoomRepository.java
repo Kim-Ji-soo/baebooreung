@@ -80,6 +80,8 @@ public class ChatRoomRepository {
             ChatRoomRecord chatRoomRecord = new ChatRoomRecord(chatRoom.getRoomId(), LocalDateTime.now(), name);
             em.persist(chatRoomRecord);
 
+            em.flush();
+
             ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
             em.persist(chatRoomCheck);
 
@@ -137,6 +139,7 @@ public class ChatRoomRepository {
         ChatRoomCheck chatRoomCheck = userRoomCheck(roomId, userId);
         chatRoomCheck.setIsSubscribe(true);
         em.persist(chatRoomCheck);
+        em.flush();
     }
 
     @Transactional
@@ -144,6 +147,7 @@ public class ChatRoomRepository {
         ChatRoomCheck chatRoomCheck = userRoomCheck(roomId, userId);
         chatRoomCheck.setIsEnter(true);
         em.persist(chatRoomCheck);
+        em.flush();
     }
 
 
@@ -181,5 +185,6 @@ public class ChatRoomRepository {
 
         ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
         em.persist(chatRoomCheck);
+        em.flush();
     }
 }
