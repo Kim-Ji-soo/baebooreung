@@ -58,4 +58,22 @@ public class UserEntity {
         this.routeId = routeId;
         this.deliveryId = deliveryId;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", specialKey='" + specialKey + '\'' +
+                ", grade=" + grade +
+                ", encryptedPwd='" + encryptedPwd + '\'' +
+                ", profile='" + profile + '\'' +
+                ", phone='" + phone + '\'' +
+                ", region=" + region +
+                ", workStatus=" + workStatus +
+                ", routeId=" + routeId +
+                ", deliveryId=" + deliveryId +
+                '}';
+    }
 }
