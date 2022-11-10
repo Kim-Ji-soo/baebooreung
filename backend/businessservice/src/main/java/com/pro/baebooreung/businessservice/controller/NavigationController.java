@@ -2,6 +2,7 @@ package com.pro.baebooreung.businessservice.controller;
 
 import com.pro.baebooreung.businessservice.domain.Navigation;
 import com.pro.baebooreung.businessservice.dto.NavigationDto;
+import com.pro.baebooreung.businessservice.dto.NavigationRequestDto;
 import com.pro.baebooreung.businessservice.service.NavigationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,9 @@ public class NavigationController {
     }
 
     @PostMapping("/navigps/{route_id}")
-    public ResponseEntity<?> saveNavigationGps(@PathVariable("route_id") int route_id, @RequestBody List<NavigationDto> path){
+    public ResponseEntity<?> saveNavigationGps(@PathVariable("route_id") int route_id, @RequestBody NavigationRequestDto requestDto){
         try {
-            navigationService.saveNavigationGps(route_id, path);
+            navigationService.saveNavigationGps(route_id, requestDto.getList());
             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
         } catch (Exception e){
             e.printStackTrace();
