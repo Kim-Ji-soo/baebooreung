@@ -1,0 +1,19 @@
+spring:
+  kafka:
+    bootstrap-servers: k7c207.p.ssafy.io:29092
+    properties:
+      spring:
+        json:
+          value:
+            default:
+              type: kr.co.sys4u.app.dto.QueuedMessage
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://k7c207.p.ssafy.io:3306/93pro?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=utf8
+    username: baebooreung
+    password: baebooreung93pro
+server:
+  port: 8083
