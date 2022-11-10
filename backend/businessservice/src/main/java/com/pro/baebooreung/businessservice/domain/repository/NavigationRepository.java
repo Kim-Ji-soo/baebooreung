@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface NavigationRepository extends JpaRepository<Navigation, Integer> {
     List<Navigation> findByRouteId(int route_id) throws Exception;
-    void save(int route_id, double latitude, double longitude);
 }
