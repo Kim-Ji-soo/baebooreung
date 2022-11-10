@@ -14,6 +14,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
@@ -35,13 +36,13 @@ import java.util.UUID;
 
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     UserRepository userRepository; //필드단위에서 @Autowired사용할 수 있지만 생성자 통해서 주입하는 것이 더 좋음
     BCryptPasswordEncoder passwordEncoder;
 
     Environment env;
-//    RestTemplate restTemplate;
     BusinessServiceClient businessServiceClient;
 //    CircuitBreakerFactory circuitBreakerFactory;
 
@@ -49,14 +50,12 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder passwordEncoder,
                            Environment env,
-//                           RestTemplate restTemplate,
                               BusinessServiceClient businessServiceClient
 //                           CircuitBreakerFactory circuitBreakerFactory
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
-//        this.restTemplate = restTemplate;
         this.businessServiceClient=businessServiceClient;
 //        this.circuitBreakerFactory = circuitBreakerFactory;
     }
@@ -137,6 +136,8 @@ public class UserServiceImpl implements UserService {
     public ResponseUser setUsertoDriver(int id){
         UserEntity findUser = userRepository.findById(id);
         findUser.builder().grade(Grade.DRIVER).build();
+        log.info(">>>>>>>>>>>>>>>"+findUser.toString());
+        System.out.println(">>>>>>>>>>"+findUser.toString());
         userRepository.save(findUser);
 
         ModelMapper mapper = new ModelMapper();
@@ -155,6 +156,9 @@ public class UserServiceImpl implements UserService {
                 .workStatus(WorkStatus.DRIVING)
                 .build();
         userRepository.save(findUser);
+
+        log.info(">>>>>>>>>>>>>>>"+findUser.toString());
+        System.out.println(">>>>>>>>>>"+findUser.toString());
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -175,6 +179,10 @@ public class UserServiceImpl implements UserService {
         findUser.builder()
                 .routeId(checkinDto.getRouteId())
                 .deliveryId(checkinDto.getDeliveryId()).build();
+
+        log.info(">>>>>>>>>>>>>>>"+findUser.toString());
+        System.out.println(">>>>>>>>>>"+findUser.toString());
+
         userRepository.save(findUser);
 
     }
