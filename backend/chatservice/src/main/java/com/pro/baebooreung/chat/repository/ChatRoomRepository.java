@@ -160,13 +160,16 @@ public class ChatRoomRepository {
 
     @Transactional
     public ChatRoomCheck userRoomCheck(String roomId, String userId) {
+        System.out.println("---- chatroom record before----");
         ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
+        System.out.println("---- chatroom check before----");
         ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
                 .setParameter("userId", userId)
                 .setParameter("roomId", chatRoomRecord.getId())
                 .getSingleResult();
+        System.out.println("chatroom search finish");
         return chatRoomCheck;
     }
 
