@@ -150,7 +150,7 @@ public class ChatRoomRepository {
         ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
-        em.createQuery("DELETE FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
+        em.createQuery("DELETE FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId")
                 .setParameter("userId", userId)
                 .setParameter("roomId", chatRoomRecord.getId())
                         .executeUpdate();
