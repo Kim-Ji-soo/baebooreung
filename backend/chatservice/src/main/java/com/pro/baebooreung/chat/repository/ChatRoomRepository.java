@@ -166,5 +166,13 @@ public class ChatRoomRepository {
         return chatRoomCheck;
     }
 
+    @Transactional
+    public void userInvite(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
 
+        ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
+        em.persist(chatRoomCheck);
+    }
 }
