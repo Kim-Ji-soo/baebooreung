@@ -30,7 +30,9 @@ public class NavigationServiceImpl implements NavigationService {
     @Override
     public void saveNavigationGps(int route_id, List<NavigationDto> path) throws Exception {
         path.forEach(navigationDto -> {
-            navigationRepository.save(route_id, navigationDto.getLatitude(), navigationDto.getLongitude());
+            Navigation navigation = new Navigation();
+            navigation.saveNavigation(route_id, navigationDto.getLatitude(), navigationDto.getLongitude());
+            navigationRepository.save(navigation);
         });
     }
 
