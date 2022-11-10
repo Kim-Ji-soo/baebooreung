@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "navigation")
 public class Navigation {
     @Id
@@ -32,5 +32,11 @@ public class Navigation {
         this.latitude = latitude;
         this.longitude = longitude;
         this.routeId = routeId;
+    }
+
+    public void saveNavigation(int routeId, double latitude, double longitude){
+        this.routeId = routeId;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
