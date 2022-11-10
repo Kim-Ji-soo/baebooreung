@@ -107,5 +107,11 @@ public class ChatRoomController {
         return chatRoomRepository.userRoomCheck(roomId, userId);
     }
 
+    @ApiOperation(value = "유저를 채팅방에 초대한다.",notes = "해당 유저를 채팅방에 초대한다.")
+    @PostMapping("/room/user/add/{roomId}/{userId}")
+    public void userInvite(@PathVariable String roomId, @PathVariable String userId){
+        chatRoomRepository.userInvite(roomId, userId);
+    }
+
 
 }
