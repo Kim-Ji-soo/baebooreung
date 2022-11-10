@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
     UserDto setStart(StartDto startDto);
 
     public void setCheckIn(CheckinDto checkinDto);
+
+    public void setEnd(int id);
 }

@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.nio.charset.Charset;
+import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,16 +170,24 @@ public class UserController {
     }
 
     @PutMapping("/checkIn")
-    public ResponseEntity<String> checkIn(@RequestBody RequestCheckInUser requestCheckInUser){
+    public ResponseEntity<String> checkIn(@RequestBody RequestCheckIn requestCheckIn){
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        CheckinDto checkinDto = mapper.map(requestCheckInUser, CheckinDto.class);
+        CheckinDto checkinDto = mapper.map(requestCheckIn, CheckinDto.class);
 
         userService.setCheckIn(checkinDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("체크인 성공");
     }
+
+    @PutMapping("/end/{userId}")
+    public ResponseEntity<String> endWork(@PathVariable("userId") int userId){
+        userService.setEnd(userId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("업무 종료 성공");
+    }
+
 }
 

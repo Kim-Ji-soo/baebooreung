@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
         UserEntity findUser = userRepository.findById(startDto.getId());
         log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
         log.info(">>>>>>>>>>>>>>>before"+startDto.toString());
-        findUser.updateStartEnd(startDto.getRouteId(), startDto.getDeliveryId());
+        findUser.updateStartEnd(startDto.getRouteId(), startDto.getDeliveryId(),WorkStatus.DRIVING);
 //        findUser.builder()
 //                .routeId(startDto.getRouteId())
 //                .deliveryId(startDto.getDeliveryId())
@@ -176,17 +176,19 @@ public class UserServiceImpl implements UserService {
         return responseUser;
     }
 
-
+    @Override
     public void setCheckIn(CheckinDto checkinDto){
         UserEntity findUser = userRepository.findById(checkinDto.getId());
-        log.info(">>>>>>>>>>>>>>>before"+findUser.toString());
-        log.info(">>>>>>>>>>>>>>>before"+checkinDto.toString());
         findUser.updateDelivery(checkinDto.getDeliveryId());
 
-        log.info("<<<<<<<<<<<<<<<after"+findUser.toString());
-
         userRepository.save(findUser);
-        log.info("<<<<<<<<<<<<<<<after22"+findUser.toString());
+    }
+
+    @Override
+    public void setEnd(int id) {
+        UserEntity findUser = userRepository.findById(id);
+        findUser.updateStartEnd(0,0,WorkStatus.OFF);
+       userRepository.save(findUser);
     }
 }
 

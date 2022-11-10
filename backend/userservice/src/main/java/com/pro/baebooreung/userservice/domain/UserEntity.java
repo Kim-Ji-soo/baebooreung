@@ -47,10 +47,10 @@ public class UserEntity {
         this.grade = grade;
     }
 
-    public void updateStartEnd(int routeId,int deliveryId){
+    public void updateStartEnd(int routeId,int deliveryId,WorkStatus workStatus){
         this.routeId = routeId;
         this.deliveryId = deliveryId;
-        this.workStatus = WorkStatus.DRIVING;
+        this.workStatus = workStatus;
     }
 
     public void updateDelivery(int deliveryId){
