@@ -81,6 +81,8 @@ public class ChatRoomRepository {
             ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
             em.persist(chatRoomCheck);
 
+            em.flush();
+
             System.out.println("채팅방 생성됨");
             return chatRoom;
      }
