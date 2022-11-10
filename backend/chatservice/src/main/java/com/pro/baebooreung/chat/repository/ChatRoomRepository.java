@@ -62,7 +62,9 @@ public class ChatRoomRepository {
 
     @Transactional
     public ChatRoomRecord findRoomById(String id){
-         ChatRoomRecord chatRoomRecord = em.find(ChatRoomRecord.class, id);
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", id)
+                .getSingleResult();
          return chatRoomRecord;
     }
 
