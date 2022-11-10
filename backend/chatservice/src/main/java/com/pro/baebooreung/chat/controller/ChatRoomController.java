@@ -95,7 +95,7 @@ public class ChatRoomController {
     }
 
     @ApiOperation(value = "퇴장한다.",notes = "해당 채팅방을 나간다.")
-    @PutMapping("/room/delete/{roomId}/{userId}")
+    @DeleteMapping("/room/delete/{roomId}/{userId}")
     public void roomQuit(@PathVariable String roomId, @PathVariable String userId){
         chatRoomRepository.roomQuit(roomId, userId);
     }
