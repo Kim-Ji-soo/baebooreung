@@ -52,3 +52,9 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootJar {
+	archivesBaseName = 's3Service'
+	archiveFileName = 's3Service.jar'
+}
+
