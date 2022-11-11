@@ -5,6 +5,7 @@ COPY . .
 RUN pip3 install flask
 RUN pip3 install --upgrade google-cloud-storage
 RUN pip3 install google-cloud-speech
+RUN pip3 install moviepy
 
 
 EXPOSE 5000
