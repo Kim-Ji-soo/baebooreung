@@ -1,4 +1,4 @@
-package com.pro.baebooreung.s3service;
+package com.pro.baebooreung.s3service.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
