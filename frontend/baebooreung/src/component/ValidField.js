@@ -15,14 +15,17 @@ function ValidField () {
   }
 
   return (
-    <TextField
+    <TextField 
+      sx = {{
+        width: 10
+      }}
       id="standard-name"
       label="ID"
       variant="outlined"
       value={value}
       onChange={onChange}
       error={validation()}
-      helperText={validation() ? "특수기호나 한글은 입력 하실 수 없습니다.":""}
+      helperText={validation() ? "특수기호나 한글은 입력 하실 수 없습니다.2":""}
     />
   );
 }

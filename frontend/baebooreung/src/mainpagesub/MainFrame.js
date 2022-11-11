@@ -16,12 +16,11 @@ import tracking from "../assets/images/tracking.png";
 
 const MainFrame = ({ setMainId, changeMenuHeader }) => {
   const menus = {
-    0: "드라이버 현황",
+    0: "실시간 업무 현황",
     1: "업무 내역",
     2: "경로 분석",
     3: "채팅",
     4: "공지사항",
-    5: "네이버지도테스트",
   }
   const menus_fold = {
     0: "",
@@ -29,7 +28,6 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
     2: "",
     3: "",
     4: "",
-    5: "",
   }
 
   function changeBackground(id) {
@@ -38,7 +36,6 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
     document.getElementById("button_3").className = styles.button_style;
     document.getElementById("button_4").className = styles.button_style;
     document.getElementById("button_5").className = styles.button_style;
-    document.getElementById("button_6").className = styles.button_style;
     document.getElementById(id).className = styles.button_style_pick;
   }
 
@@ -114,18 +111,6 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
           >
             <img className={styles.main_frame_logo_image} src={notice} alt="" />
             &nbsp;&nbsp;&nbsp;공지사항
-          </button>
-          <button
-            id="button_6"
-            className={styles.button_style}
-            onClick={() => {
-              setMainId(5);
-              changeBackground("button_6");
-              changeMenuHeader(5);
-            }}
-          >
-            <img className={styles.main_frame_logo_image} src={map} alt="" />
-            &nbsp;&nbsp;&nbsp;네이버지도
           </button>
         </div>
         <div>
