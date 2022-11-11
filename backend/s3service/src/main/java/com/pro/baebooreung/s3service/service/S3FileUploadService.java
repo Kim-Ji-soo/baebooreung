@@ -17,7 +17,6 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class S3FileUploadService {
-    //제발!
 
     // 버킷 이름 동적 할당
     @Value("${cloud.aws.s3.bucket}")
