@@ -16,13 +16,15 @@ export default function NaverMapApi() {
   // // API 2번
   // const X_NCP_APIGW_API_KEY_ID = "g05t2a43ik"
   // const X_NCP_APIGW_API_KEY = "K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt"
+  
   // const headers = {
   //   "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID
   //   "X-NCP-APIGW-API-KEY": X_NCP_APIGW_API_KEY
-  // }
+  // }0
+
 
   // waypoints 만들기
-  const [start, setStart] = useState("126.8950,35.1790") // 출발지
+  const [start, setStart] = useState("126.8950,35.1792") // 출발지
   let waypoints = []
   const waypoints1 = "126.8982,35.1786" // 킹스샌드
   const waypoints2 = "126.9043,35.1777" // 알촌
@@ -60,20 +62,38 @@ export default function NaverMapApi() {
     goal: waypoints1,
     option: "trafast",
   }
+  let temp = 0
+
+  // let [exceltest, setExcelTest] = useState(['exceltest'])
 
   const [test_course, setTestCourse] = useState([])
   const [test_course_now, setTestCourseNow] = useState([])
+  const [params_temp, setParamsTemp] = useState(0)
 
+
+  const course = []
+  const course_now = []
   async function cal_course() {
-    const course = []
+    
     await axios({
-      url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
-      method: 'get',
+      url: `https://k7c207.p.ssafy.io:8000/business-service/navigps/${params_temp}`,
+      method: "get",
+      headers: {
+          token : `${localStorage.getItem("token")}`,
+      }
+    }).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    await axios({
+      url: "https://k7c207.p.ssafy.io:8000/user-service/map",
+      method: "post",
       data: data,
     })
       .then((res) => {
-        console.log(res);
-        const path = res.data.route.traoptimal[0].path
+        const path = res.data.route.trafast[0].path
+        // console.log('path', path)
         for (let i = 0; i <= path.length - 1; i++) {
           course.push({ lat: path[i][1], lng: path[i][0] })
         }
@@ -83,15 +103,13 @@ export default function NaverMapApi() {
         console.log('에러', error);
       })
 
-    const course_now = []
     await axios({
       url: 'https://k7c207.p.ssafy.io:8000/user-service/map',
       method: 'post',
-      params: data_now
+      data: data_now
     })
       .then((res) => {
-        console.log(res);
-        const path_now = res.data.route.traoptimal[0].path
+        const path_now = res.data.route.trafast[0].path
         for (let i = 0; i <= path_now.length - 1; i++) {
           course_now.push({ lat: path_now[i][1], lng: path_now[i][0] })
         }
@@ -106,6 +124,19 @@ export default function NaverMapApi() {
     const path = payload.split(',')
     return { lat: parseFloat(path[1], 10), lng: parseFloat(path[0], 10) }
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      axios({
+        url: `https://k7c207.p.ssafy.io:8000/gps-service/gps/2`,
+        method: 'get'
+      }).then((res)=> {
+        setStart(res.data.longitude + ',' + res.data.latitude)
+      })
+      setParamsTemp(params_temp+1)
+    }
+    , 3000)
+  },[params_temp])
 
   useEffect(() => {
     cal_course()
@@ -138,7 +169,7 @@ export default function NaverMapApi() {
             position={translate_coordinate_lat_lng(start)}
             animation={1}
           />
-          <Marker position={translate_coordinate_lat_lng(waypoints1)} />
+          <Marker position={translate_coordinate_lat_lng(goal)} />
           <Marker position={translate_coordinate_lat_lng(waypoints2)} />
           <Marker position={translate_coordinate_lat_lng(waypoints3)} />
           <Marker position={translate_coordinate_lat_lng(waypoints4)} />
@@ -150,7 +181,7 @@ export default function NaverMapApi() {
           <Marker position={translate_coordinate_lat_lng(waypoints10)} />
           <Marker position={translate_coordinate_lat_lng(waypoints11)} />
           <Marker
-            position={translate_coordinate_lat_lng(goal)}
+            position={translate_coordinate_lat_lng(waypoints1)}
             animation={1}
           />
           <Polyline
@@ -171,6 +202,14 @@ export default function NaverMapApi() {
           />
         </NaverMap>
       </div>
+        {/* {test_course.map((item,idx)=>{
+          // console.log(item);
+          return(
+            <div>{item.lng}, {item.lat}</div>
+          )
+        })} */}
+
+        {/* <div>{test_course}</div> */}
     </div>
   </div>
 
