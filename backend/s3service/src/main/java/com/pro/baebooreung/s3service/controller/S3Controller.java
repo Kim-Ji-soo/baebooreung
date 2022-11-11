@@ -8,17 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/s3")
+@RequestMapping("/s3-service")
 @CrossOrigin(origins = "*", allowCredentials = "false")
 public class S3Controller {
 
@@ -29,11 +26,21 @@ public class S3Controller {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(ProfileRequest profileReq) throws IOException {
 
-        log.info("Start uploading....");
         ProfileResponse res = s3FileUploadService.uploadFile(profileReq);
         taskClient.saveProfile(res);
 
         if(res!=null)
+            return new ResponseEntity<>("성공", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("실패!!", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getFile(String userId) throws IOException {
+
+        String url = taskClient.getProfile(userId);
+
+        if(url!=null)
             return new ResponseEntity<>("성공", HttpStatus.OK);
         else
             return new ResponseEntity<>("실패!!", HttpStatus.BAD_REQUEST);
