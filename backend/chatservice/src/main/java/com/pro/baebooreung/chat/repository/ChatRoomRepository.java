@@ -1,5 +1,7 @@
 package com.pro.baebooreung.chat.repository;
 
+import com.pro.baebooreung.chat.domain.ChatRoomCheck;
+import com.pro.baebooreung.chat.domain.ChatRoomRecord;
 import com.pro.baebooreung.chat.dto.ChatRoom;
 import com.pro.baebooreung.chat.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
@@ -8,18 +10,29 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
-@Service
+//@Service
+@Component
 public class ChatRoomRepository {
 
-     //Redis CacheKeys
+    @PersistenceContext
+    private final EntityManager em;
+
+
+    //Redis CacheKeys
      private static final String CHAT_ROOMS = "CHAT_ROOM"; //채팅룸 저장
      private static final String USER_COUNT = "USER_COUNT"; //채팅룸에 입장한 클라이언트 수 저장
      private static final String ENTER_INFO = "ENTER_INFO"; //채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
@@ -31,20 +44,49 @@ public class ChatRoomRepository {
      @Resource(name = "redisTemplate")
      private ValueOperations<String, String> valueOps;
 
-     public List<ChatRoom> findAllRoom(){
-         return hashOpsChatroom.values(CHAT_ROOMS);
+//     public List<ChatRoom> findAllRoom(){
+//         return hashOpsChatroom.values(CHAT_ROOMS);
+//     }
+
+    @Transactional
+     public List<ChatRoomRecord> findAllRoom(){
+         List<ChatRoomRecord> chatRoomRecords = em.createQuery("select cr from ChatRoomRecord cr")
+                 .getResultList();
+         return chatRoomRecords;
      }
 
-     public ChatRoom findRoomById(String id){
-            return hashOpsChatroom.get(CHAT_ROOMS, id);
-        }
+//     public ChatRoom findRoomById(String id){
+//            return hashOpsChatroom.get(CHAT_ROOMS, id);
+//        }
+
+
+    @Transactional
+    public ChatRoomRecord findRoomById(String id){
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", id)
+                .getSingleResult();
+         return chatRoomRecord;
+    }
 
     /**
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
      */
-    public ChatRoom createChatRoom(String name){
+    @Transactional
+    public ChatRoom createChatRoom(String name, String userId){
             ChatRoom chatRoom = ChatRoom.create(name);
             hashOpsChatroom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+
+//            ChatRoomRecord chatRoomRecord = ChatRoomRecord.builder().roomId(chatRoom.getRoomId()).createTime(LocalDateTime.now()).roomName(name).build();
+            ChatRoomRecord chatRoomRecord = new ChatRoomRecord(chatRoom.getRoomId(), LocalDateTime.now(), name);
+            em.persist(chatRoomRecord);
+
+            em.flush();
+
+            ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
+            em.persist(chatRoomCheck);
+
+            em.flush();
+
             System.out.println("채팅방 생성됨");
             return chatRoom;
      }
@@ -92,8 +134,57 @@ public class ChatRoomRepository {
         return Optional.ofNullable(valueOps.decrement(USER_COUNT + "_" + roomId)).filter(count -> count > 0).orElse(0L);
     }
 
+    @Transactional
+    public void updateSub(String roomId, String userId) {
+        ChatRoomCheck chatRoomCheck = userRoomCheck(roomId, userId);
+        chatRoomCheck.setIsSubscribe(true);
+        em.persist(chatRoomCheck);
+        em.flush();
+    }
+
+    @Transactional
+    public void updateEnt(String roomId, String userId) {
+        ChatRoomCheck chatRoomCheck = userRoomCheck(roomId, userId);
+        chatRoomCheck.setIsEnter(true);
+        em.persist(chatRoomCheck);
+        em.flush();
+    }
 
 
+    @Transactional
+    public void roomQuit(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
+        em.createQuery("DELETE FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId")
+                .setParameter("userId", userId)
+                .setParameter("roomId", chatRoomRecord.getId())
+                        .executeUpdate();
+    }
 
+    @Transactional
+    public ChatRoomCheck userRoomCheck(String roomId, String userId) {
+        System.out.println("---- chatroom record before----");
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
+        System.out.println("---- chatroom check before----");
+        ChatRoomCheck chatRoomCheck = em.createQuery("SELECT c FROM ChatRoomCheck c WHERE c.userId = :userId AND c.roomId.id = :roomId", ChatRoomCheck.class)
+                .setParameter("userId", userId)
+                .setParameter("roomId", chatRoomRecord.getId())
+                .getSingleResult();
+        System.out.println("chatroom search finish");
+        return chatRoomCheck;
+    }
 
+    @Transactional
+    public void userInvite(String roomId, String userId) {
+        ChatRoomRecord chatRoomRecord = em.createQuery("SELECT cr FROM ChatRoomRecord cr WHERE cr.roomId = :roomId", ChatRoomRecord.class)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
+
+        ChatRoomCheck chatRoomCheck = new ChatRoomCheck(userId, chatRoomRecord, false, false);
+        em.persist(chatRoomCheck);
+        em.flush();
+    }
 }
