@@ -5,7 +5,7 @@ import styles from './3RouteAnalysis.module.css'
 const RouteAnalysis = () => {
   return (
     <div className={styles.background}>
-      경로 분석입니다.
+      경로 분석
     </div>
   );
 }

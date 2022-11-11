@@ -5,7 +5,7 @@ import styles from './1RealTime.module.css'
 const RealTime = () => {
   return (
     <div >
-      대시보드입니다.
+      드라이버 현황
     </div>
   );
 }
