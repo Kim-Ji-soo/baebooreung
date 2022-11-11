@@ -8,6 +8,8 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSocketMessageBroker
@@ -17,14 +19,16 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/sub");
-        config.setApplicationDestinationPrefixes("/pub");
+        config.enableSimpleBroker("/api/sub");
+        config.setApplicationDestinationPrefixes("/api/pub");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        System.out.println("register stomp end points");
-        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*").withSockJS();
+        System.out.println("register stomp end points--");
+        registry.addEndpoint("/api/ws-stomp").setAllowedOriginPatterns("*").withSockJS()
+                .setHeartbeatTime(1700);
+
     }
 
     @Override
