@@ -76,11 +76,7 @@ public class RouteServiceImpl implements RouteService {
         ResponseRoute responseRoute = new ResponseRoute();
 
 //        List<Route> nameList = Optional.ofNullable(getNames()).orElseGet(() -> new ArrayList<>());
-        log.info(">>routeEntity 존재안함");
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         if(routeEntity.isPresent()){
-            System.out.println("OoooooooooooooooooooOOOOOOOOOOOOOOOOOOOO");
-            log.info(">>routeEntity 존재: " + routeEntity.toString());
             ModelMapper mapper = new ModelMapper();
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             responseRoute = mapper.map(routeEntity,ResponseRoute.class);
@@ -191,10 +187,17 @@ public class RouteServiceImpl implements RouteService {
     public void endWork(int userId,int routeId){ //,int deliveryId
         //if 끝이라면 work_status와 route_id,delivery_id 비어주기 (그럼 user에서 delivery_id만 넣어줘도 될듯..)
         Optional<Route> findRoute = routeRepository.findById(routeId);
-        findRoute.get().updateDone(true);
-        routeRepository.save(findRoute.get());
-        userServiceClient.endWork(userId);
+        if(findRoute.isPresent()){
+            findRoute.get().updateDone(true);
+            routeRepository.save(findRoute.get());
+            userServiceClient.endWork(userId);
+        }else{
+
+        }
+
 
     }
+
+
 
 }

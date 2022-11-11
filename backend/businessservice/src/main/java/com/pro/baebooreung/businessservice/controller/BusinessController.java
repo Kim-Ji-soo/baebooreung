@@ -99,4 +99,17 @@ public class BusinessController {
         RouteDto result = routeService.startWork(userId, routeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    //한 안내 경로에 대한 정보 얻기
+    @GetMapping("/route/{routeId}/navigation") ///{date}
+    public ResponseEntity<ResponseRoute> getNaviRoute(@PathVariable("routeId") int routeId){
+        ResponseRoute routeList = routeService.getRoute(routeId);
+
+//        List<ResponseRoute> result = new ArrayList<>();
+//        routeList.forEach(v ->{
+//            result.add(new ModelMapper().map(v,ResponseRoute.class));
+//        });
+
+        return ResponseEntity.status(HttpStatus.OK).body(routeList);
+    }
 }
