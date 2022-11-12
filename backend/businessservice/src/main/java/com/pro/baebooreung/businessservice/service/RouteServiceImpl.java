@@ -58,7 +58,7 @@ public class RouteServiceImpl implements RouteService {
             ModelMapper mapper = new ModelMapper();
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             ResponseRoute r = mapper.map(route,ResponseRoute.class);
-
+            responseRoutes.add(r);
 //            List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
 //            route.getDeliveryList().forEach(v ->{
 //                responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
