@@ -90,7 +90,7 @@ public class BusinessController {
         return null;
     }
 
-    // 업무 시작
+    // 업무 끝
     @PutMapping("/{userId}/end/{routeId}")
     public ResponseEntity<?> endWork(@PathVariable("userId") int userId,@PathVariable("routeId") int routeId){
         // User에다가 routeId,deliveryId,workStatus 를 바꿔주고,
