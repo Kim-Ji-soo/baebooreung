@@ -14,7 +14,6 @@ public class KafkaConsumerService {
     private final GpsRepository gpsRepository;
     private final UserRepository userRepository;
 
-    @KafkaListener(topics = "gps-kafka", groupId = "testgroup", containerFactory = "kafkaListener")
     public void consume(GpsSaveDto gpsSaveDto) throws Exception {
         User user = userRepository.findOne(gpsSaveDto.getUserId());
         if(user == null) throw new IllegalStateException("해당 회원이 존재하지 않습니다.");
