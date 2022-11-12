@@ -10,7 +10,7 @@ import {
 
 // axios
 import axios from 'axios';
-import {user} from '../../api/api';
+import {user_service} from '../../api/api';
 // redux
 import {useDispatch} from 'react-redux';
 import {setUserInfo} from '../../redux/auth';
@@ -36,10 +36,10 @@ const Login = () => {
   const fetchUserInfo = id => {
     axios({
       method: 'get',
-      url: user.getUserInfo() + `${id}`, //path variable로 id값을 받는다.
+      url: user_service.getUserInfo() + `${id}`, //path variable로 id값을 받는다.
     })
       .then(res => {
-        console.log(res);
+        console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -48,7 +48,7 @@ const Login = () => {
   const login = async () => {
     await axios({
       method: 'POST',
-      url: user.login(),
+      url: user_service.login(),
       data: {
         email: id,
         password: password,

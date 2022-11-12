@@ -94,14 +94,15 @@ const DetailWork = () => {
   const killWatchLocation = () => {
     if (this.watchId !== null) {
       Geolocation.clearWatch(this.watchId);
+      setWatchLocation(false);
       console.log('getWatchLocation is stop...');
     }
   };
 
-  useEffect(() => {
-    // 업무시작 버튼을 누르면 실행되게 하기.
-    getWatchLocation();
-  }, []);
+  // useEffect(() => {
+  //   // 업무시작 버튼을 누르면 실행되게 하기.
+  //   getWatchLocation();
+  // }, []);
 
   useEffect(() => {
     if (watchLocation !== false) {
@@ -113,12 +114,16 @@ const DetailWork = () => {
       {watchLocation ? (
         <Map
           width="100%"
-          height="50%"
+          height="80%"
           coords={{
             latitude: watchLocation.latitude,
             longitude: watchLocation.longitude,
           }}></Map>
-      ) : null}
+      ) : (
+        <View style={styles.DetailWorkContainer}>
+          <Text>Loading...</Text>
+        </View>
+      )}
       <Button
         title="KILL watchLocation"
         onPress={() => {
@@ -138,6 +143,7 @@ export default DetailWork;
 const styles = StyleSheet.create({
   DetailWorkContainer: {
     flex: 1,
+    justifyContent: 'center',
   },
   header: {
     flex: 0.8,

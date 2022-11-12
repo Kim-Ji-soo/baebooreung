@@ -19,16 +19,52 @@ const voice = {
 };
 
 // user 관련 기능 api
-const USER_BASE_URL = 'https://k7c207.p.ssafy.io:8000/';
-const USER = 'user-service/';
-const user = {
-  login: () => USER_BASE_URL + USER + 'login', // 로그인
-  join: () => USER_BASE_URL + USER + 'join', // 회원가입
+const BASE_URL = 'https://k7c207.p.ssafy.io:8000/';
+const USER_SERVICE = 'user-service/';
+const user_service = {
+  login: () => BASE_URL + USER_SERVICE + 'login', // 로그인
+  join: () => BASE_URL + USER_SERVICE + 'join', // 회원가입
+  authdriver: () => BASE_URL + USER_SERVICE + 'authdriver/', // 관리자 드라이버 인증
+  getUserInfo: () => BASE_URL + USER_SERVICE + 'user/', // 사용자 정보 요청
+  getAllUser: () => BASE_URL + USER_SERVICE + 'users', // 전체 사용자 정보 출력
   // profile: () => USER_BASE_URL + USER + 'profile', // 프로필 사진 수정
-  authdriver: () => USER_BASE_URL + USER + 'authdriver/', // 관리자가 드라이버를 인증하는 api
-  getUserInfo: () => USER_BASE_URL + USER + 'user/', // id값 params로 전달, 사용자 정보 출력
-  getAllUser: () => USER_BASE_URL + USER + 'users', // 전체 사용자 정보 출력
 };
 
-export {chat, user, voice};
-//
+const BUSINESS_SERVICE = 'business-service/';
+const business_service = {
+  //<---------------------------------GET------------------------------------>
+  getDriverRoute: () => BASE_URL + BUSINESS_SERVICE,
+  /* 
+    드라이버의 루트
+    path Variable: userId,
+   */
+  getRoute: () => BASE_URL + BUSINESS_SERVICE + 'route/',
+  /* 
+    루트 한개의 정보,
+    path Variable: routeId
+  */
+  getNotDone: () => BASE_URL + BUSINESS_SERVICE + 'routes/',
+  /* 
+    당일 완료하지 못한 루트, 
+    pathVariable: userId,  
+    https://k7c207.p.ssafy.io:8000/business-service/routes/{userId}/today/undone, 
+  */
+
+  // POST
+  workDone: () => BASE_URL + BUSINESS_SERVICE,
+  /* 
+    업무완료
+    path Variable: userId, routeId,
+    https://k7c207.p.ssafy.io:8000/business-service/${userId}/end/{routeId},
+  */
+  checkIn: () => BASE_URL + BUSINESS_SERVICE + 'check-in/',
+  /* 
+    체크인
+    path Variable: userId,
+    requestBody : routeId, deliveryId,
+  */
+  takePhoto: () => BASE_URL + BUSINESS_SERVICE + 'photo',
+  // 사진 찍기
+};
+
+export {chat, voice, user_service, business_service};
