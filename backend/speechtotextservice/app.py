@@ -8,11 +8,11 @@ import base64
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/speechtotext-service')
 def hello_world():
     return 'Hello, World!'
 
-@app.route('/stt', methods=['POST'])
+@app.route('/speechtotext-service/stt', methods=['POST'])
 def getFile():
     if request.method == 'POST':
         payload = request.get_json()
