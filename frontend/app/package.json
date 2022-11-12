@@ -12,8 +12,8 @@
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/viewpager": "^5.0.11",
-    "@react-native-firebase/app": "^16.4.3",
     "@react-native-community/voice": "^1.1.9",
+    "@react-native-firebase/app": "^16.4.3",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",

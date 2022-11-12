@@ -5,7 +5,8 @@ import {useSelector} from 'react-redux';
 
 const MainScreen = () => {
   const name = useSelector(state => state.auth.name);
-  console.log(name);
+  const id = useSelector(state => state.auth.id);
+
   return (
     <View style={styles.MainRootContainer}>
       <View style={styles.MainHeader}>
