@@ -52,19 +52,23 @@ public class RouteServiceImpl implements RouteService {
         List<ResponseRoute> responseRoutes = new ArrayList<>();
 
         routeEntityList.forEach(route -> {
-            route.builder().deliveryList(deliveryRepository.findByRouteId(route.getId())).build();
-            ResponseRoute r = new ResponseRoute();
+//            route.builder().deliveryList(deliveryRepository.findByRouteId(route.getId())).build();
+//            ResponseRoute r = new ResponseRoute();
 
-            List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
-            route.getDeliveryList().forEach(v ->{
-                responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
-            });
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            ResponseRoute r = mapper.map(route,ResponseRoute.class);
 
-            responseRoutes.add(r.builder()
-                                    .id(route.getId())
-                                    .routeName(route.getRouteName())
-                                    .deliveryList(responseDeliveryList)
-                                    .build()); // deliverylist(delivery) -> list(responsedelivery)
+//            List<ResponseDelivery> responseDeliveryList = new ArrayList<>();
+//            route.getDeliveryList().forEach(v ->{
+//                responseDeliveryList.add(new ModelMapper().map(v,ResponseDelivery.class));
+//            });
+//
+//            responseRoutes.add(r.builder()
+//                                    .id(route.getId())
+//                                    .routeName(route.getRouteName())
+//                                    .deliveryList(responseDeliveryList)
+//                                    .build()); // deliverylist(delivery) -> list(responsedelivery)
 
         });
         return responseRoutes;
