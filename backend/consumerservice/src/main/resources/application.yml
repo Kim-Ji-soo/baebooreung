@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: k7c207.p.ssafy.io:29092
+    bootstrap-servers: k7c2071.p.ssafy.io:29092
     properties:
       spring:
         json:
