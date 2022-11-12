@@ -18,7 +18,7 @@ public class ConsumerserviceApplication {
 		SpringApplication.run(ConsumerserviceApplication.class, args);
 	}
 
-	@KafkaListener(topics = "gps-kafka", groupId = "testgroups", containerFactory = "kafkaListener")
+	@KafkaListener(topics = "gps-kafka", groupId = "gps-db-consumer", containerFactory = "kafkaListener")
 	public void consume(GpsSaveDto gpsSaveDto){
 		System.out.println("Received Message = "+ gpsSaveDto.toString());
 		try {

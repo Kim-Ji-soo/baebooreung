@@ -27,7 +27,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, GpsSaveDto> consumerFactory(){
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "testgroup");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "gps-db-consumer");
 
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(GpsSaveDto.class, false));
     }
