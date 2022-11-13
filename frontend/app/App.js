@@ -21,6 +21,7 @@ import GPSScreen from './src/pages/managerApp/GPSScreen';
 import MessageScreen from './src/pages/managerApp/MessageScreen';
 import DetailWorkScreen from './src/pages/managerApp/DetailWorkScreen';
 import STTScreen from './src/pages/managerApp/STTScreen';
+import DetailGPSScreen from './src/pages/managerApp/DetailGPSScreen';
 
 // <-- driver App pages -->
 import HomePage from './src/pages/driverApp/HomePage';
@@ -43,6 +44,39 @@ function HomeStack() {
       <Stack.Screen
         name="DetailWork"
         component={DetailWorkScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: identityColor,
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: identityTextColor,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}></Stack.Screen>
+    </Stack.Navigator>
+  );
+}
+
+function GPSStack() {
+  return (
+    <Stack.Navigator initialRouteName="GPS">
+      <Stack.Screen
+        name="GPS"
+        component={GPSScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: identityColor,
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: identityTextColor,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="DetailGPS"
+        component={DetailGPSScreen}
         options={{
           headerStyle: {
             backgroundColor: identityColor,
@@ -90,17 +124,10 @@ function ManagerTab() {
         }}></Tab.Screen>
       <Tab.Screen
         name="GPS"
-        component={GPSScreen}
+        component={GPSStack}
         options={{
           title: '실시간위치',
-          headerStyle: {
-            backgroundColor: identityColor,
-          },
-          headerTitleAlign: 'center',
-          headerTintColor: identityTextColor,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
+          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="gps-fixed" color={color} size={size}></Icon>
           ),
