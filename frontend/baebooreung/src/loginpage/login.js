@@ -1,23 +1,75 @@
 import styles from './login.module.css'
-import new_logo from '../assets/images/new_logo_2.png'
+import team_logo from '../assets/images/logo_team.png'
+import animation from '../assets/images/animation.gif'
 import { TextField } from '@mui/material';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { isEmail, isPassword } from '../utill';
 import { useNavigate } from "react-router-dom";
+import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Swal from 'sweetalert2';
+import SliderSlick from '../component/slick/reactSlick';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+const theme = createTheme({
+  overrides: {
+    // Style sheet name
+    MuiTouchRipple: {
+      // Name of the rule
+      child: {
+        // Some CSS
+        backgroundColor: "red"
+      }
+    }
+  },
+  palette: {
+    mymaincolor: {
+      main: '#0F1839',
+    },
+  },
+  typography: {
+    "fontFamily": "BMJUA"
+  }
+});
+
+const CssTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#0F1839',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#0F1839',
+  },
+  '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+      borderColor: '#0F1839',
+    },
+  },
+});
 
 const Login = ({ history }) => {
   const navigate = useNavigate();
   const [Id, setId] = useState('');
   const [Password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(true);
 
-  const onChnageId = (e)=> {
-      setId(e.target.value)
+  const onChnageId = (e) => {
+    setId(e.target.value)
   }
-  const onChangePassword = (e)=> {
-      setPassword(e.target.value)
+  const onChangePassword = (e) => {
+    setPassword(e.target.value)
   }
-  async function login () {
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  async function login() {
     await axios({
       url: "https://k7c207.p.ssafy.io:8000/user-service/login",
       method: "post",
@@ -25,104 +77,139 @@ const Login = ({ history }) => {
         email: Id,
         password: Password
       },
-    }).then((res)=>{
+    }).then((res) => {
       console.log(res.headers.token)
       localStorage.setItem("Token", res.headers.token)
-      axios.defaults.headers.common["Authorization"] =`Bearer ${res.headers.token}`; 
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.headers.token}`;
       // 로그아웃 시 토큰 없애고, 디폴트 헤더 커몬 어스에 빈 문자열 넣기
       localStorage.setItem("specialKey", res.headers.specialkey)
-      navigate("/main",{replace :true});
+      navigate("/main", { replace: true });
+    }).catch(() => {
+      let timerInterval
+      Swal.fire({
+        imageUrl: "https://user-images.githubusercontent.com/97590478/201513112-c13e3dd5-b4e0-432a-a900-deffb3a03400.gif",
+        html: '<div style="font-family:BMJUA;"><strong>ID</strong> 혹은 <strong>Password</strong>를 잘못 입력하셨거나 <br><strong>등록되지 않은 ID</strong>입니다. <br><br> <strong style="color:red;"><b></b></strong>초 후 창이 닫힙니다.</div>',
+        confirmButtonText: '닫기',
+        confirmButtonColor: '#0F1839',
+        timer: 5000,
+        timerProgressBar: true,
+        allowOutsideClick: false,
+        didOpen: () => {
+          const b = Swal.getHtmlContainer().querySelector('b')
+          timerInterval = setInterval(() => {
+            b.textContent = Math.floor(Swal.getTimerLeft() / 1000, 2) + 1
+          }, 10)
+
+        },
+        willClose: () => {
+          clearInterval(timerInterval)
+        }
+      }).then((result) => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+          console.log('I was closed by the timer')
+        }
+      })
     })
   }
 
-  const validation =()=>{
-      let check = /[~!#$%^&*()_+|<>?:{}.,/;='"ㄱ-ㅎ | ㅏ-ㅣ |가-힣]/;
-      return check.test(Id);
+  const validation = () => {
+    let check = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    return check.test(Id);
   }
+
   return (
     <div className={styles.login_page}>
-      {/* <img src={new_logo} alt="" /> */}
       <div className={styles.login_image_login_flex}>
-        <div className={styles.login_main_image_div}>
-          <img className={styles.login_main_image} src={new_logo} alt="" />
-        </div>
+        <SliderSlick></SliderSlick>
+        {/* <div className={styles.login_main_image_div}>
+          <a href="/">
+            <img className={styles.login_main_image} src={new_logo} alt="" />
+          </a>
+        </div> */}
         <div className={styles.login_box}>
-          <div>Login</div>
-          <div>
-          <TextField
-            size='small'
-            sx={{
-              width:300,
-              height:20
-            }}
-            id="standard-name"
-            label="ID2"
-            variant="outlined"
-            value={Id}
-            onChange={onChnageId}
-            error={isEmail()}
-            // helperText={validation() ? "특수기호나 한글은 입력 하실 수 없습니다.":""}
-            helperText={isEmail() ? "":""}
-            InputLabelProps={{
-              classes: {
-                root: {
-                  color: 'red !important',
-                },
-              },
-            }}
-            InputProps={{
-              classes: {
-                root: {
-                  '&$cssFocused $notchedOutline': {
-                    borderColor: `#000000 !important`,
-                  },
-                },
-                notchedOutline: {
-                  borderWidth: '10px',
-                  borderColor: '#000000 !important',
-                },
-              },
-              inputMode: 'numeric',
-            }}
-          />
-          <TextField
-            size='small'
-            sx={{
-              width:300,
-              height:20
-            }}
-            id="standard-name"
-            label="ID2"
-            variant="outlined"
-            value={Password}
-            onChange={onChangePassword}
-            error={validation()}
-            // helperText={validation() ? "특수기호나 한글은 입력 하실 수 없습니다.":""}
-            helperText={validation() ? "":""}
-            InputLabelProps={{
-              classes: {
-                root: {
-                  color: 'red !important',
-                },
-              },
-            }}
-            InputProps={{
-              classes: {
-                root: {
-                  '&$cssFocused $notchedOutline': {
-                    borderColor: `#000000 !important`,
-                  },
-                },
-                notchedOutline: {
-                  borderWidth: '10px',
-                  borderColor: '#000000 !important',
-                },
-              },
-              inputMode: 'numeric',
-            }}
-          />
-          <button onClick={login}>제출</button>
-        </div>
+          <div></div>
+          <div className={styles.login_box_space_between}>
+            <img style={{ marginBottom: "20px" }} src={animation} alt="" />
+            <div style={{ marginBottom: "30px", fontWeight: "300", fontFamily: "BMJUA" }}>배부릉 관리자 페이지</div>
+            <ThemeProvider theme={theme}>
+              <CssTextField
+                autoFocus
+                required
+                id="standard-basic"
+                label="Email"
+                variant="outlined"
+                placeholder='Email을 입력해주세요.'
+                sx={{
+                  width: 0.8,
+                  marginBottom: 5,
+                  color: "warning"
+                }}
+                value={Id}
+                onChange={onChnageId}
+                error={Id ? !validation() : false}
+                helperText={Id ? (!validation() ? "이메일 형식으로 입력해주세요" : "") : ""}
+              />
+              <CssTextField
+                id="custom-css-outlined-input"
+                type={showPassword ? 'password' : 'text'}
+                required
+                label="Password"
+                variant="outlined"
+                placeholder='Password를 입력해주세요.'
+                sx={{
+                  width: 0.8,
+                  marginBottom: 5,
+                }}
+                value={Password}
+                onChange={
+                  onChangePassword
+                }
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>,
+                }}
+              />
+              <Button onClick={login}
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="mymaincolor"
+                sx={{
+                  width: 0.8,
+                  '&& .MuiTouchRipple-child': {
+                    backgroundColor: "white",
+                  }
+                }}
+              >
+                <div style={{
+                  color: "white",
+                  height: "40px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "15px",
+                }}>LOG IN</div>
+              </Button>
+            </ThemeProvider >
+          </div>
+          <div></div>
+          <div className={styles.copyright}>
+            <img style={{ width: "50px", height: "50px", marginRight: "5px" }} src={team_logo} alt="" />
+            <div>
+              우) 62218 광주광역시 광산구 하남산단6번로 107<br />
+              COPYRIGHT (c) 2022. TEAM_93%. All rights reserved.
+            </div>
+          </div>
         </div>
       </div>
     </div>
