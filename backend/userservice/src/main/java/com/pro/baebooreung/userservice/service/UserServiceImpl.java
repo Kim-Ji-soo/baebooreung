@@ -6,6 +6,7 @@ import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.WorkStatus;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.CheckinDto;
+import com.pro.baebooreung.userservice.dto.ResponseDriverRoute;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
@@ -177,6 +178,17 @@ public class UserServiceImpl implements UserService {
         UserEntity findUser = userRepository.findById(id);
         findUser.updateStartEnd(0,0,WorkStatus.OFF);
        userRepository.save(findUser);
+    }
+
+    @Override
+    public ResponseDriverRoute getDriverRoute(int id) {
+        UserEntity findUser  = userRepository.findById(id);
+        boolean isDriver = findUser.getWorkStatus().equals(WorkStatus.DRIVING)?true:false;
+        if(isDriver){
+            return ResponseDriverRoute.builder().route_id(findUser.getRouteId()).delivery_id(findUser.getDeliveryId()).drive(isDriver).build();
+        } else {
+            return ResponseDriverRoute.builder().route_id(0).delivery_id(0).drive(false).build();
+        }
     }
 }
 
