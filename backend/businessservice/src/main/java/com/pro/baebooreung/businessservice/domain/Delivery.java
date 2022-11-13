@@ -42,6 +42,9 @@ public class Delivery {
     @Column(name="check", nullable = false)
     private boolean check;
 
+    @Column(name="img", nullable = true)
+    private String img;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
@@ -66,7 +69,6 @@ public class Delivery {
     }
 
 
-
     //builder에 id 안넣음
     @Builder
     public Delivery(int id, String delName,LocalDate date, LocalTime delScheduledTime, LocalTime delActualTime, String address, double latitude, double longitude, int sequence, Type type, boolean check, Route route) {
@@ -83,4 +85,12 @@ public class Delivery {
         this.check = check;
         this.route = route;
     }
+
+    // 체크인 처리
+    public void checkIn(boolean check, String img){
+        this.check = true;
+        this.img = img;
+        this.delActualTime = LocalTime.now();
+    }
+
 }
