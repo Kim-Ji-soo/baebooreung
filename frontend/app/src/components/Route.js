@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import line from '../assets/images/separator.png';
 import BottomScrollSheet from './BottomScrollSheet';
-const Work = () => {
+const Route = () => {
   const ButtonStyle = {
     height: 30,
     width: '100%',
@@ -91,67 +91,6 @@ const Work = () => {
       },
     ],
   };
-  const dummy = {
-    date: '2022-11-05',
-    workList: [
-      {
-        id: 1,
-        type: 'pickup',
-        store: '청화당',
-        time: '12:05',
-        count: '14',
-      },
-      {
-        id: 2,
-        type: 'pickup',
-        store: '김가네',
-        time: '12:15',
-        count: '14',
-      },
-      {
-        id: 3,
-        type: 'pickup',
-        store: '김밥천국',
-        time: '12:20',
-        count: '14',
-      },
-      {
-        id: 4,
-        type: 'pickup',
-        store: '이디야',
-        time: '12:25',
-        count: '14',
-      },
-      {
-        id: 5,
-        type: 'pickup',
-        store: '스타벅스',
-        time: '12:35',
-        count: '14',
-      },
-      {
-        id: 6,
-        type: 'delivery',
-        store: '행정동',
-        time: '12:40',
-        count: 20,
-      },
-      {
-        id: 7,
-        type: 'delivery',
-        store: '기숙사동',
-        time: '12:50',
-        count: 12,
-      },
-      {
-        id: 8,
-        type: 'delivery',
-        store: '체육관',
-        time: '13:00',
-        count: 10,
-      },
-    ],
-  };
   return (
     <View style={styles.workRootContainer}>
       <View style={styles.workContainer}>
@@ -211,7 +150,7 @@ const Work = () => {
   );
 };
 
-export default Work;
+export default Route;
 const styles = StyleSheet.create({
   workRootContainer: {
     justifyContent: 'center',

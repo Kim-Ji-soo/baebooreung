@@ -4,9 +4,19 @@ import camera from '../assets/images/camera.png';
 import Map from './Map';
 import {useSelector} from 'react-redux';
 import separator from '../assets/images/separator.png';
+import Cam from '../components/Cam';
+
 const DetailJob = props => {
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
+  const coordinate = {
+    latitude: lat,
+    longitude: lng,
+  };
+  const activeCam = () => {
+    console.log('실행되냐?');
+    return <Cam />;
+  };
   return (
     <View style={styles.DetailJobcontainer}>
       <View style={styles.header}>
@@ -14,10 +24,13 @@ const DetailJob = props => {
         <Text style={styles.headerText2}>삼성전자 광주캠퍼스</Text>
       </View>
       <View style={styles.MapContainer}>
-        <Map
-          width="100%"
-          height="100%"
-          coords={{latitude: lat, longitude: lng}}></Map>
+        {coordinate.latitude === true || coordinate.longitude === true ? (
+          <Map width="100%" height="100%" coords={coordinate}></Map>
+        ) : (
+          <View style={styles.MapContainer}>
+            <Text>오류</Text>
+          </View>
+        )}
       </View>
       <View style={styles.body}>
         <View style={styles.bodyLeft}>
@@ -34,7 +47,7 @@ const DetailJob = props => {
           </View>
         </View>
         <View style={styles.bodyRight}>
-          <Pressable>
+          <Pressable onPress={activeCam}>
             <Image source={camera} style={styles.camera}></Image>
           </Pressable>
         </View>
@@ -76,6 +89,8 @@ const styles = StyleSheet.create({
   MapContainer: {
     // borderWidth: 1,
     flex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   body: {
     flexDirection: 'row',

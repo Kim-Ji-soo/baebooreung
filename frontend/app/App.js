@@ -23,13 +23,11 @@ import DetailWorkScreen from './src/pages/managerApp/DetailWorkScreen';
 import STTScreen from './src/pages/managerApp/STTScreen';
 
 // <-- driver App pages -->
-import DetailPage from './src/pages/driverApp/DetailPage';
 import HomePage from './src/pages/driverApp/HomePage';
-import TestMap from './src/pages/driverApp/TestMap';
 import LoginPage from './src/pages/driverApp/LoginPage';
 import SignUpPage from './src/pages/driverApp/SignUpPage';
-import Test from './src/pages/driverApp/Test';
-
+import DetailRoutePage from './src/pages/driverApp/DetaliRoutePage';
+import Cam from './src/components/Cam';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const identityColor = '#0B0B3B';
@@ -142,18 +140,18 @@ function DriverTab() {
           headerShown: false,
         }}></Tab.Screen>
       <Tab.Screen
-        name="Detail"
-        component={DetailPage}
+        name="Cam"
+        component={Cam}
         options={{
-          title: 'Detail',
+          title: 'Cam',
           headerStyle: {
             backgroundColor: '#29b6f6',
           },
           headerShown: false,
         }}></Tab.Screen>
       <Tab.Screen
-        name="Test"
-        component={Test}
+        name="Detail"
+        component={DetailRoutePage}
         options={{
           title: 'Test',
           headerStyle: {
