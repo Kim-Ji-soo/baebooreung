@@ -2,7 +2,7 @@ package com.pro.baebooreung.businessservice.controller;
 
 import com.netflix.discovery.converters.Auto;
 import com.pro.baebooreung.businessservice.domain.Route;
-import com.pro.baebooreung.businessservice.dto.RouteDto;
+import com.pro.baebooreung.businessservice.dto.*;
 import com.pro.baebooreung.businessservice.service.RouteService;
 import com.pro.baebooreung.businessservice.vo.RequestCheckBusiness;
 import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
@@ -84,13 +84,13 @@ public class BusinessController {
 
 
     //근데 이 체크인이 요청을 계속 보내주나.....?
-    @PatchMapping("/check-in/{userId}")
-    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckBusiness requestCheckBusiness){
-        routeService.checkIn(userId,requestCheckBusiness.getRouteId(), requestCheckBusiness.getSequence());
-        return null;
-    }
+//    @PatchMapping("/check-in/{userId}")
+//    public ResponseEntity<List<ResponseRoute>> checkIn(@PathVariable("userId")int userId, @RequestBody RequestCheckBusiness requestCheckBusiness){
+//        routeService.checkIn(userId,requestCheckBusiness.getRouteId(), requestCheckBusiness.getSequence());
+//        return null;
+//    }
 
-    // 업무 시작
+    // 업무 끝
     @PutMapping("/{userId}/end/{routeId}")
     public ResponseEntity<?> endWork(@PathVariable("userId") int userId,@PathVariable("routeId") int routeId){
         // User에다가 routeId,deliveryId,workStatus 를 바꿔주고,
@@ -111,5 +111,54 @@ public class BusinessController {
 //        });
 
         return ResponseEntity.status(HttpStatus.OK).body(routeList);
+    }
+
+    // 체크인 처리
+    @PostMapping("/check-in/{userId}")
+    public ResponseEntity<?> checkIn(@PathVariable("userId") int userId, @RequestBody CheckInDto checkInDto) {
+        try {
+            CheckinResponseDto responseDto = routeService.checkIn(userId, checkInDto);
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } catch (IllegalStateException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 deliveryId가 존재하지 않습니다.");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    // 지역, 날짜에 모든 안내 경로 얻기
+    @GetMapping("/route/navigps")
+    public ResponseEntity<?> getRouteAndNavigations(@RequestBody RouteAndNaviRequestDto requestDto){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDate(requestDto.getRegion(), requestDto.getDate()));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    // 지역, 날짜에 모든 안내 경로 얻기
+    @GetMapping("/route/navigps/univ")
+    public ResponseEntity<?> getRouteAndNavigationsByUniv(@RequestBody RouteAndNaviByRouteNameRequestDto requestDto){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDateAndRouteName(requestDto.getRegion(), requestDto.getDate(), requestDto.getRouteName()));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    @GetMapping("/route/delivery/{userId}")
+    public ResponseEntity<?> getDelivery(@PathVariable("userId") int userId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(routeService.getDriverRouteAndDelivery(userId));
+        } catch (IllegalStateException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("현재 운행중이지 않은 드라이버입니다.");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
     }
 }

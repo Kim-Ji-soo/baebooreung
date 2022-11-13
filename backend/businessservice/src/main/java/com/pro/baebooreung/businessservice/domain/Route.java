@@ -58,6 +58,9 @@ public class Route {
     @OneToMany(mappedBy = "route",cascade = CascadeType.ALL)
     private List<Delivery> deliveryList = new ArrayList<>();
 
+    @Column(name = "region")
+    private Region region;
+
 
     public void setActualStartTime(LocalTime startTime){
         this.actualStartTime = startTime;
@@ -67,7 +70,7 @@ public class Route {
         this.done = done;
     }
     @Builder
-    public Route(int id, LocalDate date, LocalTime scheduledStartTime, LocalTime actualStartTime, int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList) {
+    public Route(int id, LocalDate date, LocalTime scheduledStartTime, LocalTime actualStartTime, int userId, RouteType routeType, String routeName, boolean done,List<Delivery> deliveryList, Region region) {
         this.id = id;
         this.date = date;
         this.scheduledStartTime = scheduledStartTime;
@@ -77,5 +80,6 @@ public class Route {
         this.routeName = routeName;
         this.done = done;
         this.deliveryList = deliveryList;
+        this.region = region;
     }
 }
