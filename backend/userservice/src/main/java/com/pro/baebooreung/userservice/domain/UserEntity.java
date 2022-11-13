@@ -43,6 +43,13 @@ public class UserEntity {
     @Column(name = "delivery_id",nullable = true)
     private Integer deliveryId;
 
+    @Column(name = "fcm_token",nullable = true)
+    private String fcmToken;
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
     public void updateGrade(Grade grade) {
         this.grade = grade;
     }
