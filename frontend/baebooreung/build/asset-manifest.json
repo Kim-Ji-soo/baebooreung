@@ -1,8 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.4e5ed0f1.css",
-    "main.js": "/static/js/main.d2591ea3.js",
+    "main.css": "/static/css/main.0d8892ca.css",
+    "main.js": "/static/js/main.317f2868.js",
+    "static/media/animation.gif": "/static/media/animation.2fff346d79ce2ea973e0.gif",
     "static/media/new_logo_2.png": "/static/media/new_logo_2.d1752d4bfb683d032310.png",
+    "static/media/전남대학교.png": "/static/media/전남대학교.62d067bc7f9853bb33bb.png",
+    "static/media/new_logo.png": "/static/media/new_logo.3ee23d2c722eb7a9442b.png",
+    "static/media/logo_team.png": "/static/media/logo_team.a2cd3cecb2ec8054398e.png",
     "static/media/driver.png": "/static/media/driver.4db55175facbebba6b7f.png",
     "static/media/map.png": "/static/media/map.73948584a92a3fc87a6f.png",
     "static/media/new_logo_2_fold_stroke.png": "/static/media/new_logo_2_fold_stroke.ee49dfe98c5a6b7924d6.png",
@@ -10,16 +14,17 @@
     "static/media/task.png": "/static/media/task.ab4c39d2e156f466dd92.png",
     "static/media/profile.png": "/static/media/profile.4c1db188c1ed79a85c7b.png",
     "static/media/chat.png": "/static/media/chat.7425923556a70039e052.png",
+    "static/media/지스트.png": "/static/media/지스트.f5e76f19e1e954e9903e.png",
     "static/media/notice2.png": "/static/media/notice2.9472365ff2a88cfe195f.png",
     "static/media/fold_off.png": "/static/media/fold_off.93e3472eaf96fe485a25.png",
     "static/media/fold_on.png": "/static/media/fold_on.f303a425a51001baf5d4.png",
     "static/media/logout_white.png": "/static/media/logout_white.821e6f5bddd8427e6395.png",
     "index.html": "/index.html",
-    "main.4e5ed0f1.css.map": "/static/css/main.4e5ed0f1.css.map",
-    "main.d2591ea3.js.map": "/static/js/main.d2591ea3.js.map"
+    "main.0d8892ca.css.map": "/static/css/main.0d8892ca.css.map",
+    "main.317f2868.js.map": "/static/js/main.317f2868.js.map"
   },
   "entrypoints": [
-    "static/css/main.4e5ed0f1.css",
-    "static/js/main.d2591ea3.js"
+    "static/css/main.0d8892ca.css",
+    "static/js/main.317f2868.js"
   ]
 }

@@ -43,7 +43,7 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
     <div className={styles.main_display_flex} style={{ height: "100%" }}>
       <div className={styles.main_justify_content_space_between}>
         <div className={styles.main_display_flex_direction_col}>
-          <a href="/">
+          <a href="/main">
             {/* <img className={styles.main_logo_fold_image} src={logo_fold} alt="" /> */}
             <img className={styles.main_logo_image} src={logo} alt="" />
           </a>
