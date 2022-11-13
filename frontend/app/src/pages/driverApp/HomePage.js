@@ -1,11 +1,40 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import Work from '../../components/Work';
-import {useSelector} from 'react-redux';
+import Route from '../../components/Route';
+import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
+import {business_service} from '../../api/api';
+import {setDriverRouteList} from '../../redux/work';
 
 const MainScreen = () => {
+  const dispatch = useDispatch();
   const name = useSelector(state => state.auth.name);
   const id = useSelector(state => state.auth.id);
+
+  const getDriverWorkRoute = id => {
+    axios({
+      method: 'get',
+      url: business_service.getDriverRoute() + `${id}` + '/routes',
+    })
+      .then(res => {
+        const response = res.data;
+        const RouteInfo = [];
+        for (let i = 0; i < response.length; i++) {
+          for (let k = 0; k < response[i].deliveryList.length; k++) {
+            RouteInfo.push(response[i].deliveryList[k]);
+          }
+        }
+        console.log(RouteInfo);
+        dispatch(setDriverRouteList(RouteInfo));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  React.useEffect(() => {
+    getDriverWorkRoute(id);
+  }, []);
 
   return (
     <View style={styles.MainRootContainer}>
@@ -14,7 +43,7 @@ const MainScreen = () => {
         <Text style={styles.todayList}>오늘의 배송 목록</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
-        <Work />
+        <Route />
       </ScrollView>
     </View>
   );
