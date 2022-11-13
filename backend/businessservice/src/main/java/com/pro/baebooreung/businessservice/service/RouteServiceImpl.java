@@ -206,7 +206,9 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDate(Region region, LocalDate localDate) throws Exception {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDate(region, localDate);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
+
         findRouteList.forEach(route -> {
+            log.info("getRouteByRegionAndDate 내에 route: {}", route);
             RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
                     .routeType(route.getRouteType()).done(route.isDone()).build();
             try {
