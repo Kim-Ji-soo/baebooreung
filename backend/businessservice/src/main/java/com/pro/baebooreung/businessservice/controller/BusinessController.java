@@ -7,6 +7,7 @@ import com.pro.baebooreung.businessservice.service.RouteService;
 import com.pro.baebooreung.businessservice.vo.RequestCheckBusiness;
 import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
 import com.pro.baebooreung.businessservice.vo.ResponseRoute;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 public class BusinessController {
 
     RouteService routeService;
@@ -116,6 +118,7 @@ public class BusinessController {
     // 체크인 처리
     @PostMapping("/check-in/{userId}")
     public ResponseEntity<?> checkIn(@PathVariable("userId") int userId, @RequestBody CheckInDto checkInDto) {
+        log.info("request checkIn data : {}", checkInDto.toString());
         try {
             CheckinResponseDto responseDto = routeService.checkIn(userId, checkInDto);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -131,6 +134,7 @@ public class BusinessController {
     // 지역, 날짜에 모든 안내 경로 얻기
     @GetMapping("/route/navigps")
     public ResponseEntity<?> getRouteAndNavigations(@RequestBody RouteAndNaviRequestDto requestDto){
+        log.info("request navigps data : {}", requestDto.toString());
         try {
             return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDate(requestDto.getRegion(), requestDto.getDate()));
         } catch (Exception e){
@@ -142,6 +146,7 @@ public class BusinessController {
     // 지역, 날짜에 모든 안내 경로 얻기
     @GetMapping("/route/navigps/univ")
     public ResponseEntity<?> getRouteAndNavigationsByUniv(@RequestBody RouteAndNaviByRouteNameRequestDto requestDto){
+        log.info("request navigpsByUniv data : {}", requestDto.toString());
         try {
             return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDateAndRouteName(requestDto.getRegion(), requestDto.getDate(), requestDto.getRouteName()));
         } catch (Exception e){
