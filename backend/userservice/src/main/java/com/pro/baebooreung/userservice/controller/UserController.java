@@ -2,6 +2,7 @@ package com.pro.baebooreung.userservice.controller;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.dto.CheckinDto;
+import com.pro.baebooreung.userservice.dto.ResponseDriverRoute;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.service.UserService;
@@ -187,6 +188,11 @@ public class UserController {
         userService.setEnd(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("업무 종료 성공");
+    }
+
+    @GetMapping("/route/delivery/{userId}")
+    public ResponseDriverRoute checkRouteAndDelivery(@PathVariable("userId") int userId){
+        return userService.getDriverRoute(userId);
     }
 
 }
