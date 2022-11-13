@@ -60,6 +60,7 @@ public class Route {
     private List<Delivery> deliveryList = new ArrayList<>();
 
     @Column(name = "region")
+    @Enumerated(EnumType.STRING)
     private Region region;
 
 

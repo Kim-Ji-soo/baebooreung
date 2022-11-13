@@ -6,6 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
+@ToString
 public class RouteAndNaviRequestDto {
     Region region;
     LocalDate date;
