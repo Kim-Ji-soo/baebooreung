@@ -17,7 +17,7 @@ const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
 const identityColor = '#0B0B3B';
 const identityTextColor = '#F7FE2E';
 
-export default function DetailWork(props) {
+export default function DetailGPS(props) {
   const [ok, setOk] = useState(false);
   const [workType, setWorkType] = useState(false); // 픽업장소 / 수령장소 분기처리
   const [ID, setID] = useState('');

@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import AudioRecord from '../../components/AudioRecord';
-import Voice from '../../components/Voice';
+// import Voice from '../../components/Voice';
 function STTScreen() {
   return (
     <View style={styles.container}>

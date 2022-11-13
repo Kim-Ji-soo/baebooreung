@@ -36,63 +36,8 @@ export default function ManagerChat({navigation}) {
   const userList = useSelector(state => state.userList.userList);
   const user = useSelector(state => state.user);
   const name = user.name; //메세지를 전송하는 주체
-  const userId = useSelector(state => state.user.userId);
   const dispatch = useDispatch();
   const client = useRef({});
-
-  // const [chatRoomListTemp, setChatRoomListTemp] = useState([
-  //   {
-  //     id: 1,
-  //     name: '김싸피',
-  //     last_message: '점심1 배달 완료했습니다.',
-  //     last_time: '오후 1시 12분',
-  //     last_count: 2,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: '박싸피'
-  //     last_message: '점심2 배달 완료했습니다.',
-  //     last_time: '오후 1시 30분',
-  //     last_count: 1,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: '이싸피',
-  //     last_message: '저녁1 배달 완료했습니다.',
-  //     last_time: '어제',
-  //     last_count: 1,
-  //   },
-  // ]);
-  // const [userList, setUserList] = useState([
-  //   {
-  //     user_id: 'kimssafy',
-  //     grade: '관리자',
-  //     name: '김싸피',
-  //     phone: '010-1111-1111',
-  //     region: 1,
-  //   },
-  //   {
-  //     user_id: 'parkssafy',
-  //     grade: '관리자',
-  //     name: '박싸피',
-  //     phone: '010-2222-2222',
-  //     region: 2,
-  //   },
-  //   {
-  //     user_id: 'ssafy',
-  //     grade: '관리자',
-  //     name: '최싸피',
-  //     phone: '010-2222-2222',
-  //     region: 2,
-  //   },
-  //   {
-  //     user_id: 'Leessafy',
-  //     grade: '드라이버',
-  //     name: '이싸피',
-  //     phone: '010-3333-3333',
-  //     region: 3,
-  //   },
-  // ]);
 
   useEffect(() => {
     userList.map((item, idx) => {
@@ -140,6 +85,7 @@ export default function ManagerChat({navigation}) {
   }
 
   async function findAllRooms() {
+    //방 전체 출력
     await axios({
       method: 'get',
       url: chat.findAllRooms(),
@@ -152,11 +98,11 @@ export default function ManagerChat({navigation}) {
           newArr.map((item, idx) => {
             axios({
               method: 'get',
-              url: chat.getInfo() + `${item.roomId}/${userId}`,
+              url: chat.getInfo() + `${item.roomId}/${user.email}`,
             })
               .then(result => {
                 console.log('getInfo', result.data);
-                if (result.data.userId === userId) {
+                if (result.data.userId === user.email) {
                   setChatRoomList(chatRoomList => {
                     const newChatRoomList = [...chatRoomList];
                     newChatRoomList.push(item);
@@ -175,18 +121,18 @@ export default function ManagerChat({navigation}) {
       });
   }
 
-  async function enterRoom(roomId, user) {
+  async function enterRoom(roomId, userId) {
     setRoomId(roomId);
     axios({
       method: 'get',
-      url: chat.getInfo() + `${roomId}/${user}`,
+      url: chat.getInfo() + `${roomId}/${userId}`,
     })
       .then(res => {
         console.log('getInfo', res.data.isEnter, res.data.isSubscribe);
         if (res.data.isSubscribe === false) {
           axios({
             method: 'put',
-            url: chat.updateSubscribeInfo() + `${roomId}/${user}/`,
+            url: chat.updateSubscribeInfo() + `${roomId}/${userId}/`,
           })
             .then(() => {
               console.log('update Subscribe');
@@ -195,14 +141,14 @@ export default function ManagerChat({navigation}) {
               console.log(e);
             })
             .finally(() => {
-              subscribe(roomId, user);
+              subscribe(roomId, userId);
             });
         }
 
         if (res.data.isEnter === false) {
           axios({
             method: 'put',
-            url: chat.updateEnterInfo() + `${roomId}/${user}/`,
+            url: chat.updateEnterInfo() + `${roomId}/${userId}/`,
             // params: {
             //   roomId: roomId,
             //   userId: user,
@@ -215,7 +161,7 @@ export default function ManagerChat({navigation}) {
               console.log(e);
             })
             .finally(() => {
-              enter(roomId, user);
+              enter(roomId, userId);
             });
         }
       })
@@ -227,11 +173,11 @@ export default function ManagerChat({navigation}) {
   function sendMessage() {
     client.current.publish({
       destination: '/api/pub/chat/message',
-      headers: {id: name},
+      headers: {id: user.name},
       body: JSON.stringify({
         type: 'TALK',
         roomId: roomId,
-        sender: userId,
+        sender: user.email,
         message: message,
         userCount: userCount,
       }),
@@ -260,7 +206,7 @@ export default function ManagerChat({navigation}) {
         const recv = JSON.parse(body.body);
         recvMessage(recv);
       },
-      {id: userId},
+      {id: user.name},
     );
   };
 
@@ -343,7 +289,8 @@ export default function ManagerChat({navigation}) {
                   <View style={styles.userListDetailText}>
                     <Icon name="person" size={30}></Icon>
                     <Text style={styles.userListTextStyle}>
-                      {item.name} {item.grade}
+                      {item.name} {item.grade === 'MANAGER' && '관리자'}
+                      {item.grade === 'DRIVER' && '드라이버'}
                     </Text>
                   </View>
                   <View style={styles.userListDetailIcon}>
@@ -353,7 +300,7 @@ export default function ManagerChat({navigation}) {
                     <TouchableOpacity
                       onPress={() => {
                         chatRoomList.forEach(value => {
-                          subscribe(roomId);
+                          subscribe(roomId, user.email);
                           setPage('chat');
                         });
                       }}>
@@ -415,8 +362,12 @@ export default function ManagerChat({navigation}) {
                     setQuitChatVisible(!quitChatVisible);
                   }}
                   onPress={() => {
-                    console.log('enterRoom에 보낼 데이터', item.roomId, userId);
-                    enterRoom(item.roomId, userId);
+                    console.log(
+                      'enterRoom에 보낼 데이터',
+                      item.roomId,
+                      user.email,
+                    );
+                    enterRoom(item.roomId, user.email);
                     setPage('chat');
                   }}>
                   {({pressed}) => (
@@ -494,16 +445,16 @@ export default function ManagerChat({navigation}) {
                   {/*  */}
                   <View
                     style={
-                      item.roomId === roomId && item.sender === userId
+                      item.roomId === roomId && item.sender === user.email
                         ? styles.myChatComponent
-                        : item.roomId === roomId && item.sender !== userId
+                        : item.roomId === roomId && item.sender !== user.email
                         ? styles.otherChatComponent
                         : {}
                     }>
                     {/*  */}
                     {item.roomId === roomId &&
                       item.type === 'TALK' &&
-                      item.sender !== userId && (
+                      item.sender !== user.email && (
                         <View style={styles.otherChatProfile}>
                           <Icon name="person" size={50}></Icon>
                         </View>
@@ -513,12 +464,12 @@ export default function ManagerChat({navigation}) {
                       style={
                         (item.type === 'ENTER' ||
                           item.type === 'QUIT' ||
-                          item.sender !== userId) && {flex: 1}
+                          item.sender !== user.email) && {flex: 1}
                       }>
                       {/*  */}
                       {item.roomId === roomId &&
                         item.type === 'TALK' &&
-                        item.sender !== userId && (
+                        item.sender !== user.email && (
                           <View style={styles.otherChatName}>
                             <Text style={{fontWeight: 'bold'}}>
                               {item.sender}
@@ -531,15 +482,17 @@ export default function ManagerChat({navigation}) {
                         style={
                           item.roomId === roomId && item.type === 'ENTER'
                             ? styles.noticeChat
-                            : item.roomId === roomId && item.sender === userId
+                            : item.roomId === roomId &&
+                              item.sender === user.email
                             ? styles.myChat
-                            : item.roomId === roomId && item.sender !== userId
+                            : item.roomId === roomId &&
+                              item.sender !== user.email
                             ? styles.otherChat
                             : {}
                         }>
                         {item.roomId === roomId &&
                           item.type === 'ENTER' &&
-                          item.sender === userId && (
+                          item.sender === user.email && (
                             <Text style={styles.noticeChatText}>
                               {item.sender}님이 입장하셨습니다.
                             </Text>
@@ -549,7 +502,7 @@ export default function ManagerChat({navigation}) {
                         {item.roomId === roomId && item.type === 'TALK' && (
                           <Text
                             style={
-                              item.sender === userId
+                              item.sender === user.email
                                 ? styles.myChatText
                                 : styles.otherChatText
                             }>
@@ -619,7 +572,8 @@ export default function ManagerChat({navigation}) {
                   <View style={styles.userListDetailText}>
                     <Icon name="person" size={30}></Icon>
                     <Text style={styles.userListTextStyle}>
-                      {item.name} {item.grade}
+                      {item.name} {item.grade === 'MANAGER' && '관리자'}
+                      {item.grade === 'DRIVER' && '드라이버'}
                     </Text>
                   </View>
                   <View style={styles.userListDetailIcon}>
@@ -650,11 +604,11 @@ export default function ManagerChat({navigation}) {
                       url: chat.createRoom(),
                       params: {
                         name: roomName,
-                        userId: userId,
+                        userId: user.email,
                       },
                     })
                       .then(res => {
-                        console.log('결과확인', res.data.roomId, userId);
+                        console.log('결과확인', res.data.roomId, user.email);
 
                         createChatCheckBox.map((item, idx) => {
                           if (item === true) {
@@ -752,7 +706,9 @@ export default function ManagerChat({navigation}) {
               onPress={() => {
                 axios({
                   method: 'delete',
-                  url: chat.exitRoom() + `${quitChatRoomInfo.roomId}/${userId}`,
+                  url:
+                    chat.exitRoom() +
+                    `${quitChatRoomInfo.roomId}/${user.email}`,
                 })
                   .then(res => {
                     console.log('채팅방 삭제', res.data);

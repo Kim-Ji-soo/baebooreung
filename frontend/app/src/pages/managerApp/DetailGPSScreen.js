@@ -1,17 +1,17 @@
 import {useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import DetailWork from '../../components/DetailWork';
+import DetailGPS from '../../components/DetailGPS';
 
-function DetailWorkScreen(props) {
+function DetailGPSScreen(props) {
   useEffect(() => {
     const headerTitle = props.route.params.headerTitle;
     props.navigation.setOptions({headerTitle: headerTitle});
   }, []);
   return (
     <View style={styles.container}>
-      <DetailWork
+      <DetailGPS
         routeName={props.route.params.headerTitle}
-        routeList={props.route.params.routeList}></DetailWork>
+        routeList={props.route.params.routeList}></DetailGPS>
     </View>
   );
 }
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailWorkScreen;
+export default DetailGPSScreen;
