@@ -33,6 +33,7 @@ public class Route {
 //    private LocalDateTime deliveryDateTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "`date`")
     private LocalDate date;
 
     @Column(name="scheduled_start_time", nullable = true)
