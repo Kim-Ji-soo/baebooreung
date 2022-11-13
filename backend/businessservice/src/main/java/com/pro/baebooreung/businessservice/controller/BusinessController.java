@@ -157,12 +157,14 @@ public class BusinessController {
 
     @GetMapping("/route/delivery/{userId}")
     public ResponseEntity<?> getDelivery(@PathVariable("userId") int userId){
+        log.info("request get Delivery userId : {}", userId);
         try {
             return ResponseEntity.status(HttpStatus.OK).body(routeService.getDriverRouteAndDelivery(userId));
         } catch (IllegalStateException e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("현재 운행중이지 않은 드라이버입니다.");
         } catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
         }
     }
