@@ -20,7 +20,7 @@ public interface RouteRepository extends JpaRepository<Route,Integer> {
     Iterable<Route> findByUserIdAndDeliveryDateTime(@Param("userId") int userId, @Param("date")LocalDate date);
     @Query("SELECT r FROM Route as r WHERE r.region = :region and r.date = :date")
     Iterable<Route> findByRegionAndDate(@Param("region") Region region, @Param("date") LocalDate date);
-    @Query("SELECT r FROM Route as r WHERE r.region = :region and r.date = :date and r.route_name = routeName")
+    @Query("SELECT r FROM Route as r WHERE r.region = :region and r.date = :date and r.route_name = :routeName")
     Iterable<Route> findByRegionAndDateAndRouteName(@Param("region") Region region, @Param("date") LocalDate date, @Param("routeName") String routeName);
 
 //    @Override
