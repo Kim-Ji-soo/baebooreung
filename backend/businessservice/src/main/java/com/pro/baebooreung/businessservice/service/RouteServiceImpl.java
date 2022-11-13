@@ -192,7 +192,8 @@ public class RouteServiceImpl implements RouteService {
             Optional<Delivery> nextDelivery = deliveryRepository.findByRouteIdAndSequence(findDelivery.get().getRoute().getId(), findDelivery.get().getSequence()+1);
             if(nextDelivery.isPresent()){
                 // user에서 넣어주기 feign client 코드 작성
-                userServiceClient.checkIn(new RequestCheckIn(userId,nextDelivery.get().getId()));
+//                userServiceClient.checkIn(new RequestCheckIn(userId,nextDelivery.get().getId()));
+                userServiceClient.checkIn(new RequestCheckIn(userId,checkInDto.getDeliveryId()));
                 return CheckinResponseDto.builder().deliveryId(nextDelivery.get().getId()).build();
             } else {
                 return CheckinResponseDto.builder().deliveryId(-1).build();
