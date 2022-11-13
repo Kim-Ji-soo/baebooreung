@@ -259,7 +259,6 @@ public class RouteServiceImpl implements RouteService {
         } else {
             throw new IllegalStateException("현재 운행중인 드라이버가 아닙니다.");
         }
-        return null;
     }
 
 
