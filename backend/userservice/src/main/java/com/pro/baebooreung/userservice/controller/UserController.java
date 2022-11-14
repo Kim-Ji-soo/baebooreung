@@ -205,8 +205,8 @@ public class UserController {
         userService.saveProfile(res);
     }
 
-    @GetMapping("/user/profile/{userId}")
-    public String getProfile(@PathVariable("userId") int userId){
+    @GetMapping("/user/profile")
+    public String getProfile(@RequestParam("userId") int userId){
         return userService.getProfile(userId);
     }
 
