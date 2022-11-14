@@ -102,6 +102,7 @@ public class S3FileUploadService {
             if(originWidth < targetWidth)
                 return originalImage;
 
+            log.info("------------------resizing 시작-------------------");
             MarvinImage imageMarvin = new MarvinImage(image);
 
             Scale scale = new Scale();
