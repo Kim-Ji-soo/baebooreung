@@ -6,6 +6,7 @@ import com.pro.baebooreung.userservice.dto.ProfileResponse;
 import com.pro.baebooreung.userservice.dto.ResponseDriverRoute;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
+import com.pro.baebooreung.userservice.dto.UserProfileDto;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -33,4 +34,7 @@ public interface UserService extends UserDetailsService {
     public void saveProfile(ProfileResponse res);
 
     public String getProfile(int userId);
+
+    public UserProfileDto getUserProfile(int userId);
+>>>>>>> backend/userservice/src/main/java/com/pro/baebooreung/userservice/service/UserService.java
 }
