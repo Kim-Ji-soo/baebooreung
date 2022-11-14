@@ -170,7 +170,7 @@ public class BusinessController {
     }
 
     @GetMapping("/delivery/name/{deliveryId}")
-    public ResponseEntity<?> getDeliveryName(@PathVariable("deliveryId") int deliveryId){
+    public ResponseEntity<String> getDeliveryName(@PathVariable("deliveryId") int deliveryId){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(routeService.getDeliveryName(deliveryId));
         } catch (IllegalStateException e){
