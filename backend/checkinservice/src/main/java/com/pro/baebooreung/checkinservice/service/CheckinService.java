@@ -6,10 +6,12 @@ import com.pro.baebooreung.checkinservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.checkinservice.domain.repository.UserRepository;
 import com.pro.baebooreung.checkinservice.dto.GpsSaveDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CheckinService {
     private final UserRepository userRepository;
     private final DeliveryRepository deliveryRepository;
@@ -25,9 +27,12 @@ public class CheckinService {
 
         // 향하는 지점 ~ 현재 위치 간이 거리 계산(meter)
         double dist = distance(Double.parseDouble(gpsSaveDto.getLatitude()), Double.parseDouble(gpsSaveDto.getLongitude()), delivery.getLatitude(), delivery.getLongitude());
-        System.out.println("거리 계산 결과 : "+ dist+" m");
+        log.info("거리 계산 결과 : {} m", dist);
 
         // 거리가 체크인 범위 안 -> webhook logic
+        if(dist <= 10.0){
+
+        }
     }
 
     //두 지점 간의 거리 계산
