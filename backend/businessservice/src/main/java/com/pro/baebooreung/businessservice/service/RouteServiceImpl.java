@@ -105,7 +105,7 @@ public class RouteServiceImpl implements RouteService {
 //    @Transactional
     @Override
     public RouteDto startWork(int userId, int routeId){
-        Optional<Delivery> findDelivery = deliveryRepository.findByRouteIdAndSequence(userId,1);
+        Optional<Delivery> findDelivery = deliveryRepository.findByRouteIdAndSequence(routeId,1);
         Optional<Route> findRoute = routeRepository.findById(routeId);
         /* feign client */
         RequestStart requestStart = new RequestStart();
