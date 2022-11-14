@@ -5,24 +5,14 @@ import com.pro.baebooreung.userservice.domain.Grade;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.WorkStatus;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
-import com.pro.baebooreung.userservice.dto.CheckinDto;
-import com.pro.baebooreung.userservice.dto.ProfileResponse;
-import com.pro.baebooreung.userservice.dto.ResponseDriverRoute;
-import com.pro.baebooreung.userservice.dto.StartDto;
-import com.pro.baebooreung.userservice.dto.UserDto;
+import com.pro.baebooreung.userservice.dto.*;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,10 +20,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -158,10 +146,10 @@ public class UserServiceImpl implements UserService {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto responseUser = mapper.map(findUser, UserDto.class);
 
-        /* feign client */
-        List<ResponseRoute> routeList = new ArrayList<>();
-        routeList.add(businessServiceClient.getRoute(startDto.getRouteId()));
-        responseUser.setRouteList(routeList);
+//        /* feign client */
+//        List<ResponseRoute> routeList = new ArrayList<>();
+//        routeList.add(businessServiceClient.getRoute(startDto.getRouteId()));
+//        responseUser.setRouteList(routeList);
 
         return responseUser;
     }
