@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/s3-service")
+@RequestMapping("/")
 @CrossOrigin(origins = "*", allowCredentials = "false")
 public class S3Controller {
 
