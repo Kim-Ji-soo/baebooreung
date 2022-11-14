@@ -61,6 +61,7 @@ public class S3FileUploadService {
         objectMetaData.setContentType(curImage.getContentType());
         objectMetaData.setContentLength(size);
 
+        System.out.println("zz");
         try(InputStream inputStream = resizedFile.getInputStream()){
             amazonS3Client.putObject(
                     new PutObjectRequest(bucket, originalName,inputStream, objectMetaData)
