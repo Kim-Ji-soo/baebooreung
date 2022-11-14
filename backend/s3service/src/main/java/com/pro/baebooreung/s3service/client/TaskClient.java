@@ -12,6 +12,6 @@ public interface TaskClient {
     @PostMapping("/user/save/profile")
     void saveProfile(ProfileResponse res);
 
-    @GetMapping("/user/profile/{userId}")
+    @GetMapping("/user/profile")
     String getProfile(int userId);
 }
