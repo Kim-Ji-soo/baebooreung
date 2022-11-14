@@ -20,13 +20,11 @@ public class FCMController {
     private final FCMService fcmService;
 
     @PostMapping("/fcm/message")
-//    public ResponseEntity pushMessage(@PathVariable("userId") int userId, @RequestBody FCMDto fcmDto) throws IOException {
-    public ResponseEntity pushMessage(@RequestBody FCMDto fcmDto) throws IOException {
-
-
+    public ResponseEntity pushMessage(@PathVariable("userId") int userId, @RequestBody FCMDto fcmDto) throws IOException {
+//    public ResponseEntity pushMessage(@RequestBody FCMDto fcmDto) throws IOException {
         fcmService.sendMessageTo(
-//                    userId,
-                fcmDto.getTargetToken(),
+                    userId,
+//                fcmDto.getTargetToken(),
                 fcmDto.getTitle(),
                 fcmDto.getBody());
         return ResponseEntity.ok().build();

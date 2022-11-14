@@ -36,9 +36,9 @@ public class FCMService {
 
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
-//    public void sendMessageTo(int userId, String title, String body) throws IOException {
-//        String targetToken = getTargetToken(userId);
+//    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+    public void sendMessageTo(int userId, String title, String body) throws IOException {
+        String targetToken = getTargetToken(userId);
 
         String message = makeMessage(targetToken, title, body);
 
