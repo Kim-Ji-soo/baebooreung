@@ -39,6 +39,7 @@ public class S3Controller {
     public ResponseEntity<?> getFile(int userId) throws IOException {
 
         System.out.println("왜 안돼");
+        System.out.println(taskClient.getProfile(userId));
         String url = taskClient.getProfile(userId);
         System.out.println(url);
 

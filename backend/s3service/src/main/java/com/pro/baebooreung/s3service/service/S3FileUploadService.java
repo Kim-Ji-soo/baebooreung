@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -46,18 +47,25 @@ public class S3FileUploadService {
         MultipartFile curImage = profileReq.getImage();
 
         String originalName = LocalDate.now() + "/" + currentUserId + "/" + createFileName(curImage.getOriginalFilename());
-        MultipartFile resizedFile = resizeImage(curImage.getOriginalFilename(),originalName, curImage, 500);
+        MultipartFile resizedFile = resizeImage(curImage.getOriginalFilename(),originalName, curImage, 768);
 
+        log.info(resizedFile.getSize()+":size!!!!!!!!!!!!");
         long size = resizedFile.getSize();
 
         ObjectMetadata objectMetaData = new ObjectMetadata();
         objectMetaData.setContentType(curImage.getContentType());
         objectMetaData.setContentLength(size);
 
-        amazonS3Client.putObject(
-                new PutObjectRequest(bucket, originalName, resizedFile.getInputStream(), objectMetaData)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
+        try(InputStream inputStream = resizedFile.getInputStream()){
+            amazonS3Client.putObject(
+                    new PutObjectRequest(bucket, originalName,inputStream, objectMetaData)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+        } catch (IOException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+        }
+
+
 
         String imagePath = amazonS3Client.getUrl(bucket, originalName).toString();
 
