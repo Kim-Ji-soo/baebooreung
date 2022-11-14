@@ -41,7 +41,7 @@ public class S3Controller {
         String url = taskClient.getProfile(userId);
 
         if(url!=null)
-            return new ResponseEntity<>("성공", HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(url);
         else
             return new ResponseEntity<>("실패!!", HttpStatus.BAD_REQUEST);
     }
