@@ -29,6 +29,7 @@ const user_service = {
   getUserInfo: () => BASE_URL + USER_SERVICE + 'user/', // 사용자 정보 요청
   getAllUser: () => BASE_URL + USER_SERVICE + 'users', // 전체 사용자 정보 출력
   // profile: () => USER_BASE_URL + USER + 'profile', // 프로필 사진 수정
+  saveFCMToken: () => BASE_URL + USER_SERVICE + 'fcm/' + 'saveToken',
 };
 
 const BUSINESS_SERVICE = 'business-service/';

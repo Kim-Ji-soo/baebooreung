@@ -6,10 +6,15 @@ import {
   Button,
   SafeAreaView,
   PermissionsAndroid,
+  Alert,
 } from 'react-native';
 import {useState, useEffect, useCallback} from 'react';
+import {useSelector} from 'react-redux';
 import * as encoding from 'text-encoding';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRefContext,
+} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -29,6 +34,13 @@ import LoginPage from './src/pages/driverApp/LoginPage';
 import SignUpPage from './src/pages/driverApp/SignUpPage';
 import DetailRoutePage from './src/pages/driverApp/DetaliRoutePage';
 import Cam from './src/components/Cam';
+
+// <-- firebase -->
+import {
+  requestUserPermission,
+  NotificationListener,
+} from './src/components/push';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const identityColor = '#0B0B3B';
@@ -190,6 +202,10 @@ function DriverTab() {
   );
 }
 export default function App() {
+  useEffect(() => {
+    requestUserPermission();
+    NotificationListener();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <Provider store={store}>

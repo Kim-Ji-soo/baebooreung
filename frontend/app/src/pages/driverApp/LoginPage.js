@@ -19,8 +19,11 @@ import {setUserList} from '../../redux/userList';
 //component and function
 import CustomButton from '../../components/CustomButton';
 import {isEmail, isPassword} from '../../utils/inputCheck';
+import messaging from '@react-native-firebase/messaging';
 
 const Login = ({navigation}) => {
+  const fcmToken = useSelector(state => state.auth.fcmToken);
+  console.log(fcmToken);
   const ButtonStyle = {
     borderWidth: 0.8,
     borderRadius: 16,
@@ -84,7 +87,18 @@ const Login = ({navigation}) => {
         console.log(e);
       });
   };
+  // const getFCMToken = (id) => {
+  //   messaging().getToken()
+  //   .then(token => {
+  //     axios({
+  //       method: 'put',
+  //       url: user_service.saveFCMToken(),
+  //       data: {
 
+  //       }
+  //     })
+  //   })
+  // }
   const login = async () => {
     await axios({
       method: 'POST',
@@ -93,27 +107,44 @@ const Login = ({navigation}) => {
         email: id,
         password: password,
       },
-    })
-      .then(res => {
-        axios.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${res.headers.token}`;
-        //redux
-        dispatch(
-          setUserInfo({
-            id: res.headers.id,
-            accessToken: res.headers.token,
-            specialkey: res.headers.specialkey,
-            name: res.headers.name,
-          }),
-        );
-        fetchUserInfo(res.headers.id);
-        console.log('Login Success!');
-      })
-      .catch(err => {
-        console.log(err);
-        console.log('Login failed!');
-      });
+    }).then(res => {
+      axios.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${res.headers.token}`;
+      //redux
+      dispatch(
+        setUserInfo({
+          id: res.headers.id,
+          accessToken: res.headers.token,
+          specialkey: res.headers.specialkey,
+          name: res.headers.name,
+        }),
+      );
+      fetchUserInfo(res.headers.id);
+      console.log('Login Success!');
+      messaging()
+        .getToken()
+        .then(token => {
+          axios({
+            method: 'put',
+            url: user_service.saveFCMToken(),
+            data: {
+              id: res.headers.id,
+              fcmToken: token,
+            },
+          })
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+          console.log('Login failed!');
+        });
+    });
   };
   // id 유효성 검사
   const onChangeId = event => {
