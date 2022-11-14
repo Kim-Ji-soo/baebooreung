@@ -4,6 +4,7 @@ import com.netflix.discovery.converters.Auto;
 import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.dto.*;
 import com.pro.baebooreung.businessservice.service.DeliveryService;
+import com.pro.baebooreung.businessservice.service.OrderService;
 import com.pro.baebooreung.businessservice.service.RouteService;
 import com.pro.baebooreung.businessservice.vo.RequestCheckBusiness;
 import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
@@ -27,12 +28,14 @@ import java.util.List;
 public class BusinessController {
 
     RouteService routeService;
+    OrderService orderService;
 
     private DeliveryService deliveryService;
 
     @Autowired
-    public BusinessController(RouteService routeService){
+    public BusinessController(RouteService routeService, OrderService orderService){
         this.routeService=routeService;
+        this.orderService=orderService;
     }
 
    //유저의 모든 루트들 가져오기
@@ -195,4 +198,15 @@ public class BusinessController {
 
         return deliveryService.getImg(delId);
     }
+
+    @GetMapping("/order/cnt/{routeId}")
+    public ResponseEntity<?> getOrderCntByDeliveryId(@PathVariable("orderId") int routeId){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCntByRoute(routeId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
 }
