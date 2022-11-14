@@ -10,6 +10,7 @@ import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.FcmMessage;
 import com.pro.baebooreung.userservice.dto.FcmTokenDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class FCMService {
     @Autowired
     UserRepository userRepository; //필드단위에서 @Autowired사용할 수 있지만 생성자 통해서 주입하는 것이 더 좋음
@@ -104,6 +106,10 @@ public class FCMService {
         String targetToken = findUser.getFcmToken();
 
         //deliveryId로 delivery name 찾아오기
+        log.info(">>"+businessServiceClient.getDeliveryName(findUser.getDeliveryId()));
+        log.info(">>>"+businessServiceClient.getDeliveryName(findUser.getDeliveryId()).getBody());
+        log.info(">>>"+businessServiceClient.getDeliveryName(findUser.getDeliveryId()).getBody().toString());
+
         String delivery_name = businessServiceClient.getDeliveryName(findUser.getDeliveryId()).getBody().toString();
 
         body += " - " + delivery_name;
