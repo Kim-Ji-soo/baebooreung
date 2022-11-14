@@ -1,11 +1,7 @@
 package com.pro.baebooreung.userservice.controller;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
-import com.pro.baebooreung.userservice.dto.CheckinDto;
-import com.pro.baebooreung.userservice.dto.ProfileResponse;
-import com.pro.baebooreung.userservice.dto.ResponseDriverRoute;
-import com.pro.baebooreung.userservice.dto.StartDto;
-import com.pro.baebooreung.userservice.dto.UserDto;
+import com.pro.baebooreung.userservice.dto.*;
 import com.pro.baebooreung.userservice.service.UserService;
 import com.pro.baebooreung.userservice.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,8 +61,8 @@ public class UserController {
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders header = new HttpHeaders();
-            header.add("X-NCP-APIGW-API-KEY-ID","i3oq00t777");
-            header.add("X-NCP-APIGW-API-KEY","SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG");
+            header.add("X-NCP-APIGW-API-KEY-ID","g05t2a43ik");
+            header.add("X-NCP-APIGW-API-KEY","K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt");
             HttpEntity<?> entity = new HttpEntity<>(header);
 
             UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();

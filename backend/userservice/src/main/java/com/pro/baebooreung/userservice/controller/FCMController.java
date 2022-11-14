@@ -27,7 +27,7 @@ public class FCMController {
 //                fcmDto.getTargetToken(),
                 fcmDto.getTitle(),
                 fcmDto.getBody());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).body("푸시 알림 성공 - "+fcmDto.getTitle());
     }
 
     @PutMapping("/fcm/saveToken")
@@ -38,7 +38,18 @@ public class FCMController {
         FcmTokenDto fcmTokenDto = mapper.map(requestFcmToken, FcmTokenDto.class);
 
         fcmService.saveToken(fcmTokenDto);
-        return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
+        return ResponseEntity.status(HttpStatus.OK).body("토큰 저장 성공");
+    }
+
+    @PostMapping("/fcm/message/check-in/{userId}")
+    public ResponseEntity pushMessageCheckIn(@PathVariable("userId") int userId) throws IOException {
+        String title = "체크인 가능";
+        String body = "체크인이 가능한 위치입니다. 사진을 찍어 체크인해주세요!";
+        fcmService.sendMessageCheckIn(
+                userId,
+                title,
+                body);
+        return ResponseEntity.ok().build();
     }
 
 }

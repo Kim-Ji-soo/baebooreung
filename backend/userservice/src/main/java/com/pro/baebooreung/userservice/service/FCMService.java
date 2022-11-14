@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.pro.baebooreung.userservice.client.BusinessServiceClient;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.FcmMessage;
@@ -24,6 +25,8 @@ public class FCMService {
     @Autowired
     UserRepository userRepository; //필드단위에서 @Autowired사용할 수 있지만 생성자 통해서 주입하는 것이 더 좋음
 
+    @Autowired
+    BusinessServiceClient businessServiceClient;
 
 //    @Autowired
 //    public FCMService(UserRepository userRepository) {
@@ -42,6 +45,11 @@ public class FCMService {
 
         String message = makeMessage(targetToken, title, body);
 
+        sendMessageCommon(message);
+    }
+
+    /* 공통적인 부분 */
+    public void sendMessageCommon(String message)throws IOException{
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message,
                 MediaType.get("application/json; charset=utf-8"));
@@ -53,8 +61,6 @@ public class FCMService {
                 .build();
 
         Response response = client.newCall(request).execute();
-
-        System.out.println(response.body().string());
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
@@ -72,9 +78,7 @@ public class FCMService {
     }
 
     private String getAccessToken() throws IOException {
-//        String firebaseConfigPath = "firebase/firebase_service_key.json";
         String firebaseConfigPath = "baebooreung-398a1-firebase-adminsdk-f7l3r-ef613b3b15.json";
-
 
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
@@ -90,8 +94,20 @@ public class FCMService {
         userRepository.save(findUser);
     }
 
-    public String getTargetToken(int id) {
-        UserEntity findUser = userRepository.findById(id);
+    public String getTargetToken(int userId) {
+        UserEntity findUser = userRepository.findById(userId);
         return findUser.getFcmToken();
+    }
+
+    public void sendMessageCheckIn(int userId, String title, String body) throws IOException {
+        UserEntity findUser = userRepository.findById(userId);
+        String targetToken = findUser.getFcmToken();
+
+        //deliveryId로 delivery name 찾아오기
+        String delivery_name = businessServiceClient.getDeliveryName(findUser.getDeliveryId()).toString();
+        body += " - " + delivery_name;
+        String message = makeMessage(targetToken, title, body);
+
+        sendMessageCommon(message);
     }
 }
