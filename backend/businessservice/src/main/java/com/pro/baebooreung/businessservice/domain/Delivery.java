@@ -68,6 +68,8 @@ public class Delivery {
         this.delActualTime = time;
     }
 
+    public void updateImg(String imgUrl) {this.img = imgUrl;}
+
 
     //builder에 id 안넣음
     @Builder

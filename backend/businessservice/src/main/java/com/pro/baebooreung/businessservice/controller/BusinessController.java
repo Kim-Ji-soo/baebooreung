@@ -3,6 +3,7 @@ package com.pro.baebooreung.businessservice.controller;
 import com.netflix.discovery.converters.Auto;
 import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.dto.*;
+import com.pro.baebooreung.businessservice.service.DeliveryService;
 import com.pro.baebooreung.businessservice.service.RouteService;
 import com.pro.baebooreung.businessservice.vo.RequestCheckBusiness;
 import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
@@ -26,6 +27,8 @@ import java.util.List;
 public class BusinessController {
 
     RouteService routeService;
+
+    private DeliveryService deliveryService;
 
     @Autowired
     public BusinessController(RouteService routeService){
@@ -180,5 +183,16 @@ public class BusinessController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
         }
+    }
+
+    @PostMapping("/delivery/save/Img")
+    public void saveImg(@RequestBody CheckResponse res){
+        deliveryService.saveImg(res);
+    }
+
+    @GetMapping("/delivery/Img/{delId}")
+    public String getImg(@PathVariable("delId") int delId){
+
+        return deliveryService.getImg(delId);
     }
 }

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface DeliveryRepository extends JpaRepository<Delivery,Integer> {
     List<Delivery> findByRouteId(int routeId);
     Optional<Delivery> findByRouteIdAndSequence(int routId, int sequence);
+
 //
 //    @Override
 //    Optional<Delivery> findById(Integer id);
