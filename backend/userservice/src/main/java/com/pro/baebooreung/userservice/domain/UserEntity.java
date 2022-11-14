@@ -57,6 +57,10 @@ public class UserEntity {
         this.deliveryId = deliveryId;
     }
 
+    public void updateProfile(String profileUrl) {
+        this.profile = profileUrl;
+    }
+
 
     @Builder
     public UserEntity(int id, String email, String name, String specialKey, Grade grade, String encryptedPwd, String profile, String phone, Integer region, WorkStatus workStatus, Integer routeId, Integer deliveryId) {

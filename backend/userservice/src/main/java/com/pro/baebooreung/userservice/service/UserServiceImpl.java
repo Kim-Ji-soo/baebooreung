@@ -6,6 +6,7 @@ import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.WorkStatus;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.CheckinDto;
+import com.pro.baebooreung.userservice.dto.ProfileResponse;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
@@ -176,7 +177,22 @@ public class UserServiceImpl implements UserService {
     public void setEnd(int id) {
         UserEntity findUser = userRepository.findById(id);
         findUser.updateStartEnd(0,0,WorkStatus.OFF);
-       userRepository.save(findUser);
+        userRepository.save(findUser);
     }
+
+    @Override
+    public void saveProfile(ProfileResponse res) {
+        UserEntity findUser = userRepository.findById(res.getUserId());
+        findUser.updateProfile(res.getProfileUrl());
+        userRepository.save(findUser);
+    }
+
+    @Override
+    public String getProfile(int userId) {
+        UserEntity findUser = userRepository.findById(userId);
+        return findUser.getProfile();
+    }
+
+
 }
 
