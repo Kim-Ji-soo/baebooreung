@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.pro.baebooreung.userservice.client.BusinessServiceClient;
 import com.pro.baebooreung.userservice.domain.UserEntity;
 import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.FcmMessage;
@@ -12,10 +11,8 @@ import com.pro.baebooreung.userservice.dto.FcmTokenDto;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -39,7 +36,10 @@ public class FCMService {
 
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+//    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+    public void sendMessageTo(int userId, String title, String body) throws IOException {
+        String targetToken = getTargetToken(userId);
+
         String message = makeMessage(targetToken, title, body);
 
         OkHttpClient client = new OkHttpClient();
@@ -48,8 +48,7 @@ public class FCMService {
         Request request = new Request.Builder()
                 .url(API_URL)
                 .post(requestBody)
-//                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                .addHeader(HttpHeaders.AUTHORIZATION, "FCMBearer " + getAccessToken())
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();
 
@@ -89,5 +88,10 @@ public class FCMService {
         UserEntity findUser = userRepository.findById(fcmTokenDto.getId());
         findUser.updateFcmToken(fcmTokenDto.getFcmToken());
         userRepository.save(findUser);
+    }
+
+    public String getTargetToken(int id) {
+        UserEntity findUser = userRepository.findById(id);
+        return findUser.getFcmToken();
     }
 }

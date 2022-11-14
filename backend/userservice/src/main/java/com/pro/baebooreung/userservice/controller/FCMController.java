@@ -1,6 +1,5 @@
 package com.pro.baebooreung.userservice.controller;
 
-import com.pro.baebooreung.userservice.dto.CheckinDto;
 import com.pro.baebooreung.userservice.dto.FCMDto;
 import com.pro.baebooreung.userservice.dto.FcmTokenDto;
 import com.pro.baebooreung.userservice.service.FCMService;
@@ -8,11 +7,9 @@ import com.pro.baebooreung.userservice.vo.RequestFcmToken;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -22,13 +19,13 @@ public class FCMController {
 
     private final FCMService fcmService;
 
-    @PostMapping("/fcm/check")
-    public ResponseEntity pushMessage(@RequestBody FCMDto fcmDto) throws IOException {
-        System.out.println(fcmDto.getTargetToken() + " "
-                +fcmDto.getTitle() + " " + fcmDto.getBody());
+    @PostMapping("/fcm/message/{userId}")
+    public ResponseEntity pushMessage(@PathVariable("userId") int userId, @RequestBody FCMDto fcmDto) throws IOException {
+
 
         fcmService.sendMessageTo(
-                fcmDto.getTargetToken(),
+                    userId,
+//                fcmDto.getTargetToken(),
                 fcmDto.getTitle(),
                 fcmDto.getBody());
         return ResponseEntity.ok().build();
@@ -42,7 +39,7 @@ public class FCMController {
         FcmTokenDto fcmTokenDto = mapper.map(requestFcmToken, FcmTokenDto.class);
 
         fcmService.saveToken(fcmTokenDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
     }
 
 }
