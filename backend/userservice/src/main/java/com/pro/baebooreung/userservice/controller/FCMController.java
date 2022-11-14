@@ -19,7 +19,7 @@ public class FCMController {
 
     private final FCMService fcmService;
 
-    @PostMapping("/fcm/message")
+    @PostMapping("/fcm/message/{userId}")
     public ResponseEntity pushMessage(@PathVariable("userId") int userId, @RequestBody FCMDto fcmDto) throws IOException {
 //    public ResponseEntity pushMessage(@RequestBody FCMDto fcmDto) throws IOException {
         fcmService.sendMessageTo(
