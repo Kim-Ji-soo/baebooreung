@@ -168,4 +168,17 @@ public class BusinessController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
         }
     }
+
+    @GetMapping("/delivery/name/{deliveryId}")
+    public ResponseEntity<?> getDeliveryName(@PathVariable("deliveryId") int deliveryId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(routeService.getDeliveryName(deliveryId));
+        } catch (IllegalStateException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 목적지 입니다.");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
 }

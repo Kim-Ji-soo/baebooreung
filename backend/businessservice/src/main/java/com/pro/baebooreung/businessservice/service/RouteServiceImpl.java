@@ -269,4 +269,14 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
+    public String getDeliveryName(int deliveryId) throws Exception {
+        Optional<Delivery> findDelivery = deliveryRepository.findById(deliveryId);
+        if(findDelivery.isPresent()){
+            return findDelivery.get().getDelName();
+        }else{
+            throw new Exception("id : "+deliveryId+ " 를 가진 목적지가 없습니다.");
+        }
+    }
+
+
 }

@@ -25,6 +25,6 @@ public interface RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDate(Region region, LocalDate localDate) throws Exception;
     List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteName(Region region, LocalDate localDate, String routeName) throws Exception;
     DriverRouteAndDeliveryDto getDriverRouteAndDelivery(int user_id) throws Exception;
-
+    public String getDeliveryName(int deliveryId) throws Exception;
 
 }
