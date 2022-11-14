@@ -43,6 +43,13 @@ public class UserEntity {
     @Column(name = "delivery_id",nullable = true)
     private Integer deliveryId;
 
+    @Column(name = "fcm_token",nullable = true)
+    private String fcmToken;
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
     public void updateGrade(Grade grade) {
         this.grade = grade;
     }
@@ -55,6 +62,10 @@ public class UserEntity {
 
     public void updateDelivery(int deliveryId){
         this.deliveryId = deliveryId;
+    }
+
+    public void updateProfile(String profileUrl) {
+        this.profile = profileUrl;
     }
 
 

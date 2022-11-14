@@ -16,4 +16,7 @@ public interface BusinessServiceClient {
 
     @GetMapping("/route/{routeId}")
     ResponseRoute getRoute(@PathVariable("routeId") int routeId);
+
+    @GetMapping("/delivery/name/{deliveryId}")
+    public ResponseEntity<String> getDeliveryName(@PathVariable("deliveryId") int deliveryId);
 }

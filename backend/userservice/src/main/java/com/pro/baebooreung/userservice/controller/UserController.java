@@ -1,11 +1,10 @@
 package com.pro.baebooreung.userservice.controller;
 
 import com.pro.baebooreung.userservice.domain.UserEntity;
-import com.pro.baebooreung.userservice.dto.CheckinDto;
-import com.pro.baebooreung.userservice.dto.StartDto;
-import com.pro.baebooreung.userservice.dto.UserDto;
+import com.pro.baebooreung.userservice.dto.*;
 import com.pro.baebooreung.userservice.service.UserService;
 import com.pro.baebooreung.userservice.vo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 //@CrossOrigin(originPatterns = "https://localhost:3000, http://localhost:3000, https://k7c207.p.ssafy.io, http://k7c207.p.ssafy.io, https://k7c207.p.ssafy.io:8000, http://k7c207.p.ssafy.io:8000",maxAge=3600)
 public class UserController {
 
@@ -62,8 +61,8 @@ public class UserController {
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders header = new HttpHeaders();
-            header.add("X-NCP-APIGW-API-KEY-ID","i3oq00t777");
-            header.add("X-NCP-APIGW-API-KEY","SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG");
+            header.add("X-NCP-APIGW-API-KEY-ID","lzyp7jzxro");
+            header.add("X-NCP-APIGW-API-KEY","CrXHLpd2o9Fh7ow6ScjEh7WC3KiSMuQ7V21M7BBt");
             HttpEntity<?> entity = new HttpEntity<>(header);
 
             UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
@@ -171,7 +170,7 @@ public class UserController {
 
     @PutMapping("/checkIn")
     public ResponseEntity<String> checkIn(@RequestBody RequestCheckIn requestCheckIn){
-
+        log.info("checkIn request data = {}", requestCheckIn.toString());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -189,9 +188,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("업무 종료 성공");
     }
 
+    @GetMapping("/route/delivery/{userId}")
+    public ResponseDriverRoute checkRouteAndDelivery(@PathVariable("userId") int userId){
+        return userService.getDriverRoute(userId);
+    }
+
+
+
+    @PostMapping("/user/save/profile")
+    public void saveProfile(@RequestBody ProfileResponse res){
+        userService.saveProfile(res);
+    }
+
     @GetMapping("/user/profile/{userId}")
-    public ResponseEntity<?> getProfile(@PathVariable("userId") int userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserProfile(userId));
+    public String getProfile(@PathVariable("userId") int userId){
+
+        return userService.getProfile(userId);
     }
 
 }
