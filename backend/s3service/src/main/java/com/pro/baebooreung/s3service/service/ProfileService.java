@@ -12,6 +12,4 @@ public class ProfileService {
         this.s3FileUploadService = s3FileUploadService;
     }
 
-    public void profileSave(MultipartFile multipartFile) {
-    }
 }
