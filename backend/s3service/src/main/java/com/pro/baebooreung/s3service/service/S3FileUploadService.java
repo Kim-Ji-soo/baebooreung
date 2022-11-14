@@ -46,8 +46,11 @@ public class S3FileUploadService {
         int currentUserId = profileReq.getUserId();
         MultipartFile curImage = profileReq.getImage();
 
-        String originalName = LocalDate.now() + "/" + currentUserId + "/" + createFileName(curImage.getOriginalFilename());
-        MultipartFile resizedFile = resizeImage(curImage.getOriginalFilename(),originalName, curImage, 768);
+        String fileName = createFileName(curImage.getOriginalFilename());
+        String fileFormatName = curImage.getContentType().substring(curImage.getContentType().lastIndexOf("/") + 1);
+
+        String originalName = LocalDate.now() + "/" + currentUserId + "/" + fileName;
+        MultipartFile resizedFile = resizeImage(fileName,fileFormatName, curImage, 768);
 
         log.info(resizedFile.getSize()+":size!!!!!!!!!!!!");
         long size = resizedFile.getSize();
