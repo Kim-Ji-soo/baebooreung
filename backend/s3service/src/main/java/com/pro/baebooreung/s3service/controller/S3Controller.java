@@ -38,7 +38,9 @@ public class S3Controller {
     @GetMapping("/getProfile")
     public ResponseEntity<?> getFile(int userId) throws IOException {
 
+        System.out.println("왜 안돼");
         String url = taskClient.getProfile(userId);
+        System.out.println(url);
 
         if(url!=null)
             return ResponseEntity.status(HttpStatus.OK).body(url);
