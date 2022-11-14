@@ -41,8 +41,6 @@ public class S3FileUploadService {
 
     public ProfileResponse uploadFile(ProfileRequest profileReq) throws IOException {
 
-        log.info("?????????????????????????????");
-
         ProfileResponse profileRes = new ProfileResponse();
 
         int currentUserId = profileReq.getUserId();
@@ -54,24 +52,18 @@ public class S3FileUploadService {
         String originalName = LocalDate.now() + "/" + currentUserId + "/" + fileName;
         MultipartFile resizedFile = resizeImage(fileName,fileFormatName, curImage, 768);
 
-        log.info(resizedFile.getSize()+":size!!!!!!!!!!!!");
         long size = resizedFile.getSize();
 
         ObjectMetadata objectMetaData = new ObjectMetadata();
         objectMetaData.setContentType(curImage.getContentType());
         objectMetaData.setContentLength(size);
 
-        System.out.println("zz");
-        try(InputStream inputStream = resizedFile.getInputStream()){
-            amazonS3Client.putObject(
-                    new PutObjectRequest(bucket, originalName,inputStream, objectMetaData)
-                            .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
-        } catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
-        }
 
-
+        System.out.println("-----InputStream inputStream = resizedFile.getInputStream()----");
+        amazonS3Client.putObject(
+                new PutObjectRequest(bucket, originalName,resizedFile.getInputStream(), objectMetaData)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
 
         String imagePath = amazonS3Client.getUrl(bucket, originalName).toString();
 
