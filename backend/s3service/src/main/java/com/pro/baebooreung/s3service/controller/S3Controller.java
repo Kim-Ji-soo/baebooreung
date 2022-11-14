@@ -36,7 +36,7 @@ public class S3Controller {
     }
 
     @GetMapping("/getProfile")
-    public ResponseEntity<?> getFile(int userId) throws IOException {
+    public ResponseEntity<?> getFile(@RequestParam("userId") int userId) throws IOException {
 
         System.out.println("왜 안돼");
         System.out.println(taskClient.getProfile(userId));
