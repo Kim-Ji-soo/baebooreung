@@ -194,5 +194,11 @@ public class UserServiceImpl implements UserService {
             return ResponseDriverRoute.builder().route_id(0).delivery_id(0).drive(false).build();
         }
     }
+
+    @Override
+    public UserProfileDto getUserProfile(int userId) {
+        UserEntity userEntity = userRepository.findById(userId);
+        return UserProfileDto.builder().profile(userEntity.getProfile()).build();
+    }
 }
 
