@@ -41,6 +41,8 @@ public class S3FileUploadService {
 
     public ProfileResponse uploadFile(ProfileRequest profileReq) throws IOException {
 
+        log.info("?????????????????????????????");
+
         ProfileResponse profileRes = new ProfileResponse();
 
         int currentUserId = profileReq.getUserId();
