@@ -4,12 +4,17 @@ import Route from '../../components/Route';
 import {useSelector, useDispatch} from 'react-redux';
 import axios from 'axios';
 import {business_service} from '../../api/api';
-import {setDriverRouteList} from '../../redux/work';
+import work, {
+  setLunchRouteInfo,
+  setDinnerRouteInfo,
+  setLunchRoute,
+  setDinnerRoute,
+} from '../../redux/work';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
-  const name = useSelector(state => state.auth.name);
   const id = useSelector(state => state.auth.id);
+  const name = useSelector(state => state.auth.name);
 
   const getDriverWorkRoute = id => {
     axios({
@@ -17,15 +22,35 @@ const MainScreen = () => {
       url: business_service.getDriverRoute() + `${id}` + '/routes',
     })
       .then(res => {
-        const response = res.data;
-        const RouteInfo = [];
-        for (let i = 0; i < response.length; i++) {
-          for (let k = 0; k < response[i].deliveryList.length; k++) {
-            RouteInfo.push(response[i].deliveryList[k]);
+        const workList = res.data;
+        const deliveryList = workList[0].deliveryList;
+        for (let i = 0; i < workList.length; i++) {
+          if (workList[i].routeType === 'lunch') {
+            dispatch(
+              setLunchRouteInfo({
+                date: workList[i].date,
+                routeId: workList[i].routeId,
+                done: workList[i].done,
+                routeType: workList[i].routeType,
+                routeName: workList[i].routeName,
+                scheduledStartTime: workList[i].scheduledStartTime,
+              }),
+            );
+            dispatch(setLunchRoute(workList[i].deliveryList));
+          } else {
+            dispatch(
+              setDinnerRouteInfo({
+                date: workList[i].date,
+                routeId: workList[i].routeId,
+                done: workList[i].done,
+                routeType: workList[i].routeType,
+                routeName: workList[i].routeName,
+                scheduledStartTime: workList[i].scheduledStartTime,
+              }),
+            );
+            dispatch(setDinnerRoute(workList[i].deliveryList));
           }
         }
-        console.log(RouteInfo);
-        dispatch(setDriverRouteList(RouteInfo));
       })
       .catch(err => {
         console.log(err);
@@ -39,7 +64,7 @@ const MainScreen = () => {
   return (
     <View style={styles.MainRootContainer}>
       <View style={styles.MainHeader}>
-        <Text style={styles.MainHeaderText}>안녕하세요 {name}!</Text>
+        <Text style={styles.MainHeaderText}>안녕하세요 {name}</Text>
         <Text style={styles.todayList}>오늘의 배송 목록</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>

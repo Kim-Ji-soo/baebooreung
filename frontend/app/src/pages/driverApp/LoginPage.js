@@ -57,7 +57,6 @@ const Login = ({navigation}) => {
       url: user_service.getUserInfo() + `${id}`, //path variable로 id값을 받는다.
     })
       .then(res => {
-        console.log(res.data);
         dispatch(setUser(res.data));
       })
       .catch(err => {
@@ -77,28 +76,15 @@ const Login = ({navigation}) => {
         res.data
           .filter(item => item.id !== userInfo.id)
           .map((item, idx) => {
-            console.log(item.id);
+            // console.log(item.id);
             userList.push(item);
           });
-        console.log(userList);
         dispatch(setUserList(userList));
       })
       .catch(e => {
         console.log(e);
       });
   };
-  // const getFCMToken = (id) => {
-  //   messaging().getToken()
-  //   .then(token => {
-  //     axios({
-  //       method: 'put',
-  //       url: user_service.saveFCMToken(),
-  //       data: {
-
-  //       }
-  //     })
-  //   })
-  // }
   const login = async () => {
     await axios({
       method: 'POST',
@@ -189,7 +175,6 @@ const Login = ({navigation}) => {
           placeholder="아이디를 입력하세요."
           onChange={onChangeId}
         />
-
         <Text style={styles.label}>비밀번호</Text>
         <TextInput
           style={styles.passwordForm}

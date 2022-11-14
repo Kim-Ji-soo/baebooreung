@@ -23,9 +23,15 @@ const BottomScrollSheet = props => {
       <>
         {item.type === 'pickup' ? (
           <View style={styles.pickupContainer}>
-            <Text style={styles.pickupId}>[{item.sequence}]</Text>
-            <Text style={styles.pickupStore}>{item.address}</Text>
-            <Text style={styles.pickupTime}>{item.delScheduledTime}</Text>
+            <Text style={styles.pickupId}>{item.sequence}</Text>
+            <Text style={styles.pickupStore}>{item.delName}</Text>
+            <Text style={styles.pickupTime}>
+              {item.delScheduledTime.split(':')[0] +
+                '시' +
+                ' ' +
+                item.delScheduledTime.split(':')[1] +
+                '분'}
+            </Text>
             <Text style={styles.pickupCount}>{item.orderNum}건</Text>
           </View>
         ) : null}
@@ -37,9 +43,15 @@ const BottomScrollSheet = props => {
       <>
         {item.type === 'delivery' ? (
           <View style={styles.DeliveryContainer}>
-            <Text style={styles.DeliveryId}>[{item.sequence}]</Text>
-            <Text style={styles.DeliveryStore}>{item.address}</Text>
-            <Text style={styles.DeliveryTime}>{item.delScheduledTime}</Text>
+            <Text style={styles.DeliveryId}>{item.sequence}</Text>
+            <Text style={styles.DeliveryStore}>{item.delName}</Text>
+            <Text style={styles.DeliveryTime}>
+              {item.delScheduledTime.split(':')[0] +
+                '시' +
+                ' ' +
+                item.delScheduledTime.split(':')[1] +
+                '분'}
+            </Text>
             <Text style={styles.DeliveryCount}>{item.orderNum}건</Text>
           </View>
         ) : null}
@@ -58,7 +70,7 @@ const BottomScrollSheet = props => {
           <Text style={styles.workHeader}>픽업</Text>
           <View style={styles.body}>
             <FlatList
-              data={props.data.deliveryList}
+              data={props.data}
               renderItem={renderPickup}
               keyExtractor={item => item.id}
             />
@@ -66,7 +78,7 @@ const BottomScrollSheet = props => {
           <Text style={styles.workHeader}>배송</Text>
           <View style={styles.body}>
             <FlatList
-              data={props.data.deliveryList}
+              data={props.data}
               renderItem={renderDelivery}
               keyExtractor={item => item.id}
             />
