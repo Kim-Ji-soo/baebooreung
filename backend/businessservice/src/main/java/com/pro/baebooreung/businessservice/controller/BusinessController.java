@@ -132,7 +132,7 @@ public class BusinessController {
     }
 
     // 지역, 날짜에 모든 안내 경로 얻기
-    @GetMapping("/route/navigps")
+    @PostMapping("/route/navigps")
     public ResponseEntity<?> getRouteAndNavigations(@RequestBody RouteAndNaviRequestDto requestDto){
         log.info("request navigps data : {}", requestDto.toString());
         try {
@@ -144,7 +144,7 @@ public class BusinessController {
     }
 
     // 지역, 날짜에 모든 안내 경로 얻기
-    @GetMapping("/route/navigps/univ")
+    @PostMapping("/route/navigps/univ")
     public ResponseEntity<?> getRouteAndNavigationsByUniv(@RequestBody RouteAndNaviByRouteNameRequestDto requestDto){
         log.info("request navigpsByUniv data : {}", requestDto.toString());
         try {
