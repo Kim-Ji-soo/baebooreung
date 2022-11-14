@@ -102,7 +102,8 @@ public class RouteServiceImpl implements RouteService {
         return responseRoutes;
     }
 
-    @Transactional
+//    @Transactional
+    @Override
     public RouteDto startWork(int userId, int routeId){
         Optional<Delivery> findDelivery = deliveryRepository.findByRouteIdAndSequence(userId,1);
         Optional<Route> findRoute = routeRepository.findById(routeId);
@@ -112,6 +113,8 @@ public class RouteServiceImpl implements RouteService {
             requestStart = new RequestStart(userId,routeId,findDelivery.get().getId());
             log.info(">>>>>>>>"+requestStart.toString());
             ResponseUser responseUser = userServiceClient.startWork(requestStart);
+        }else{
+            log.info(">>>>>>>> There's no delivery");
         }
 
         LocalTime now = LocalTime.now();
