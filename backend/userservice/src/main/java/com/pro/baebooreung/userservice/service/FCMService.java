@@ -36,7 +36,10 @@ public class FCMService {
 
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+//    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+    public void sendMessageTo(int userId, String title, String body) throws IOException {
+        String targetToken = getTargetToken(userId);
+
         String message = makeMessage(targetToken, title, body);
 
         OkHttpClient client = new OkHttpClient();
@@ -46,7 +49,6 @@ public class FCMService {
                 .url(API_URL)
                 .post(requestBody)
                 .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-//                .addHeader(HttpHeaders.AUTHORIZATION, "FCMBearer " + getAccessToken())
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();
 
@@ -86,5 +88,10 @@ public class FCMService {
         UserEntity findUser = userRepository.findById(fcmTokenDto.getId());
         findUser.updateFcmToken(fcmTokenDto.getFcmToken());
         userRepository.save(findUser);
+    }
+
+    public String getTargetToken(int id) {
+        UserEntity findUser = userRepository.findById(id);
+        return findUser.getFcmToken();
     }
 }
