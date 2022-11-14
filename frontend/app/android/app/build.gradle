@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-
+apply plugin: "com.google.gms.google-services"
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -252,9 +252,16 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    // implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    // implementation 'com.google.firebase:firebase-inappmessaging'
+    // implementation 'com.google.firebase:firebase-inappmessaging-display'
+    // implementation 'com.google.firebase:firebase-auth'
+    // implementation 'com.google.firebase:firebase-firestore'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     // naver map sdk
-   implementation 'com.naver.maps:map-sdk:3.16.0'
+    implementation 'com.naver.maps:map-sdk:3.16.0'
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
