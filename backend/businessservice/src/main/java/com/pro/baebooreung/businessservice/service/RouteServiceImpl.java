@@ -110,6 +110,7 @@ public class RouteServiceImpl implements RouteService {
         RequestStart requestStart = new RequestStart();
         if(findDelivery.isPresent()){
             requestStart = new RequestStart(userId,routeId,findDelivery.get().getId());
+            log.info(">>>>>>>>"+requestStart.toString());
             ResponseUser responseUser = userServiceClient.startWork(requestStart);
         }
 
