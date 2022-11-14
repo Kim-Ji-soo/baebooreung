@@ -61,8 +61,8 @@ public class UserController {
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders header = new HttpHeaders();
-            header.add("X-NCP-APIGW-API-KEY-ID","g05t2a43ik");
-            header.add("X-NCP-APIGW-API-KEY","K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt");
+            header.add("X-NCP-APIGW-API-KEY-ID","lzyp7jzxro");
+            header.add("X-NCP-APIGW-API-KEY","CrXHLpd2o9Fh7ow6ScjEh7WC3KiSMuQ7V21M7BBt");
             HttpEntity<?> entity = new HttpEntity<>(header);
 
             UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
