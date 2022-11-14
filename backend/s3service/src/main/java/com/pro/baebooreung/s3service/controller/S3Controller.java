@@ -35,7 +35,7 @@ public class S3Controller {
             return new ResponseEntity<>("실패!!", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/getProfile")
     public ResponseEntity<?> getFile(int userId) throws IOException {
 
         String url = taskClient.getProfile(userId);
