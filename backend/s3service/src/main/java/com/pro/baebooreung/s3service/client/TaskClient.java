@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-@FeignClient(name = "feign", url = "https://k7c207.p.ssafy.io:8000")
+@FeignClient(name = "user-service", url = "https://k7c207.p.ssafy.io:8000")
 public interface TaskClient {
 
     @PostMapping("/user/save/profile")
