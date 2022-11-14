@@ -8,6 +8,7 @@ import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
 import com.pro.baebooreung.userservice.service.UserService;
 import com.pro.baebooreung.userservice.vo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 //@CrossOrigin(originPatterns = "https://localhost:3000, http://localhost:3000, https://k7c207.p.ssafy.io, http://k7c207.p.ssafy.io, https://k7c207.p.ssafy.io:8000, http://k7c207.p.ssafy.io:8000",maxAge=3600)
 public class UserController {
 
@@ -173,7 +175,7 @@ public class UserController {
 
     @PutMapping("/checkIn")
     public ResponseEntity<String> checkIn(@RequestBody RequestCheckIn requestCheckIn){
-
+        log.info("checkIn request data = {}", requestCheckIn.toString());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
