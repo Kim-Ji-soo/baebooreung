@@ -1,12 +1,11 @@
 package com.pro.baebooreung.s3service.service;
 
-import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.Upload;
+import com.pro.baebooreung.s3service.dto.CheckRequest;
+import com.pro.baebooreung.s3service.dto.CheckResponse;
 import com.pro.baebooreung.s3service.dto.ProfileRequest;
 import com.pro.baebooreung.s3service.dto.ProfileResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,33 +22,30 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class S3FileUploadService {
-
+public class S3ImgUploadService {
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
-    public ProfileResponse uploadFile(ProfileRequest profileReq) throws IOException {
+    public CheckResponse uploadImg(CheckRequest checkReq) throws IOException {
 
-        ProfileResponse profileRes = new ProfileResponse();
+        CheckResponse checkRes = new CheckResponse();
 
-        int currentUserId = profileReq.getUserId();
-        MultipartFile curImage = profileReq.getImage();
+        int currentDelId = checkReq.getDelId();
+        MultipartFile curImage = checkReq.getImage();
 
         String fileName = createFileName(curImage.getOriginalFilename());
         String fileFormatName = curImage.getContentType().substring(curImage.getContentType().lastIndexOf("/") + 1);
 
-        String originalName = currentUserId + "/" + fileName;
+        String originalName = LocalDate.now() + "/" + currentDelId + "/" + fileName;
         MultipartFile resizedFile = resizeImage(fileName,fileFormatName, curImage, 768);
 
         long size = resizedFile.getSize();
@@ -66,10 +62,10 @@ public class S3FileUploadService {
 
         String imagePath = amazonS3Client.getUrl(bucket, originalName).toString();
 
-        profileRes.setProfileUrl(imagePath);
-        profileRes.setUserId(currentUserId);
+        checkRes.setImgUrl(imagePath);
+        checkRes.setDelId(currentDelId);
 
-        return profileRes;
+        return checkRes;
     }
 
     private String createFileName(String fileName) {
@@ -115,5 +111,4 @@ public class S3FileUploadService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 리사이즈에 실패했습니다.");
         }
     }
-
 }
