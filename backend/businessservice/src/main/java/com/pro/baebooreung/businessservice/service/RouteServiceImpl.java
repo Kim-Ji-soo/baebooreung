@@ -197,7 +197,7 @@ public class RouteServiceImpl implements RouteService {
             if(nextDelivery.isPresent()){
                 // user에서 넣어주기 feign client 코드 작성
 //                userServiceClient.checkIn(new RequestCheckIn(userId,nextDelivery.get().getId()));
-                userServiceClient.checkIn(new RequestCheckIn(userId,nextDelivery.getDeliveryId()));
+                userServiceClient.checkIn(new RequestCheckIn(userId,nextDelivery.get().getDeliveryId()));
                 return CheckinResponseDto.builder().deliveryId(nextDelivery.get().getId()).build();
             } else {
                 return CheckinResponseDto.builder().deliveryId(-1).build();
