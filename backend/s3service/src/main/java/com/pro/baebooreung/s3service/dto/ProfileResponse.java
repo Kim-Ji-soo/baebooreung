@@ -10,5 +10,5 @@ import lombok.*;
 public class ProfileResponse {
 
     private String profileUrl;
-    private String userId;
+    private int userId;
 }

@@ -36,7 +36,7 @@ public class S3FileUploadService {
 
         ProfileResponse profileRes = new ProfileResponse();
 
-        String currentUserId = profileReq.getUserId();
+        int currentUserId = profileReq.getUserId();
         MultipartFile curImage = profileReq.getImage();
 
         String originalName = LocalDate.now() + "/" + currentUserId + "/" + createFileName(curImage.getOriginalFilename());

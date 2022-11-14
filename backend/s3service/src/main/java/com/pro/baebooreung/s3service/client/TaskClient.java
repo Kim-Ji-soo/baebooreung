@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 @FeignClient(name = "fegin", url = "https://k7c207.p.ssafy.io:8000")
 public interface TaskClient {
 
-    @PostMapping("/save/profile")
-    String saveProfile(ProfileResponse res);
+    @PostMapping("/user/save/profile")
+    void saveProfile(ProfileResponse res);
 
-    @GetMapping("/get/profile")
-    String getProfile(String userId);
+    @GetMapping("/user/profile/{userId}")
+    String getProfile(int userId);
 }

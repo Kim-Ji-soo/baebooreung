@@ -11,5 +11,5 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileRequest {
 
     MultipartFile image;
-    String userId;
+    int userId;
 }
