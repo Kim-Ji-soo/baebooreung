@@ -189,5 +189,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("업무 종료 성공");
     }
 
+    @GetMapping("/user/profile/{userId}")
+    public ResponseEntity<?> getProfile(@PathVariable("userId") int userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserProfile(userId));
+    }
+
 }
 

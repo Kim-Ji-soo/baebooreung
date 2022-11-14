@@ -8,6 +8,7 @@ import com.pro.baebooreung.userservice.domain.repository.UserRepository;
 import com.pro.baebooreung.userservice.dto.CheckinDto;
 import com.pro.baebooreung.userservice.dto.StartDto;
 import com.pro.baebooreung.userservice.dto.UserDto;
+import com.pro.baebooreung.userservice.dto.UserProfileDto;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
 import com.pro.baebooreung.userservice.vo.ResponseUser;
 import io.jsonwebtoken.Claims;
@@ -177,6 +178,12 @@ public class UserServiceImpl implements UserService {
         UserEntity findUser = userRepository.findById(id);
         findUser.updateStartEnd(0,0,WorkStatus.OFF);
        userRepository.save(findUser);
+    }
+
+    @Override
+    public UserProfileDto getUserProfile(int userId) {
+        UserEntity userEntity = userRepository.findById(userId);
+        return UserProfileDto.builder().profile(userEntity.getProfile()).build();
     }
 }
 
