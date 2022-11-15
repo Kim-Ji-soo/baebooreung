@@ -19,10 +19,8 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public void saveImg(CheckResponse res) {
         Optional<Delivery> findDel = deliveryRepository.findById(res.getDelId());
-        if(findDel.isPresent()){
-            findDel.get().updateImg(res.getImgUrl());
-            deliveryRepository.save(findDel.get());
-        }
+        findDel.get().updateImg(res.getImgUrl());
+        deliveryRepository.save(findDel.get());
 
     }
 
