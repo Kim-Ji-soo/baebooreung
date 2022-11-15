@@ -180,16 +180,6 @@ function DriverTab() {
           headerShown: false,
         }}></Tab.Screen>
       <Tab.Screen
-        name="Cam"
-        component={Cam}
-        options={{
-          title: 'Cam',
-          headerStyle: {
-            backgroundColor: '#29b6f6',
-          },
-          headerShown: false,
-        }}></Tab.Screen>
-      <Tab.Screen
         name="Detail"
         component={DetailRoutePage}
         options={{
