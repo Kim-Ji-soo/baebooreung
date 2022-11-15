@@ -30,13 +30,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public void saveImg(CheckResponse res) {
-        log.info(res.getDelId()+":delivery Id!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Optional<Delivery> findDel = deliveryRepository.findById(res.getDelId());
-        Delivery delivery = findDel.get();
-        log.info(delivery+":delivery!!!!!!!!!");
-        delivery.updateImg(res.getImgUrl());
-//        em.persist(delivery);
-        deliveryRepository.save(delivery);
+        if(findDel.isPresent()){
+            findDel.get().updateImg(res.getImgUrl());
+            deliveryRepository.save(findDel.get());
+        }
 
     }
 
