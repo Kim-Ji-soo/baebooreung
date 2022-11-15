@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService{
         int all_cnt = 0;
         int done_cnt = 0;
         for(Delivery delivery:deliveryList){
-            List<Order> orderList = orderRepository.findByDelivery(delivery.getId());
+            List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
             if(orderList != null && orderList.size() != 0){
                 if(delivery.isCheck()){
                     done_cnt += orderList.size();
