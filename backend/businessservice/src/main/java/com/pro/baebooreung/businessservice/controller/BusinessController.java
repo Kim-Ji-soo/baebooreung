@@ -213,7 +213,7 @@ public class BusinessController {
     }
 
     @GetMapping("/order/cnt/{routeId}")
-    public ResponseEntity<?> getOrderCntByDeliveryId(@PathVariable("orderId") int routeId){
+    public ResponseEntity<?> getOrderCntByDeliveryId(@PathVariable("routeId") int routeId){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCntByRoute(routeId));
         } catch (Exception e){
