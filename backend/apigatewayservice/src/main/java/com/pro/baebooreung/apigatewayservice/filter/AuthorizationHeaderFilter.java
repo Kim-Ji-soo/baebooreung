@@ -89,14 +89,14 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             returnValue = false;
         }
         //userId와 같은 값인지도 확인하면 좋음
-        log.info(">>>subject: "+subject);
-        log.info(">>>specialkey: "+specialkey);
-        log.info(">>>equal? "+ specialkey.equals(subject));
-        String returnKey = userServiceClient.getSpecialkey(userId);
-        if(!returnKey.equals(specialkey)){
-            log.info(">>>feign client "+ returnKey);
-            returnValue = false;
-        }
+//        log.info(">>>subject: "+subject);
+//        log.info(">>>specialkey: "+specialkey);
+//        log.info(">>>equal? "+ specialkey.equals(subject));
+//        String returnKey = userServiceClient.getSpecialkey(userId);
+//        if(!returnKey.equals(specialkey)){
+//            log.info(">>>feign client "+ returnKey);
+//            returnValue = false;
+//        }
 
         return returnValue;
     }
