@@ -93,10 +93,14 @@ public class UserServiceImpl implements UserService {
         //매칭 전략을 딱 맞아 떨어지는 것만 되게끔 강력하게 설정
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         //전달받은 userDto 값을 UserEntity로 변환
+        log.info("userDto:"+userDto.toString());
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+        log.info("userEntity: "+userEntity.toString());
+
         if(userEntity.getGrade()==Grade.DRIVER) {
             userEntity.builder().grade(Grade.UNAUTHORIZED).build();// 드라이버로 가입한 사람은 임시권한
         }
+
         userEntity.builder().encryptedPwd(passwordEncoder.encode(userDto.getPassword())).build(); // 비밀번호 암호화
 
         userRepository.save(userEntity);

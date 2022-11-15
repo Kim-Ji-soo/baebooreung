@@ -106,10 +106,6 @@ public class FCMService {
         String targetToken = findUser.getFcmToken();
 
         //deliveryId로 delivery name 찾아오기
-        log.info(">>"+businessServiceClient.getDeliveryName(findUser.getDeliveryId()));
-        log.info(">>>"+businessServiceClient.getDeliveryName(findUser.getDeliveryId()).getBody());
-        log.info(">>>>"+businessServiceClient.getDeliveryName(findUser.getDeliveryId()).getBody().toString());
-
         String delivery_name = businessServiceClient.getDeliveryName(findUser.getDeliveryId()).getBody().toString();
 
         body += " - " + delivery_name;
