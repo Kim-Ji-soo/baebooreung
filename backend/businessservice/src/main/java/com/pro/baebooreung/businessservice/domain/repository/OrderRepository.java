@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<OrderRepository, Integer> {
-    List<Order> findByDelivery(int deliveryId);
+    List<Order> findByDeliveryId(int deliveryId);
 }
