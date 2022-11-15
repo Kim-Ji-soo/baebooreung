@@ -36,7 +36,7 @@ public class Delivery {
     @Column(name = "sequence", nullable = false)
     private int sequence;
 
-    @Column(name="type", nullable = false)
+    @Column(name="type", nullable = true)
     @Enumerated(EnumType.STRING)
     private Type type;
 
