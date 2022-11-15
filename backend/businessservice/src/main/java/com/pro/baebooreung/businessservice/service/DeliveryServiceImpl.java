@@ -18,17 +18,17 @@ import java.util.Optional;
 public class DeliveryServiceImpl implements DeliveryService {
 
     DeliveryRepository deliveryRepository;
-//    BCryptPasswordEncoder passwordEncoder;
-//
-//    Environment env;
-//    @Autowired
-//    public DeliveryServiceImpl(DeliveryRepository deliveryRepository,
-//                           BCryptPasswordEncoder passwordEncoder,
-//                           Environment env ) {
-//        this.deliveryRepository= deliveryRepository;
-//        this.passwordEncoder = passwordEncoder;
-//        this.env = env;
-//    }
+    BCryptPasswordEncoder passwordEncoder;
+
+    Environment env;
+    @Autowired
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository,
+                           BCryptPasswordEncoder passwordEncoder,
+                           Environment env ) {
+        this.deliveryRepository= deliveryRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.env = env;
+    }
 
     @Override
     public void saveImg(CheckResponse res) {
