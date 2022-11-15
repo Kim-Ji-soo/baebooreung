@@ -11,8 +11,8 @@ import CustomButton from '../../components/CustomButton';
 import SelectList from 'react-native-dropdown-select-list';
 import {isEmail, isPhoneNumber} from '../../utils/inputCheck';
 import {isPassword} from '../../utils/inputCheck';
-import {user} from '../../api/api';
-
+import {user_service} from '../../api/api';
+import axios from 'axios';
 const SignUp = () => {
   const ButtonStyle = {
     borderWidth: 0.8,
@@ -71,12 +71,12 @@ const SignUp = () => {
   const join = async () => {
     await axios({
       method: 'POST',
-      url: user.join(),
+      url: user_service.join(),
       data: {
         email: id,
         password: password,
         name: name,
-        grade: grade[selectedGrade].value,
+        grade: grade[selectedGrade - 1].value,
         phone: phoneNumber,
         region: parseInt(region), // type : int
       },
