@@ -192,7 +192,6 @@ public class BusinessController {
 
     @GetMapping("/delivery/Img/{delId}")
     public String getImg(@PathVariable("delId") int delId){
-
         return deliveryService.getImg(delId);
     }
 
