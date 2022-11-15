@@ -23,14 +23,14 @@ import java.util.Date;
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
     Environment env;
-    UserServiceClient userServiceClient;
+//    UserServiceClient userServiceClient;
 
 //    @Autowired
-    public AuthorizationHeaderFilter(Environment env
-            ,UserServiceClient userServiceClient) {
+    public AuthorizationHeaderFilter(Environment env){
+//            ,UserServiceClient userServiceClient) {
         super(Config.class);
         this.env = env;
-        this.userServiceClient = userServiceClient;
+//        this.userServiceClient = userServiceClient;
     }
 
     public static class Config {
@@ -88,15 +88,15 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             returnValue = false;
         }
         //userId와 같은 값인지도 확인하기
-        log.info(">>>subject: "+subject);
-        log.info(">>>specialkey: "+specialkey);
-        log.info(">>>equal? "+ specialkey.equals(subject));
-        String returnKey = userServiceClient.getSpecialkey(userId);
-        log.info(">>>feign returnKey: "+returnKey);
-        if(!returnKey.equals(subject)){
-            log.info(">>>not equal");
-            returnValue = false;
-        }
+//        log.info(">>>subject: "+subject);
+//        log.info(">>>specialkey: "+specialkey);
+//        log.info(">>>equal? "+ specialkey.equals(subject));
+//        String returnKey = userServiceClient.getSpecialkey(userId);
+//        log.info(">>>feign returnKey: "+returnKey);
+//        if(!returnKey.equals(subject)){
+//            log.info(">>>not equal");
+//            returnValue = false;
+//        }
 
         return returnValue;
     }
