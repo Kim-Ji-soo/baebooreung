@@ -5,6 +5,9 @@ import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.businessservice.dto.CheckResponse;
 import com.pro.baebooreung.businessservice.dto.DeliveryDto;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import javax.print.DocFlavor;
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
 
     DeliveryRepository deliveryRepository;
@@ -19,11 +24,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public void saveImg(CheckResponse res) {
         Optional<Delivery> findDel = deliveryRepository.findById(res.getDelId());
-        if(findDel.isPresent()){
-            findDel.get().updateImg(res.getImgUrl());
-            deliveryRepository.save(findDel.get());
-        }
-
+        Delivery delivery = findDel.get();
+        log.info(delivery+":delivery!!!!!!!!!");
+        delivery.updateImg(res.getImgUrl());
+        deliveryRepository.save(delivery);
     }
 
     @Override
