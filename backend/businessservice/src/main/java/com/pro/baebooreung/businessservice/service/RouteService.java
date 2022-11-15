@@ -2,6 +2,7 @@ package com.pro.baebooreung.businessservice.service;
 
 import com.pro.baebooreung.businessservice.domain.Region;
 import com.pro.baebooreung.businessservice.domain.Route;
+import com.pro.baebooreung.businessservice.domain.RouteType;
 import com.pro.baebooreung.businessservice.dto.*;
 import com.pro.baebooreung.businessservice.vo.ResponseRoute;
 import lombok.Data;
@@ -26,5 +27,6 @@ public interface RouteService {
     List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteName(Region region, LocalDate localDate, String routeName) throws Exception;
     DriverRouteAndDeliveryDto getDriverRouteAndDelivery(int user_id) throws Exception;
     public String getDeliveryName(int deliveryId) throws Exception;
+    List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteNameAndRouteType(Region region, LocalDate localDate, String routeName, RouteType routeType) throws Exception;
 
 }
