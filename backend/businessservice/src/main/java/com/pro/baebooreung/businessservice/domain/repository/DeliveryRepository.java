@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeliveryRepository extends JpaRepository<Delivery,Integer> {
-    @Query("SELECT d FROM Delivery as d WHERE d.route = :routeId")
-    List<Delivery> findByRouteId(@Param("routeId")int routeId);
+    List<Delivery> findByRouteId(int routeId);
     Optional<Delivery> findByRouteIdAndSequence(int routId, int sequence);
 
 //
