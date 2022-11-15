@@ -193,13 +193,13 @@ public class BusinessController {
 
     @GetMapping("/delivery/Img/{delId}")
     public String getImg(@PathVariable("delId") int delId){
-
         return deliveryService.getImg(delId);
     }
 
     // 루트 번호로 해당하는 모든 경유지 리스트 가져오기
     @GetMapping("/delivery/{routeId}")
     public ResponseEntity<?> getDeliveryByRouteId(@PathVariable("routeId") int routeId) {
+        log.info("getDeliveryByRouteId request path date = {}", routeId);
         try {
             return ResponseEntity.status(HttpStatus.OK).body(deliveryService.getDeliveryList(routeId));
         } catch (Exception e){

@@ -51,8 +51,9 @@ public class DeliveryServiceImpl implements DeliveryService {
         List<Delivery> findDelivery = deliveryRepository.findByRouteId(routeId);
         List<DeliveryDto> deliveryDtoList = new ArrayList<>();
         if(findDelivery == null) return deliveryDtoList;
+        log.info("routeId={}, findDelveryList size = {}", routeId, findDelivery.size());
         for(Delivery delivery:findDelivery){
-            deliveryDtoList.add(DeliveryDto.builder().id(delivery.getId())
+            DeliveryDto deliveryDto = DeliveryDto.builder().id(delivery.getId())
                     .delName(delivery.getDelName())
                     .address(delivery.getAddress())
                     .latitude(delivery.getLatitude())
@@ -61,7 +62,9 @@ public class DeliveryServiceImpl implements DeliveryService {
                     .type(delivery.getType())
                     .check(delivery.isCheck())
                     .delScheduledTime(delivery.getDelScheduledTime())
-                    .orderNum(0).build());
+                    .orderNum(0).build();
+            log.info("getDeliveryList {}", deliveryDto.toString());
+            deliveryDtoList.add(deliveryDto);
         }
         return deliveryDtoList;
     }
