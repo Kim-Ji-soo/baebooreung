@@ -2,10 +2,7 @@ package com.pro.baebooreung.businessservice.service;
 
 import com.pro.baebooreung.businessservice.client.GpsServiceClient;
 import com.pro.baebooreung.businessservice.client.UserServiceClient;
-import com.pro.baebooreung.businessservice.domain.Delivery;
-import com.pro.baebooreung.businessservice.domain.Order;
-import com.pro.baebooreung.businessservice.domain.Region;
-import com.pro.baebooreung.businessservice.domain.Route;
+import com.pro.baebooreung.businessservice.domain.*;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.businessservice.domain.repository.OrderRepository;
 import com.pro.baebooreung.businessservice.domain.repository.RouteRepository;
@@ -320,6 +317,36 @@ public class RouteServiceImpl implements RouteService {
         }else{
             throw new Exception("id : "+deliveryId+ " 를 가진 목적지가 없습니다.");
         }
+    }
+
+    @Override
+    public List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteNameAndRouteType(Region region, LocalDate localDate, String routeName, RouteType routeType) throws Exception {
+        Iterable<Route> findRouteList = routeRepository.findByRegionAndDateAndRouteNameAndRouteType(region, localDate, routeName, routeType);
+        List<RouteByRegionAndDateDto> list = new ArrayList<>();
+        findRouteList.forEach(route -> {
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(route.getRouteName())
+                    .routeType(route.getRouteType()).done(route.isDone()).build();
+
+            List<DeliveryDto> deliveryDtoList = new ArrayList<>();
+            try {
+                deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
+            try {
+                List<NavigationDto> navigationDtoList = navigationService.getNavigationGpsByRouteId(route.getId());
+                if(navigationDtoList != null && navigationDtoList.size() != 0){
+                    regionAndDateDto.setNavigationList(navigationDtoList);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            list.add(regionAndDateDto);
+        });
+        return list;
     }
 
 
