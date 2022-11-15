@@ -3,9 +3,15 @@ package com.pro.baebooreung.businessservice.service;
 import com.pro.baebooreung.businessservice.domain.Delivery;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.businessservice.dto.CheckResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
+@Slf4j
+@RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
 
     DeliveryRepository deliveryRepository;
