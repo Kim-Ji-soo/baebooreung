@@ -31,8 +31,9 @@ public class BusinessController {
     private DeliveryService deliveryService;
 
     @Autowired
-    public BusinessController(RouteService routeService){
+    public BusinessController(RouteService routeService, DeliveryService deliveryService){
         this.routeService=routeService;
+        this.deliveryService = deliveryService;
     }
 
    //유저의 모든 루트들 가져오기
