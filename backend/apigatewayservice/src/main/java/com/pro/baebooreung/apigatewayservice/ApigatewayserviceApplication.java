@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients //Feign클라이언트로 등록
+//@EnableFeignClients //Feign클라이언트로 등록
 public class ApigatewayserviceApplication {
 
 	public static void main(String[] args) {
