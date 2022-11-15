@@ -42,9 +42,17 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                 return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
             }
+//            if(!request.getHeaders().containsKey(HttpHeaders.USER_AGENT)){
+//                return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
+//            }
 
             //인증정보 가져오기(authorizationHeader에는 bearer 토큰 값이 있을 것임
-            log.info(">>>>login>>>>"+request.getHeaders().toString());
+//            log.info(">>>>login ID 1>>>>"+request.getHeaders("ID"));
+//            log.info(">>>>login ID 2>>>>"+request.getHeaders("id"));
+            log.info(">>>>login ID 3>>>>"+request.getHeaders().get("ID"));
+            log.info(">>>>login ID 4>>>>"+request.getHeaders().get("id"));
+//            log.info(">>>>login ID 5>>>>"+request.getHeaders().get(HttpHeaders.ID));
+//            log.info(">>>>login ID 6>>>>"+request.getHeaders().get(HttpHeaders.id));
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", ""); //헤더에 있는지 확인
             //String 값으로 Bearer라는 값을 토큰 정보 전달됨 -> 그 값을 비어있는 문자열로 바꾸고 나머지 값이 토큰 값
@@ -53,7 +61,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 //            ServerHttpResponse response = exchange.getResponse();
 //            ResponseCookie c1 = ResponseCookie.from("my_token", "test1234").maxAge(60 * 60 * 24).build();
 //            response.addCookie(c1);
-            
+
             //토큰 검증
             if (!isJwtValid(jwt)) {
                 return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
