@@ -28,24 +28,15 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     DeliveryRepository deliveryRepository;
 
-    @PersistenceContext
-    private final EntityManager em;
-
-    @Autowired
-    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, EntityManager em){
-        this.deliveryRepository = deliveryRepository;
-        this.em = em;
-    }
-
     @Override
     public void saveImg(CheckResponse res) {
-        log.info(res.getDelId()+":delivery Id");
+//        log.info(res.getDelId()+":delivery Id");
         Optional<Delivery> findDel = deliveryRepository.findById(res.getDelId());
         Delivery delivery = findDel.get();
-        log.info(delivery+":delivery!!!!!!!!!");
+//        log.info(delivery+":delivery!!!!!!!!!");
         delivery.updateImg(res.getImgUrl());
-        em.persist(delivery);
-//        deliveryRepository.save(delivery);
+//        em.persist(delivery);
+        deliveryRepository.save(delivery);
 
     }
 

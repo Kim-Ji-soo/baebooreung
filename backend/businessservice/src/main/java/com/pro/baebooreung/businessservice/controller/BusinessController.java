@@ -187,6 +187,7 @@ public class BusinessController {
 
     @PostMapping("/delivery/save/Img")
     public void saveImg(@RequestBody CheckResponse res){
+        System.out.println("왜 안돼!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         deliveryService.saveImg(res);
     }
 
