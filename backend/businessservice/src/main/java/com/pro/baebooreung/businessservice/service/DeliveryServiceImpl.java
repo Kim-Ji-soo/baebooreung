@@ -19,9 +19,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public void saveImg(CheckResponse res) {
         Optional<Delivery> findDel = deliveryRepository.findById(res.getDelId());
-        findDel.get().updateImg(res.getImgUrl());
-        deliveryRepository.save(findDel.get());
-
+        Delivery delivery = findDel.get();
+        log.info(delivery+":delivery!!!!!!!!!");
+        delivery.updateImg(res.getImgUrl());
+        deliveryRepository.save(delivery);
     }
 
     @Override
