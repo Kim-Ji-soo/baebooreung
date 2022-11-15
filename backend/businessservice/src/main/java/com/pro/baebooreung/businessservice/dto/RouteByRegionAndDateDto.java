@@ -11,6 +11,7 @@ import java.util.*;
 @NoArgsConstructor
 public class RouteByRegionAndDateDto {
     int routeId;
+    int userId;
     RouteType routeType;
     String routeName;
     boolean done;
@@ -18,8 +19,9 @@ public class RouteByRegionAndDateDto {
     List<DeliveryDto> deliveryDtoList = new ArrayList<>();
 
     @Builder
-    public RouteByRegionAndDateDto(int routeId, RouteType routeType, String routeName, boolean done){
+    public RouteByRegionAndDateDto(int routeId, int userId, RouteType routeType, String routeName, boolean done){
         this.routeId = routeId;
+        this.userId = userId;
         this.routeType = routeType;
         this.routeName = routeName;
         this.done = done;
