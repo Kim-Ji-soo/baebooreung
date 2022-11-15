@@ -1,5 +1,6 @@
 package com.pro.baebooreung.businessservice.controller;
 
+import com.pro.baebooreung.businessservice.domain.Delivery;
 import com.pro.baebooreung.businessservice.domain.Navigation;
 import com.pro.baebooreung.businessservice.dto.NavigationDto;
 import com.pro.baebooreung.businessservice.dto.NavigationRequestDto;
@@ -15,6 +16,7 @@ import java.util.List;
 public class NavigationController {
 
     NavigationService navigationService;
+    Delivery deliveryService;
 
     @Autowired
     public NavigationController(NavigationService navigationService){
