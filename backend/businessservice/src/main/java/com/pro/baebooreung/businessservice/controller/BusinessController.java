@@ -195,4 +195,15 @@ public class BusinessController {
 
         return deliveryService.getImg(delId);
     }
+
+    // 루트 번호로 해당하는 모든 경유지 리스트 가져오기
+    @GetMapping("/delivery/{routeId}")
+    public ResponseEntity<?> getDeliveryByRouteId(@PathVariable("routeId") int routeId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(deliveryService.getDeliveryList(routeId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
 }

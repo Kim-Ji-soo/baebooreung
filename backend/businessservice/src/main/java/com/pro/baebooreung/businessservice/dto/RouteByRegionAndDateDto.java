@@ -15,6 +15,7 @@ public class RouteByRegionAndDateDto {
     String routeName;
     boolean done;
     List<NavigationDto> navigationList = new ArrayList<>();
+    List<DeliveryDto> deliveryDtoList = new ArrayList<>();
 
     @Builder
     public RouteByRegionAndDateDto(int routeId, RouteType routeType, String routeName, boolean done){
