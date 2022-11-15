@@ -3,9 +3,11 @@ package com.pro.baebooreung.businessservice.service;
 import com.pro.baebooreung.businessservice.client.GpsServiceClient;
 import com.pro.baebooreung.businessservice.client.UserServiceClient;
 import com.pro.baebooreung.businessservice.domain.Delivery;
+import com.pro.baebooreung.businessservice.domain.Order;
 import com.pro.baebooreung.businessservice.domain.Region;
 import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
+import com.pro.baebooreung.businessservice.domain.repository.OrderRepository;
 import com.pro.baebooreung.businessservice.domain.repository.RouteRepository;
 import com.pro.baebooreung.businessservice.dto.*;
 import com.pro.baebooreung.businessservice.vo.*;
@@ -39,11 +41,13 @@ public class RouteServiceImpl implements RouteService {
 
     DeliveryService deliveryService;
 
+    OrderRepository orderRepository;
+
     @PersistenceContext
     private final EntityManager em;
 
     @Autowired
-    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient, GpsServiceClient gpsServiceClient, NavigationService navigationService, DeliveryService deliveryService){
+    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient, GpsServiceClient gpsServiceClient, NavigationService navigationService, DeliveryService deliveryService, OrderRepository orderRepository){
         this.routeRepository = routeRepository;
         this.deliveryRepository = deliveryRepository;
         this.em = em;
@@ -51,6 +55,7 @@ public class RouteServiceImpl implements RouteService {
         this.gpsServiceClient = gpsServiceClient;
         this.navigationService = navigationService;
         this.deliveryService = deliveryService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -80,7 +85,15 @@ public class RouteServiceImpl implements RouteService {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             responseRoute = mapper.map(routeEntity,ResponseRoute.class);
         }
-
+        for(int i=0;i<responseRoute.getDeliveryList().size();i++){
+            ResponseDelivery delivery = responseRoute.getDeliveryList().get(i);
+            List<Order> orderList = orderRepository.findByDelivery(delivery.getId());
+            if(orderList == null || orderList.size() == 0){
+                delivery.setOrderNum(0);
+            } else {
+                delivery.setOrderNum(orderList.size());
+            }
+        }
         return responseRoute;
     }
 
@@ -217,7 +230,7 @@ public class RouteServiceImpl implements RouteService {
 
         findRouteList.forEach(route -> {
             log.info("getRouteByRegionAndDate 내에 route: {}", route);
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(route.getRouteName())
                     .routeType(route.getRouteType()).done(route.isDone()).build();
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
             try {
@@ -246,7 +259,7 @@ public class RouteServiceImpl implements RouteService {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDateAndRouteName(region, localDate, routeName);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
         findRouteList.forEach(route -> {
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(route.getRouteName())
                     .routeType(route.getRouteType()).done(route.isDone()).build();
 
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
