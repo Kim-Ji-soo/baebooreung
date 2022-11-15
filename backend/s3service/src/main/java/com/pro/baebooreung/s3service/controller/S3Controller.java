@@ -61,6 +61,7 @@ public class S3Controller {
     public ResponseEntity<?> uploadImg(CheckRequest checkRequest) throws IOException {
 
         CheckResponse res = s3ImgUploadService.uploadImg(checkRequest);
+        log.info(res+"");
         deliveryTaskClient.saveImg(res);
 
         if(res!=null)
