@@ -19,4 +19,8 @@ public class UserRepository {
         User findUser = em.find(User.class, user_id);
         return findUser;
     }
+
+    public void save(User user){
+        em.persist(user);
+    }
 }
