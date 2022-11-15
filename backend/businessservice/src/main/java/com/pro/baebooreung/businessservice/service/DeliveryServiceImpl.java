@@ -62,6 +62,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         if(findDelivery == null) return deliveryDtoList;
         log.info("routeId={}, findDelveryList size = {}", routeId, findDelivery.size());
         for(Delivery delivery:findDelivery){
+            log.info(delivery.toString());
             deliveryDtoList.add(DeliveryDto.builder().id(delivery.getId())
                     .delName(delivery.getDelName())
                     .address(delivery.getAddress())
