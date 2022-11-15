@@ -54,7 +54,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             String jwt = authorizationHeader.replace("Bearer", ""); //헤더에 있는지 확인
             //String 값으로 Bearer라는 값을 토큰 정보 전달됨 -> 그 값을 비어있는 문자열로 바꾸고 나머지 값이 토큰 값
             int userId = Integer.valueOf(request.getHeaders().get("id").get(0));
-            String specialkey = request.getHeaders().get("sepcialkey").get(0);
+
+            String specialkey = request.getHeaders().get("specialkey").get(0);
+
+
 
             //토큰 검증
             if (!isJwtValid(jwt,userId,specialkey)) {
