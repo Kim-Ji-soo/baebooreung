@@ -36,6 +36,7 @@
     "react-native-screens": "^3.18.2",
     "react-native-sound-recorder": "^1.5.0",
     "react-native-swiper": "^1.6.0",
+    "react-native-swiper-flatlist": "^3.0.17",
     "react-native-vector-icons": "^9.2.0",
     "react-native-vision-camera": "^2.15.2",
     "react-redux": "^8.0.4",

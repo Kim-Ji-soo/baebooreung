@@ -172,6 +172,7 @@ const SignUp = () => {
               returnKeyType="next"
               onSubmitEditing={() => ref_input3.current.focus()}
               ref={ref_input2}
+              secureTextEntry={true}
             />
             {pwMessage ? (
               <Text style={styles.checkMessage}>{pwMessage}</Text>
@@ -182,6 +183,7 @@ const SignUp = () => {
               onChange={onChangePwConfirm}
               ref={ref_input3}
               returnKeyType="next"
+              secureTextEntry={true}
               onSubmitEditing={() => ref_input4.current.focus()}
             />
             {pwConfirmMessage ? (

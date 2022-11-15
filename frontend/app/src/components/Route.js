@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import line from '../assets/images/separator.png';
 import BottomScrollSheet from './BottomScrollSheet';
 
-const Route = () => {
+const Route = ({navigation}) => {
   const lunchRoute = useSelector(state => state.work.lunchRoute);
   const dinnerRoute = useSelector(state => state.work.dinnerRoute);
   const lunchDone = useSelector(state => state.work.lunchDone);
@@ -20,7 +20,7 @@ const Route = () => {
   const dinnerScheduledStartTime = useSelector(
     state => state.work.dinnerScheduledStartTime,
   );
-  console.log('-----------------------', dinnerRoute);
+
   return (
     <View style={styles.workRootContainer}>
       <View style={styles.lunchWorkContainer}>
@@ -59,10 +59,14 @@ const Route = () => {
             <Image source={line} style={styles.lineImage} />
           </View>
           <View style={styles.arrival}>
-            <Text style={styles.arrivalText}>{lunchRoute[0].delName}</Text>
-            <Text style={styles.arrivalText}>
-              {lunchRoute[lunchRoute.length - 1].delName}
-            </Text>
+            {lunchRoute[0].delName !== undefined ? (
+              <>
+                <Text style={styles.arrivalText}>{lunchRoute[0].delName}</Text>
+                <Text style={styles.arrivalText}>
+                  {lunchRoute[lunchRoute.length - 1].delName}
+                </Text>
+              </>
+            ) : null}
           </View>
         </View>
         <View style={styles.footer}>
@@ -110,10 +114,14 @@ const Route = () => {
             <Image source={line} style={styles.lineImage} />
           </View>
           <View style={styles.arrival}>
-            <Text style={styles.arrivalText}>{dinnerRoute[0].delName}</Text>
-            <Text style={styles.arrivalText}>
-              {dinnerRoute[dinnerRoute.length - 1].delName}
-            </Text>
+            {dinnerRoute[0].delName !== undefined ? (
+              <>
+                <Text style={styles.arrivalText}>{dinnerRoute[0].delName}</Text>
+                <Text style={styles.arrivalText}>
+                  {dinnerRoute[dinnerRoute.length - 1].delName}
+                </Text>
+              </>
+            ) : null}
           </View>
         </View>
         <View style={styles.footer}>
@@ -122,6 +130,7 @@ const Route = () => {
             ButtonStyle={ButtonStyle}
             TextStyle={TextStyle}
             data={dinnerRoute}
+            navigation={navigation}
           />
         </View>
       </View>

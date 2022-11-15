@@ -1,6 +1,9 @@
 import NaverMapView, {Marker} from 'react-native-nmap';
-import {StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
+
 const Map = props => {
+  const lunchRoute = useSelector(state => state.work.lunchRoute);
+  console.log('Map', lunchRoute);
   const position = {
     latitude: props.coords.latitude,
     longitude: props.coords.longitude,
@@ -13,7 +16,8 @@ const Map = props => {
         height: props.height,
         borderRadius: props.borderRadius,
       }}>
-      <Marker coordinate={props.coords} />
+      <Marker coordinate={props.myLocation} />
+      <Marker coordinate={props.targetLocation} />
     </NaverMapView>
   );
 };

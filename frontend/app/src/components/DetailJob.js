@@ -1,53 +1,60 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
 import camera from '../assets/images/camera.png';
 import Map from './Map';
 import {useSelector} from 'react-redux';
 import separator from '../assets/images/separator.png';
-import Cam from '../components/Cam';
 
 const DetailJob = props => {
+  // console.log(
+  //   'DetailJob props-----------------------------------------',
+  //   props,
+  // );
+  // 드라이버 현재 위치
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
-  const coordinate = {
+  const mylocation = {
     latitude: lat,
     longitude: lng,
-  };
-  const activeCam = () => {
-    console.log('실행되냐?');
-    return <Cam />;
   };
   return (
     <View style={styles.DetailJobcontainer}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>11월 09일</Text>
-        <Text style={styles.headerText2}>삼성전자 광주캠퍼스</Text>
+        <Text style={styles.headerText}>{props.date}</Text>
+        <Text style={styles.headerText2}>{props.item.delName}</Text>
       </View>
       <View style={styles.MapContainer}>
-        {coordinate.latitude === true || coordinate.longitude === true ? (
-          <Map width="100%" height="100%" coords={coordinate}></Map>
+        {mylocation.latitude === true || mylocation.longitude === true ? (
+          <Map
+            width="100%"
+            height="100%"
+            mylocation={mylocation}
+            targerLocation={{
+              latitude: props.item.latitude,
+              longitude: props.item.longitude,
+            }}></Map>
         ) : (
           <View style={styles.MapContainer}>
-            <Text>오류</Text>
+            <Text>Loading...</Text>
           </View>
         )}
       </View>
       <View style={styles.body}>
         <View style={styles.bodyLeft}>
           <View style={styles.RouteInfo}>
-            <Text style={styles.TimeLabel}>도착시간 </Text>
-            <Text style={styles.Time}>12 : 00</Text>
+            <Text style={styles.TimeLabel}>도착시간</Text>
+            <Text style={styles.Time}>{props.item.delScheduledTime}</Text>
           </View>
           <View>
             <Image source={separator} style={{width: 50, height: 50}} />
           </View>
           <View style={styles.Count}>
             <Text style={styles.CountTextLabel}>픽업 개수</Text>
-            <Text style={styles.CountText}>12개</Text>
+            <Text style={styles.CountText}>{props.item.orderNum}</Text>
           </View>
         </View>
         <View style={styles.bodyRight}>
-          <Pressable onPress={activeCam}>
+          <Pressable>
             <Image source={camera} style={styles.camera}></Image>
           </Pressable>
         </View>
@@ -55,6 +62,83 @@ const DetailJob = props => {
     </View>
   );
 };
+// <View style={styles.DetailJobcontainer}>
+//   <View style={styles.header}>
+//     <Text style={styles.headerText}>{lunchDate}</Text>
+//     <Text style={styles.headerText2}>{lunchRouteName}</Text>
+//   </View>
+//   <View style={styles.MapContainer}>
+//     {mylocation.latitude === true || mylocation.longitude === true ? (
+//       <Map
+//         width="100%"
+//         height="100%"
+//         mylocation={mylocation}
+//         targerLocation={{
+//           latitude: item.latitude,
+//           longitude: item.longitude,
+//         }}></Map>
+//     ) : (
+//       <View style={styles.MapContainer}>
+//         <Text>Loading...</Text>
+//       </View>
+//     )}
+//   </View>
+//   <View style={styles.body}>
+//     <View style={styles.bodyLeft}>
+//       <View style={styles.RouteInfo}>
+//         <Text style={styles.TimeLabel}>도착시간</Text>
+//         <Text style={styles.Time}>{item.delScheduledTime}</Text>
+//       </View>
+//       <View>
+//         <Image source={separator} style={{width: 50, height: 50}} />
+//       </View>
+//       <View style={styles.Count}>
+//         <Text style={styles.CountTextLabel}>픽업 개수</Text>
+//         <Text style={styles.CountText}>{item.orderNum}</Text>
+//       </View>
+//     </View>
+//     <View style={styles.bodyRight}>
+//       <Pressable>
+//         <Image source={camera} style={styles.camera}></Image>
+//       </Pressable>
+//     </View>
+//   </View>
+// </View>
+// <View style={styles.DetailJobcontainer}>
+//   <View style={styles.header}>
+//     <Text style={styles.headerText}>11월 09일</Text>
+//     <Text style={styles.headerText2}>삼성전자 광주캠퍼스</Text>
+//   </View>
+//   <View style={styles.MapContainer}>
+//     {coordinate.latitude === true || coordinate.longitude === true ? (
+//       <Map width="100%" height="100%" coords={coordinate}></Map>
+//     ) : (
+//       <View style={styles.MapContainer}>
+//         <Text>오류</Text>
+//       </View>
+//     )}
+//   </View>
+//   <View style={styles.body}>
+//     <View style={styles.bodyLeft}>
+//       <View style={styles.RouteInfo}>
+//         <Text style={styles.TimeLabel}>도착시간 </Text>
+//         <Text style={styles.Time}>12 : 00</Text>
+//       </View>
+//       <View>
+//         <Image source={separator} style={{width: 50, height: 50}} />
+//       </View>
+//       <View style={styles.Count}>
+//         <Text style={styles.CountTextLabel}>픽업 개수</Text>
+//         <Text style={styles.CountText}>12개</Text>
+//       </View>
+//     </View>
+//     <View style={styles.bodyRight}>
+//       <Pressable>
+//         <Image source={camera} style={styles.camera}></Image>
+//       </Pressable>
+//     </View>
+//   </View>
+// </View>
 
 export default DetailJob;
 const styles = StyleSheet.create({

@@ -6,16 +6,25 @@ import {
   Text,
   View,
   Pressable,
+  Alert,
 } from 'react-native';
 
 // axios
 import axios from 'axios';
 import {user_service} from '../../api/api';
+import {business_service} from '../../api/api';
+
 // redux
 import {useDispatch, useSelector} from 'react-redux';
 import {setUserInfo} from '../../redux/auth';
 import {setUser, setProfile} from '../../redux/user';
 import {setUserList} from '../../redux/userList';
+import work, {
+  setLunchRouteInfo,
+  setDinnerRouteInfo,
+  setLunchRoute,
+  setDinnerRoute,
+} from '../../redux/work';
 //component and function
 import CustomButton from '../../components/CustomButton';
 import {isEmail, isPassword} from '../../utils/inputCheck';
@@ -50,7 +59,45 @@ const Login = ({navigation}) => {
       navigation.reset({routes: [{name: 'DriverTab'}]});
     }
   }, [userInfo]);
-
+  const getDriverWorkRoute = async id => {
+    await axios({
+      method: 'get',
+      url: business_service.getDriverRoute() + `${id}` + '/routes/today/undone',
+    })
+      .then(res => {
+        const workList = res.data;
+        for (let i = 0; i < workList.length; i++) {
+          if (workList[i].routeType === 'lunch') {
+            dispatch(
+              setLunchRouteInfo({
+                date: workList[i].date,
+                routeId: workList[i].routeId,
+                done: workList[i].done,
+                routeType: workList[i].routeType,
+                routeName: workList[i].routeName,
+                scheduledStartTime: workList[i].scheduledStartTime,
+              }),
+            );
+            dispatch(setLunchRoute(workList[i].deliveryList));
+          } else {
+            dispatch(
+              setDinnerRouteInfo({
+                date: workList[i].date,
+                routeId: workList[i].routeId,
+                done: workList[i].done,
+                routeType: workList[i].routeType,
+                routeName: workList[i].routeName,
+                scheduledStartTime: workList[i].scheduledStartTime,
+              }),
+            );
+            dispatch(setDinnerRoute(workList[i].deliveryList));
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   const fetchUserInfo = async id => {
     await axios({
       method: 'get',
@@ -108,9 +155,12 @@ const Login = ({navigation}) => {
         password: password,
       },
     }).then(res => {
+      // axios global header configuration.
       axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${res.headers.token}`;
+      axios.defaults.headers.common['id'] = res.headers.id;
+      axios.defaults.headers.common['specialkey'] = res.headers.specialkey;
       //redux
       dispatch(
         setUserInfo({
@@ -122,7 +172,9 @@ const Login = ({navigation}) => {
       );
       fetchUserInfo(res.headers.id);
       fetchUserProfile(res.headers.id);
+      getDriverWorkRoute(res.headers.id);
       console.log('Login Success!');
+      // send fcmToken to server
       messaging()
         .getToken()
         .then(token => {
@@ -195,6 +247,7 @@ const Login = ({navigation}) => {
           style={styles.passwordForm}
           placeholder="비밀번호를 입력하세요."
           onChange={onChangePw}
+          secureTextEntry={true}
         />
         <Text>{pwMessage}</Text>
         <View style={styles.needSignUp}>

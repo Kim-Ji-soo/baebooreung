@@ -1,8 +1,34 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  lunchRoute: '',
-  dinnerRoute: '',
+  lunchRoute: [
+    {
+      address: '',
+      check: false,
+      delName: '',
+      delScheduledTime: '',
+      id: '',
+      latitude: '',
+      longitude: '',
+      orderNum: '',
+      sequence: '',
+      type: '',
+    },
+  ],
+  dinnerRoute: [
+    {
+      address: '',
+      check: false,
+      delName: '',
+      delScheduledTime: '',
+      id: '',
+      latitude: '',
+      longitude: '',
+      orderNum: '',
+      sequence: '',
+      type: '',
+    },
+  ],
   lunchRouteId: '',
   lunchRouteName: '',
   lunchRouteType: '',
