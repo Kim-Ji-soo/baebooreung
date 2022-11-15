@@ -45,7 +45,7 @@ public class S3ImgUploadService {
         String fileName = createFileName(curImage.getOriginalFilename());
         String fileFormatName = curImage.getContentType().substring(curImage.getContentType().lastIndexOf("/") + 1);
 
-        String originalName = LocalDate.now() + "/" + currentDelId + "/" + fileName;
+        String originalName = "check-In"+ "/" + LocalDate.now() + "/" + currentDelId + "/" + fileName;
         MultipartFile resizedFile = resizeImage(fileName,fileFormatName, curImage, 768);
 
         long size = resizedFile.getSize();
