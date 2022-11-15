@@ -150,12 +150,24 @@ public class BusinessController {
         }
     }
 
-    // 지역, 날짜에 모든 안내 경로 얻기
+    // 지역, 날짜, 대학에 모든 안내 경로 얻기
     @PostMapping("/route/navigps/univ")
     public ResponseEntity<?> getRouteAndNavigationsByUniv(@RequestBody RouteAndNaviByRouteNameRequestDto requestDto){
         log.info("request navigpsByUniv data : {}", requestDto.toString());
         try {
             return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDateAndRouteName(requestDto.getRegion(), requestDto.getDate(), requestDto.getRouteName()));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    // 지역, 날짜, 대학, 루트타입(점심, 저녁)에 모든 안내 경로 얻기
+    @PostMapping("/route/navigps/routetype")
+    public ResponseEntity<?> getRouteAndNavigationsByRouteType(@RequestBody RouteAndNaviByRouteTypeRequestDto requestDto){
+        log.info("request navigpsByRouteType data : {}", requestDto.toString());
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDateAndRouteNameAndRouteType(requestDto.getRegion(), requestDto.getDate(), requestDto.getRouteName(), requestDto.getRouteType()));
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
