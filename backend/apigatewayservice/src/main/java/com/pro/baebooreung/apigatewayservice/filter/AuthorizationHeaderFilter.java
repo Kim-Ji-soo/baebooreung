@@ -25,7 +25,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     Environment env;
     UserServiceClient userServiceClient;
 
-    @Autowired
+//    @Autowired
     public AuthorizationHeaderFilter(Environment env
             ,UserServiceClient userServiceClient) {
         super(Config.class);
