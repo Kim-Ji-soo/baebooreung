@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -7,12 +7,16 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Pressable,
 } from 'react-native';
 import BottomSheet from 'react-native-gesture-bottom-sheet';
 import CustomButton from './CustomButton';
-
+import Geolocation from 'react-native-geolocation-service';
+import {getLocationPermission} from '../utils/permission';
+import {setGps} from '../redux/gps';
+import {useDispatch, useSelector} from 'react-redux';
+import {sendGps} from '../api/kafka';
 const BottomScrollSheet = props => {
+  const dispatch = useDispatch();
   // console.log(props.data);
   const navigation = useNavigation();
   const ButtonStyle = {
@@ -22,6 +26,68 @@ const BottomScrollSheet = props => {
     overflow: 'hidden',
     width: '50%',
   };
+  const id = useSelector(state => state.auth.id);
+  const watchId = null;
+  const [watchLocation, setWatchLocation] = useState(false);
+  const getWatchLocation = () => {
+    console.log('getWatchLocation is running...');
+    const permission = getLocationPermission();
+    permission.then(granted => {
+      if (granted) {
+        this.watchId = Geolocation.watchPosition(
+          position => {
+            const {latitude, longitude} = position.coords;
+            const date = new Date(position.timestamp)
+              .toISOString()
+              .split('.')[0];
+            setWatchLocation({
+              latitude: latitude,
+              longitude,
+              longitude,
+              requestDateTime: date,
+            });
+            dispatch(
+              setGps({
+                lat: latitude,
+                lng: longitude,
+              }),
+            );
+            navigation.navigate('Detail', {data: props.data});
+          },
+          error => {
+            // console.log("driverApp/Gps => getWatchLocation's error", error);
+            setWatchLocation(false);
+          },
+          {enableHighAccuracy: true, fastestInterval: 3000, distanceFilter: 0},
+        );
+      }
+    });
+    // console.log(watchLocation);
+  };
+  const setKafka = () => {
+    const kafka = {
+      userId: id,
+      latitude: watchLocation.latitude,
+      longitude: watchLocation.longitude,
+      requestDateTime: String(watchLocation.requestDateTime),
+    };
+    return kafka;
+  };
+
+  useEffect(() => {
+    if (watchLocation !== false) {
+      sendGps(setKafka());
+    }
+  }, [watchLocation]);
+
+  const killWatchLocation = () => {
+    if (this.watchId !== null) {
+      Geolocation.clearWatch(this.watchId);
+      setWatchLocation(false);
+      // console.log('getWatchLocation is stop...');
+    }
+  };
+
   const renderPickup = ({item}) => {
     return (
       <>
@@ -91,7 +157,7 @@ const BottomScrollSheet = props => {
             <CustomButton
               ButtonStyle={ButtonStyle}
               onPress={() => {
-                navigation.navigate('Detail', {data: props.data});
+                getWatchLocation();
               }}>
               <Text style={{color: 'blue'}}>시작하기</Text>
             </CustomButton>

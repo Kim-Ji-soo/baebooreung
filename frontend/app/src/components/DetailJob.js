@@ -3,25 +3,21 @@ import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
 import camera from '../assets/images/camera.png';
 import Map from './Map';
 import {useSelector} from 'react-redux';
-import separator from '../assets/images/separator.png';
-
-import Cam from '../components/Cam';
-import ImagePicker, {
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
 import {useEffect} from 'react';
 import {requestStoragePermission} from '../utils/permission';
 import {camera_service} from '../api/api';
 import axios from 'axios';
+import Cam from '../components/Cam';
+import NaverMapView, {Marker} from 'react-native-nmap';
+import ImagePicker, {
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
+
 const DetailJob = props => {
-  // console.log(
-  //   'DetailJob props-----------------------------------------',
-  //   props,
-  // );
-  // 드라이버 현재 위치
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
+  console.log(lat, lng);
   const mylocation = {
     latitude: lat,
     longitude: lng,
@@ -86,39 +82,35 @@ const DetailJob = props => {
 
   return (
     <View style={styles.DetailJobcontainer}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>{props.date}</Text>
-        <Text style={styles.headerText2}>{props.item.delName}</Text>
-      </View>
       <View style={styles.MapContainer}>
-        {mylocation.latitude === true || mylocation.longitude === true ? (
-          <Map
-            width="100%"
-            height="100%"
-            mylocation={mylocation}
-            targerLocation={{
+        <NaverMapView
+          style={{width: '100%', height: '100%'}}
+          center={{...mylocation, zoom: 16}}>
+          <Marker coordinate={mylocation} pinColor="red" />
+          <Marker
+            coordinate={{
               latitude: props.item.latitude,
               longitude: props.item.longitude,
-            }}></Map>
-        ) : (
-          <View style={styles.MapContainer}>
-            <Text>Loading...</Text>
-          </View>
-        )}
+            }}
+          />
+        </NaverMapView>
       </View>
       <View style={styles.body}>
         <View style={styles.bodyLeft}>
           <View style={styles.RouteInfo}>
-            <Text style={styles.TimeLabel}>도착시간</Text>
-            <Text style={styles.Time}>{props.item.delScheduledTime}</Text>
+            <Text style={styles.delName}>{props.item.delName}</Text>
+            <Text style={styles.address}>{props.item.address}</Text>
           </View>
-          <View>
-            <Image source={separator} style={{width: 50, height: 50}} />
+          <View style={styles.TimeInfo}>
+            <Text>도착 예정 : </Text>
+            <Text style={styles.delTime}>
+              {props.item.delScheduledTime.split(':')[0] +
+                '시' +
+                props.item.delScheduledTime.split(':')[1] +
+                '분'}
+            </Text>
           </View>
-          <View style={styles.Count}>
-            <Text style={styles.CountTextLabel}>픽업 개수</Text>
-            <Text style={styles.CountText}>{props.item.orderNum}</Text>
-          </View>
+          <View></View>
         </View>
         <View style={styles.bodyRight}>
           <Pressable onPress={activeCam}>
@@ -129,84 +121,6 @@ const DetailJob = props => {
     </View>
   );
 };
-// <View style={styles.DetailJobcontainer}>
-//   <View style={styles.header}>
-//     <Text style={styles.headerText}>{lunchDate}</Text>
-//     <Text style={styles.headerText2}>{lunchRouteName}</Text>
-//   </View>
-//   <View style={styles.MapContainer}>
-//     {mylocation.latitude === true || mylocation.longitude === true ? (
-//       <Map
-//         width="100%"
-//         height="100%"
-//         mylocation={mylocation}
-//         targerLocation={{
-//           latitude: item.latitude,
-//           longitude: item.longitude,
-//         }}></Map>
-//     ) : (
-//       <View style={styles.MapContainer}>
-//         <Text>Loading...</Text>
-//       </View>
-//     )}
-//   </View>
-//   <View style={styles.body}>
-//     <View style={styles.bodyLeft}>
-//       <View style={styles.RouteInfo}>
-//         <Text style={styles.TimeLabel}>도착시간</Text>
-//         <Text style={styles.Time}>{item.delScheduledTime}</Text>
-//       </View>
-//       <View>
-//         <Image source={separator} style={{width: 50, height: 50}} />
-//       </View>
-//       <View style={styles.Count}>
-//         <Text style={styles.CountTextLabel}>픽업 개수</Text>
-//         <Text style={styles.CountText}>{item.orderNum}</Text>
-//       </View>
-//     </View>
-//     <View style={styles.bodyRight}>
-//       <Pressable>
-//         <Image source={camera} style={styles.camera}></Image>
-//       </Pressable>
-//     </View>
-//   </View>
-// </View>
-// <View style={styles.DetailJobcontainer}>
-//   <View style={styles.header}>
-//     <Text style={styles.headerText}>11월 09일</Text>
-//     <Text style={styles.headerText2}>삼성전자 광주캠퍼스</Text>
-//   </View>
-//   <View style={styles.MapContainer}>
-//     {coordinate.latitude === true || coordinate.longitude === true ? (
-//       <Map width="100%" height="100%" coords={coordinate}></Map>
-//     ) : (
-//       <View style={styles.MapContainer}>
-//         <Text>오류</Text>
-//       </View>
-//     )}
-//   </View>
-//   <View style={styles.body}>
-//     <View style={styles.bodyLeft}>
-//       <View style={styles.RouteInfo}>
-//         <Text style={styles.TimeLabel}>도착시간 </Text>
-//         <Text style={styles.Time}>12 : 00</Text>
-//       </View>
-//       <View>
-//         <Image source={separator} style={{width: 50, height: 50}} />
-//       </View>
-//       <View style={styles.Count}>
-//         <Text style={styles.CountTextLabel}>픽업 개수</Text>
-//         <Text style={styles.CountText}>12개</Text>
-//       </View>
-//     </View>
-//     <View style={styles.bodyRight}>
-//       <Pressable>
-//         <Image source={camera} style={styles.camera}></Image>
-//       </Pressable>
-//     </View>
-//   </View>
-// </View>
-
 export default DetailJob;
 const styles = StyleSheet.create({
   DetailJobcontainer: {
@@ -233,7 +147,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   headerText2: {
-    fontSize: 22,
+    fontSize: 20,
     color: '#427ef5',
     fontWeight: 'bold',
   },
@@ -253,9 +167,21 @@ const styles = StyleSheet.create({
   bodyLeft: {
     flex: 2.5,
     height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    justifyContent: 'center',
+    // alignItems: 'center',
+    // borderWidth: 1,
+    paddingLeft: 10,
+  },
+  delName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginRight: 5,
+    textAlignVertical: 'bottom',
+  },
+  address: {
+    textAlignVertical: 'bottom',
+    paddingBottom: 2,
   },
   bodyRight: {
     flex: 1,
@@ -263,37 +189,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  Count: {
-    justifyContent: 'center',
-    // alignItems: 'center',
-  },
-  CountText: {
-    fontSize: 18,
-  },
-  CountTextLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   camera: {
     width: 55,
     height: 55,
   },
-  // footer: {
-  //   flex: 1,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  Time: {
-    fontSize: 18,
-    color: 'red',
+  TimeInfo: {
+    flexDirection: 'row',
   },
-  TimeLabel: {
-    fontWeight: 'bold',
-    fontSize: 18,
+  delTime: {
+    color: 'crimson',
   },
   RouteInfo: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'row',
+    // borderWidth: 1,
   },
 });
 
