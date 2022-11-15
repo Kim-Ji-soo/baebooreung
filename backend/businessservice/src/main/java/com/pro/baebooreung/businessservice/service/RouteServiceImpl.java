@@ -37,17 +37,20 @@ public class RouteServiceImpl implements RouteService {
     GpsServiceClient gpsServiceClient;
     NavigationService navigationService;
 
+    DeliveryService deliveryService;
+
     @PersistenceContext
     private final EntityManager em;
 
     @Autowired
-    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient, GpsServiceClient gpsServiceClient, NavigationService navigationService){
+    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient, GpsServiceClient gpsServiceClient, NavigationService navigationService, DeliveryService deliveryService){
         this.routeRepository = routeRepository;
         this.deliveryRepository = deliveryRepository;
         this.em = em;
         this.userServiceClient = userServiceClient;
         this.gpsServiceClient = gpsServiceClient;
         this.navigationService = navigationService;
+        this.deliveryService = deliveryService;
     }
 
     @Override
@@ -216,6 +219,15 @@ public class RouteServiceImpl implements RouteService {
             log.info("getRouteByRegionAndDate 내에 route: {}", route);
             RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
                     .routeType(route.getRouteType()).done(route.isDone()).build();
+            List<DeliveryDto> deliveryDtoList = new ArrayList<>();
+            try {
+                deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
             try {
                 List<NavigationDto> navigationDtoList = navigationService.getNavigationGpsByRouteId(route.getId());
                 if(navigationDtoList != null && navigationDtoList.size() != 0){
@@ -236,12 +248,23 @@ public class RouteServiceImpl implements RouteService {
         findRouteList.forEach(route -> {
             RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
                     .routeType(route.getRouteType()).done(route.isDone()).build();
+
+            List<DeliveryDto> deliveryDtoList = new ArrayList<>();
+            try {
+                deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
             try {
                 List<NavigationDto> navigationDtoList = navigationService.getNavigationGpsByRouteId(route.getId());
                 if(navigationDtoList != null && navigationDtoList.size() != 0){
                     regionAndDateDto.setNavigationList(navigationDtoList);
                 }
             } catch (Exception e){
+                e.printStackTrace();
             }
             list.add(regionAndDateDto);
         });
