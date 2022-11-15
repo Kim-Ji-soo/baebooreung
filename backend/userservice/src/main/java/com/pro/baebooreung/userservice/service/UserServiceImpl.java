@@ -194,5 +194,14 @@ public class UserServiceImpl implements UserService {
             return ResponseDriverRoute.builder().route_id(0).delivery_id(0).drive(false).build();
         }
     }
+
+    public String getSpecialKey(int id){
+        UserEntity findUser  = userRepository.findById(id);
+        if(!findUser.getSpecialKey().isEmpty()){
+            return findUser.getSpecialKey();
+        }else{
+            throw new NullPointerException("id: "+id+"의 special key 값이 비어있습니다.");
+        }
+    }
 }
 

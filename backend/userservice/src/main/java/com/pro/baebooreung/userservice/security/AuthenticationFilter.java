@@ -83,7 +83,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader("specialKey", userDetails.getSpecialKey()); //토큰 확인을 위해 userId 같이 넣음
         response.addIntHeader("id",userDetails.getId()); // 사람 id 값 헤더에 같이 보내주기
         response.addHeader("name",userDetails.getName());
-        response.addHeader("check","hey");
+//        response.addHeader("check","hey");
 
     }
 }

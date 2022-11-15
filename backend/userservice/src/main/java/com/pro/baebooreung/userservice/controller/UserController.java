@@ -49,7 +49,7 @@ public class UserController {
     @PostMapping("/map")
     public ResponseEntity<Object> getData(@RequestBody RequestNaverMap request) {
         String url =
-                "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start="+request.getStart()
+                "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start="+request.getStart()
                         +"&goal="+request.getGoal()
                         +"&option="+request.getOption()
                         +"&waypoints="+request.getWaypoints();
@@ -206,5 +206,14 @@ public class UserController {
         return userService.getProfile(userId);
     }
 
+    @GetMapping("/user/specialkey/{userId}")
+    public String getSpecialkey(@PathVariable("userId") int userId){
+        String specialkey = userService.getSpecialKey(userId);
+        if(!specialkey.isEmpty()){
+            return specialkey;
+        }else{
+            return "There's no special key";
+        }
+    }
 }
 

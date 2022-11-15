@@ -33,4 +33,6 @@ public interface UserService extends UserDetailsService {
     public void saveProfile(ProfileResponse res);
 
     public String getProfile(int userId);
+
+    public String getSpecialKey(int id);
 }
