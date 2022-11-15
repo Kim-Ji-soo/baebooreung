@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderCntResponseDto getOrderCntByRoute(int routeId) throws Exception{
+    public OrderCntResponseDto getOrderCntByRoute(int routeId) throws Exception {
         List<Delivery> deliveryList = deliveryRepository.findByRouteId(routeId);
         if(deliveryList == null || deliveryList.size() == 0) return OrderCntResponseDto.builder().all(0).done(0).build();
         int all_cnt = 0;
