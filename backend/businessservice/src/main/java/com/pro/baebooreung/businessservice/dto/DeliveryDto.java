@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
+@ToString
 public class DeliveryDto {
     private int id;
     private String delName;
