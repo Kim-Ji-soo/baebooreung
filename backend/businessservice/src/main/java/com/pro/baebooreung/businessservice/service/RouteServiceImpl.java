@@ -87,7 +87,7 @@ public class RouteServiceImpl implements RouteService {
         }
         for(int i=0;i<responseRoute.getDeliveryList().size();i++){
             ResponseDelivery delivery = responseRoute.getDeliveryList().get(i);
-            List<Order> orderList = orderRepository.findByDelivery(delivery.getId());
+            List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
             if(orderList == null || orderList.size() == 0){
                 delivery.setOrderNum(0);
             } else {
