@@ -166,7 +166,9 @@ const BottomScrollSheet = props => {
       </BottomSheet>
       <TouchableOpacity
         style={props.ButtonStyle}
-        onPress={() => bottomSheet.current.show()}>
+        onPress={() => {
+          bottomSheet.current.show();
+        }}>
         <Text style={props.TextStyle}>{props.title}</Text>
       </TouchableOpacity>
     </SafeAreaView>

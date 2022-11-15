@@ -17,7 +17,6 @@ import ImagePicker, {
 const DetailJob = props => {
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
-  console.log(lat, lng);
   const mylocation = {
     latitude: lat,
     longitude: lng,
