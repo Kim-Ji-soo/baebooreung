@@ -1,4 +1,5 @@
-import React, {useRef} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useRef, useEffect} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -6,11 +7,14 @@ import {
   StyleSheet,
   View,
   FlatList,
+  Pressable,
 } from 'react-native';
 import BottomSheet from 'react-native-gesture-bottom-sheet';
 import CustomButton from './CustomButton';
 
 const BottomScrollSheet = props => {
+  // console.log(props.data);
+  const navigation = useNavigation();
   const ButtonStyle = {
     borderWidth: 0.5,
     borderRadius: 16,
@@ -84,8 +88,12 @@ const BottomScrollSheet = props => {
             />
           </View>
           <View style={styles.footer}>
-            <CustomButton ButtonStyle={ButtonStyle}>
-              <Text>시작하기</Text>
+            <CustomButton
+              ButtonStyle={ButtonStyle}
+              onPress={() => {
+                navigation.navigate('Detail', {data: props.data});
+              }}>
+              <Text style={{color: 'blue'}}>시작하기</Text>
             </CustomButton>
           </View>
         </View>

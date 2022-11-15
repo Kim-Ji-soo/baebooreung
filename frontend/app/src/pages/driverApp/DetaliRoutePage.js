@@ -1,13 +1,20 @@
 import {React, useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import Swiper from 'react-native-swiper';
+import {Dimensions, StyleSheet, View} from 'react-native';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import DetailJob from '../../components/DetailJob';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setGps} from '../../redux/gps';
 import {getLocationPermission} from '../../utils/permission';
 import Geolocation from 'react-native-geolocation-service';
+import {useNavigation} from '@react-navigation/native';
 
-export const DetailRoutePage = () => {
+export const DetailRoutePage = props => {
+  // 경로 데이터
+  const lunchDate = useSelector(state => state.work.lunchDate);
+  const dinnerDate = useSelector(state => state.work.dinnerDate);
+  const lunchRoute = useSelector(state => state.work.lunchRoute);
+  const lunchDone = useSelector(state => state.work.lunchDone);
+  const dinnerRoute = useSelector(state => state.work.dinnerRoute);
   const dispatch = useDispatch();
   // const [currentLocation, setCurrentLocation] = useState(false);
   // // <------------------------current position-------------------------->
@@ -56,7 +63,6 @@ export const DetailRoutePage = () => {
   // <-------------------------watch position-------------------------->
   const watchId = null;
   const [watchLocation, setWatchLocation] = useState(false);
-
   const getWatchLocation = () => {
     // console.log('getWatchLocation is running...');
     const permission = getLocationPermission();
@@ -104,43 +110,20 @@ export const DetailRoutePage = () => {
       // console.log('getWatchLocation is stop...');
     }
   };
+  const {width} = Dimensions.get('window');
+
   const renderItem = ({item}) => {
-    return <DetailJob data={item} />;
+    return (
+      <View style={{width: width}}>
+        <DetailJob item={item} date={lunchDate} />
+      </View>
+    );
   };
+
   return (
-    <Swiper
-      style={styles.wrapper}
-      showsButtons={true}
-      showsPagination={true}
-      loop={false}>
-      <SafeAreaView style={styles.DetailWorkContainer}>
-        <View style={styles.body}>
-          <DetailJob />
-        </View>
-      </SafeAreaView>
-    </Swiper>
+    <SwiperFlatList data={props.route.params.data} renderItem={renderItem} />
   );
 };
 
 export default DetailRoutePage;
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-  DetailWorkContainer: {
-    flex: 1,
-  },
-  header: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-  },
-  headerText: {
-    fontSize: 20,
-  },
-  body: {
-    padding: 10,
-    flex: 8,
-  },
-});
+const styles = StyleSheet.create({});

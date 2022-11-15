@@ -1,66 +1,10 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import Route from '../../components/Route';
-import {useSelector, useDispatch} from 'react-redux';
-import axios from 'axios';
-import {business_service} from '../../api/api';
-import work, {
-  setLunchRouteInfo,
-  setDinnerRouteInfo,
-  setLunchRoute,
-  setDinnerRoute,
-} from '../../redux/work';
+import {useSelector} from 'react-redux';
 
-const MainScreen = () => {
-  const dispatch = useDispatch();
-  const id = useSelector(state => state.auth.id);
+const HomePage = ({navigation}) => {
   const name = useSelector(state => state.auth.name);
-
-  const getDriverWorkRoute = id => {
-    axios({
-      method: 'get',
-      url: business_service.getDriverRoute() + `${id}` + '/routes',
-    })
-      .then(res => {
-        const workList = res.data;
-        const deliveryList = workList[0].deliveryList;
-        for (let i = 0; i < workList.length; i++) {
-          if (workList[i].routeType === 'lunch') {
-            dispatch(
-              setLunchRouteInfo({
-                date: workList[i].date,
-                routeId: workList[i].routeId,
-                done: workList[i].done,
-                routeType: workList[i].routeType,
-                routeName: workList[i].routeName,
-                scheduledStartTime: workList[i].scheduledStartTime,
-              }),
-            );
-            dispatch(setLunchRoute(workList[i].deliveryList));
-          } else {
-            dispatch(
-              setDinnerRouteInfo({
-                date: workList[i].date,
-                routeId: workList[i].routeId,
-                done: workList[i].done,
-                routeType: workList[i].routeType,
-                routeName: workList[i].routeName,
-                scheduledStartTime: workList[i].scheduledStartTime,
-              }),
-            );
-            dispatch(setDinnerRoute(workList[i].deliveryList));
-          }
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  React.useEffect(() => {
-    getDriverWorkRoute(id);
-  }, []);
-
   return (
     <View style={styles.MainRootContainer}>
       <View style={styles.MainHeader}>
@@ -68,13 +12,12 @@ const MainScreen = () => {
         <Text style={styles.todayList}>오늘의 배송 목록</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
-        <Route />
+        <Route navigation={navigation} />
       </ScrollView>
     </View>
   );
 };
-
-export default MainScreen;
+export default HomePage;
 
 const styles = StyleSheet.create({
   MainRootContainer: {
