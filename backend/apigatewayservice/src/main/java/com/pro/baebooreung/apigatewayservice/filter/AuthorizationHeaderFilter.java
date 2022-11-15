@@ -44,7 +44,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
 
             //인증정보 가져오기(authorizationHeader에는 bearer 토큰 값이 있을 것임
-            log.info(">>>>login>>>>"+request.getHeaders().get(HttpHeaders.AUTHORIZATION).toString());
+            log.info(">>>>login>>>>"+request.getHeaders().toString());
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", ""); //헤더에 있는지 확인
             //String 값으로 Bearer라는 값을 토큰 정보 전달됨 -> 그 값을 비어있는 문자열로 바꾸고 나머지 값이 토큰 값
