@@ -2,6 +2,7 @@ package com.pro.baebooreung.businessservice.service;
 
 import com.pro.baebooreung.businessservice.domain.Delivery;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
+import com.pro.baebooreung.businessservice.domain.repository.NavigationRepository;
 import com.pro.baebooreung.businessservice.dto.CheckResponse;
 import com.pro.baebooreung.businessservice.dto.DeliveryDto;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +23,19 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@Transactional
 public class DeliveryServiceImpl implements DeliveryService {
 
     DeliveryRepository deliveryRepository;
-//    BCryptPasswordEncoder passwordEncoder;
-//
-//    Environment env;
-//    @Autowired
-//    public DeliveryServiceImpl(DeliveryRepository deliveryRepository,
-//                           BCryptPasswordEncoder passwordEncoder,
-//                           Environment env ) {
-//        this.deliveryRepository= deliveryRepository;
-//        this.passwordEncoder = passwordEncoder;
-//        this.env = env;
-//    }
+
+    @PersistenceContext
+    private final EntityManager em;
+
+    @Autowired
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, EntityManager em){
+        this.deliveryRepository = deliveryRepository;
+        this.em = em;
+    }
 
     @Override
     public void saveImg(CheckResponse res) {
@@ -42,7 +44,9 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery delivery = findDel.get();
         log.info(delivery+":delivery!!!!!!!!!");
         delivery.updateImg(res.getImgUrl());
-        deliveryRepository.save(delivery);
+        em.persist(delivery);
+//        deliveryRepository.save(delivery);
+
     }
 
     @Override
