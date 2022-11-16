@@ -238,7 +238,8 @@ public class RouteServiceImpl implements RouteService {
             log.info("getRouteByRegionAndDate 내에 route: {}", route);
             String univName = route.getRouteName();
             if(univ.containsKey(route.getRouteName())){
-                char c = (char)(univ.get(univName)-'0');
+                int i = Integer.parseInt(univ.get(univName).toString());
+                char c = (char)i;
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
@@ -297,7 +298,8 @@ public class RouteServiceImpl implements RouteService {
         findRouteList.forEach(route -> {
             String univName = route.getRouteName();
             if(univ.containsKey(route.getRouteName())){
-                char c = (char)(univ.get(univName)-'0');
+                int i = Integer.parseInt(univ.get(univName).toString());
+                char c = (char)i;
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
@@ -386,7 +388,8 @@ public class RouteServiceImpl implements RouteService {
         findRouteList.forEach(route -> {
             String univName = route.getRouteName();
             if(univ.containsKey(route.getRouteName())){
-                char c = (char)(univ.get(univName)-'0');
+                int i = Integer.parseInt(univ.get(univName).toString());
+                char c = (char)i;
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
