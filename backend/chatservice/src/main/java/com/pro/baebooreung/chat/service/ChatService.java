@@ -34,9 +34,11 @@ public class ChatService {
         if(ChatMessage.MessageType.ENTER.equals(chatMessage.getType())){
 //            chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender(chatMessage.getSender());
+            chatMessage.setName(chatMessage.getName());
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())){
 //            chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender(chatMessage.getSender());
+            chatMessage.setName(chatMessage.getName());
         }
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
