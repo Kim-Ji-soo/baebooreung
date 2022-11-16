@@ -39,7 +39,7 @@ public class StompHandler implements ChannelInterceptor {
             //채팅방 인원수 +1
             chatRoomRepository.plusUserCount(roomId);
             //클라이언트 입장 메시지를 채팅방에 발송한다. (redis publish)
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(sessionId).build());
+//            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(sessionId).build());
             log.info("SUBSCRIBED {}, {}", sessionId, roomId);
         } else if(StompCommand.DISCONNECT == accessor.getCommand()){ // Web Socket 연결 종료
             System.out.println("연결 종료");
