@@ -23,9 +23,8 @@ import java.util.Date;
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
     Environment env;
-//    UserServiceClient userServiceClient;
+    UserServiceClient userServiceClient;
 
-//    @Autowired
     public AuthorizationHeaderFilter(Environment env){
 //            ,UserServiceClient userServiceClient) {
         super(Config.class);
