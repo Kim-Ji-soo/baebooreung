@@ -243,7 +243,7 @@ public class RouteServiceImpl implements RouteService {
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
-                univ.put(univName, 65);
+                univ.put(univName, 66);
                 char c = (char)65;
                 univName += String.valueOf(c);
             }
@@ -303,7 +303,7 @@ public class RouteServiceImpl implements RouteService {
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
-                univ.put(univName, 65);
+                univ.put(univName, 66);
                 char c = (char)65;
                 univName += String.valueOf(c);
             }
@@ -393,7 +393,7 @@ public class RouteServiceImpl implements RouteService {
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
-                univ.put(univName, 65);
+                univ.put(univName, 66);
                 char c = (char)65;
                 univName += String.valueOf(c);
             }
