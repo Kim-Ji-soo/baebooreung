@@ -99,8 +99,10 @@ public class UserServiceImpl implements UserService {
                 .specialKey(userDto.getSpecialKey())
                 .phone(userDto.getPhone())
                 .region(userDto.getRegion())
-                .grade(userDto.getGrade()=="DRIVER"?Grade.UNAUTHORIZED:Grade.MANAGER)
+                .grade(userDto.getGrade().equals("DRIVER")?Grade.UNAUTHORIZED:Grade.MANAGER)
                 .build();
+
+
 //        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
         log.info("userEntity: "+userEntity.toString());
 
