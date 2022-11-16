@@ -11,7 +11,6 @@ public class UserJoinDto {
     private String specialKey;
     private Grade grade;
     private String encryptedPwd;
-    private String profile;
     private String phone;
     private Integer region;
 

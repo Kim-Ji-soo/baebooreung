@@ -85,14 +85,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserJoinDto createUser(UserJoinDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         userDto.setSpecialKey(UUID.randomUUID().toString());
 
         //길게 set하지 않고 간편하게 쓰는 법
         ModelMapper mapper = new ModelMapper();
-        //매칭 전략을 딱 맞아 떨어지는 것만 되게끔 강력하게 설정
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        //전달받은 userDto 값을 UserEntity로 변환
         log.info("userDto:"+userDto.toString());
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
         log.info("userEntity: "+userEntity.toString());
@@ -104,9 +102,10 @@ public class UserServiceImpl implements UserService {
         userEntity.builder().encryptedPwd(passwordEncoder.encode(userDto.getPassword())).build(); // 비밀번호 암호화
 
         userRepository.save(userEntity);
-
+        log.info("userEntity2: "+userEntity.toString());
         //반환해서 확인하기 위함
-        UserJoinDto returnUserDto = mapper.map(userEntity, UserJoinDto.class);
+        UserDto returnUserDto = mapper.map(userEntity, UserDto.class);
+        log.info("userDto2:"+returnUserDto.toString());
         return returnUserDto;
     }
 

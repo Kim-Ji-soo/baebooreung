@@ -112,9 +112,9 @@ public class UserController {
         //userService로 넘겨주기 위해서는 Requestuser를 dto로 바꿔야함
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserJoinDto userDto = mapper.map(user, UserJoinDto.class);
+        UserDto userDto = mapper.map(user, UserDto.class);
 
-        UserJoinDto response = userService.createUser(userDto);
+        UserDto response = userService.createUser(userDto);
 
         //반환값 설정정
        ResponseUser responseUser = mapper.map(response, ResponseUser.class);
