@@ -23,8 +23,8 @@ public class GpsRepository {
         Gps gps = Gps.builder().latitude(Double.parseDouble(gpsSaveDto.getLatitude()))
                 .longitude(Double.parseDouble(gpsSaveDto.getLongitude()))
                 .user(user)
-                .routeId(1)
-                .delivery_id(1)
+                .routeId(user.getRouteId())
+                .delivery_id(user.getDeliveryId())
                 .requestDateTime(gpsSaveDto.getRequestDateTime()).build();
         em.persist(gps);
     }
