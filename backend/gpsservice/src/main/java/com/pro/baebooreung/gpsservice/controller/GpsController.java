@@ -31,4 +31,30 @@ public class GpsController {
             return new ResponseEntity<>("SERVER ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/gps/route/{routeId}")
+    public ResponseEntity<?> getGpsListByRouteId(@PathVariable("routeId") int routeId){
+        try {
+            log.info("get GPS, routeId : {}", routeId);
+            return new ResponseEntity<>(gpsService.findGpsByRouteId(routeId), HttpStatus.OK);
+        } catch (IllegalStateException e){
+            return new ResponseEntity<>("현재 배달 중인 배달원이 아닙니다.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("SERVER ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/gps/user/{userId}")
+    public ResponseEntity<?> getGpsListByUserId(@PathVariable("userId") int userId){
+        try {
+            log.info("get GPS, userId : {}", userId);
+            return new ResponseEntity<>(gpsService.findGpsByUserId(userId), HttpStatus.OK);
+        } catch (IllegalStateException e){
+            return new ResponseEntity<>("현재 배달 중인 배달원이 아닙니다.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("SERVER ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
