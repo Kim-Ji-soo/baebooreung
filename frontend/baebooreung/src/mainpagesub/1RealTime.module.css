@@ -1,0 +1,146 @@
+.effect {
+    width:100%;
+    height:100%;
+    position: absolute;
+    /* background-color: rgba(#0F1839, 0.5); */
+    /* rgba( 255, 255, 255, 0.5 ); */
+    background-color: rgba(15, 24, 57, 0.2);
+    z-index: 3;
+    text-align: end;
+    font-family: "BMJUA";
+    color:black;
+    font-size:30px;
+  }
+  
+  .ment {
+    position: absolute;
+    top:40%;
+    right:35%;
+  
+    padding: 12px;
+    background-color: rgba( 255, 255, 255, 1 );
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgba( 0, 0, 0, 0.1 ) ;
+  }
+  .mydiv {
+    display:flex;
+    border-radius: 50%;
+    /* outline: 7px solid blue; */
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width:30px;
+    height:30px;
+    color:black;
+    font-size: 20px;
+    font-family: 'BMJUA';
+  }
+  /* .mydiv {
+    color:black;
+    font-size: 20px;
+    font-family: 'BMJUA';
+    display:flex;
+    position: absolute;
+    top:1px;
+    left:10px;
+    transform: translate(-50%, -50%);
+  } */
+  
+  .profileList {
+    position:absolute;
+    padding:10px;
+    top: 20px;
+    left: 20px;
+    display: flex ;
+    flex-direction: column;
+    z-index: 2; 
+    background-color: rgba( 255, 255, 255, 1 );
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgba( 0, 0, 0, 0.1 ) ;
+    padding-left:10px;
+    margin-right: 20px;
+    font-family: 'BMJUA';
+    /* border: 1px solid black; */
+  }
+  
+  .profileImage {
+    /* background-color: blue; */
+    border-radius: 50%;
+    font-size: 20px;
+    width:40px;
+    height:40px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  
+  .profileImageContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    font-family: 'BMJUA';
+    width:100%;
+    font-size:20px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 10px;
+    /* -webkit-text-stroke: 0.1px black */
+  }
+  
+  .profileImageContent:hover {
+    background-color: #EFEFEF;
+    border-radius: 10px;
+  }
+  
+  .profileContent {
+    width:100%;
+    margin-left:10px;
+    margin-right:10px;
+    text-align: center;
+  }
+
+  .outerDiv {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .taskList {
+    position:absolute;
+    padding:10px;
+    top: 20px;
+    right: 20px;
+    display: flex ;
+    flex-direction: column;
+    z-index: 2; 
+    background-color: rgba( 255, 255, 255, 1 );
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgba( 0, 0, 0, 0.1 ) ;
+    padding-left:10px;
+    margin-right: 20px;
+    font-family: 'BMJUA';
+    /* border: 1px solid black; */
+  }
+
+  .taskDiv {
+    width:350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .taskImg {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 5px solid #F5CC1F;
+    /* margin: 10px; */
+    object-fit: cover;
+    object-position: center;
+  }
