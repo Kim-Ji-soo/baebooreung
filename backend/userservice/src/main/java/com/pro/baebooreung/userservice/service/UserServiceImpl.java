@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
                 .specialKey(userDto.getSpecialKey())
                 .phone(userDto.getPhone())
                 .region(userDto.getRegion())
+                .grade(userDto.getGrade())
                 .build();
 //        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
         log.info("userEntity: "+userEntity.toString());
