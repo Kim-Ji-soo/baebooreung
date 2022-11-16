@@ -13,21 +13,26 @@ import profile from "../assets/images/profile.png";
 import task from "../assets/images/task.png";
 import driver from "../assets/images/driver.png";
 import tracking from "../assets/images/tracking.png";
+import { useNavigate } from "react-router-dom";
 
 const MainFrame = ({ setMainId, changeMenuHeader }) => {
+  const navigate = useNavigate();
+  const onClickImg = () => {
+    navigate(`/`);
+  };
   const menus = {
     0: "실시간 업무 현황",
     1: "업무 내역",
     2: "경로 분석",
     3: "채팅",
-    4: "공지사항",
+    // 4: "테스트"
   }
   const menus_fold = {
     0: "",
     1: "",
     2: "",
     3: "",
-    4: "",
+    // 4: "",
   }
 
   function changeBackground(id) {
@@ -43,10 +48,8 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
     <div className={styles.main_display_flex} style={{ height: "100%" }}>
       <div className={styles.main_justify_content_space_between}>
         <div className={styles.main_display_flex_direction_col}>
-          <a href="/main">
-            {/* <img className={styles.main_logo_fold_image} src={logo_fold} alt="" /> */}
-            <img className={styles.main_logo_image} src={logo} alt="" />
-          </a>
+          {/* <img className={styles.main_logo_fold_image} src={logo_fold} alt="" /> */}
+          <img className={styles.main_logo_image} onClick={onClickImg} src={logo} alt="" />
           <button
             id="button_1"
             className={styles.button_style_pick}
@@ -100,7 +103,7 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
             <img className={styles.main_frame_logo_image} src={chat} alt="" />
             &nbsp;&nbsp;&nbsp;채팅
           </button>
-          <button
+          {/* <button
             id="button_5"
             className={styles.button_style}
             onClick={() => {
@@ -110,8 +113,8 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
             }}
           >
             <img className={styles.main_frame_logo_image} src={notice} alt="" />
-            &nbsp;&nbsp;&nbsp;공지사항
-          </button>
+            &nbsp;&nbsp;&nbsp;테스트용
+          </button> */}
         </div>
         <div>
           <div className={styles.profile}>
