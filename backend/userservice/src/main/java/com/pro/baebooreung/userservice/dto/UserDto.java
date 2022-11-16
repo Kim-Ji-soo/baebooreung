@@ -1,5 +1,6 @@
 package com.pro.baebooreung.userservice.dto;
 
+import com.pro.baebooreung.userservice.domain.WorkStatus;
 import com.pro.baebooreung.userservice.vo.ResponseRoute;
 import lombok.Data;
 
@@ -15,7 +16,9 @@ public class UserDto {
     private String specialKey;
     private Date createdAt;
 
+
     private String grade; //?
+    private WorkStatus workStatus;
 
     private String phone;
 
