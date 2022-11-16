@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto createUser(UserDto userDto) {
+    public UserJoinDto createUser(UserJoinDto userDto) {
         userDto.setSpecialKey(UUID.randomUUID().toString());
 
         //길게 set하지 않고 간편하게 쓰는 법
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
 
         //반환해서 확인하기 위함
-        UserDto returnUserDto = mapper.map(userEntity, UserDto.class);
+        UserJoinDto returnUserDto = mapper.map(userEntity, UserJoinDto.class);
         return returnUserDto;
     }
 
