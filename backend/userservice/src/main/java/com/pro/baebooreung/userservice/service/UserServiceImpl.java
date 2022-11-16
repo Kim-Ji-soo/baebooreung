@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 //        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
         log.info("userEntity: "+userEntity.toString());
 
-        if(userEntity.getGrade()==Grade.DRIVER) {
+        if(userDto.getGrade().equals(Grade.DRIVER)) {
             userEntity.builder().grade(Grade.UNAUTHORIZED).build();// 드라이버로 가입한 사람은 임시권한
         }else userEntity.builder().grade(Grade.MANAGER).build();
 
