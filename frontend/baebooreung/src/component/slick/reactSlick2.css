@@ -112,8 +112,20 @@
 
     height: auto;
 
-    border: 1px solid transparent;
+    /* border: 1px solid transparent; */
 }
 .slick-arrow.slick-hidden {
     display: none;
+}
+
+.slick-slide > div > div {
+    border:none;
+    border-style: none;
+    outline:none;
+}
+
+.slick-slide > div {
+    border:none;
+    border-style: none;
+    outline:none;
 }

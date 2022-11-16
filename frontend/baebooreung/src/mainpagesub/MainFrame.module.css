@@ -10,6 +10,7 @@
 .main_logo_image {
   height:160px;
   margin:20px;
+  cursor: pointer;
 }
 .main_logo_fold_image {
   height:140px;

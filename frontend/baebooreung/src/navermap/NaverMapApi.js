@@ -22,11 +22,13 @@ export default function NaverMapApi() {
   // // API 2번
   // const X_NCP_APIGW_API_KEY_ID = "g05t2a43ik"
   // const X_NCP_APIGW_API_KEY = "K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt"
-
+  // // API 3번
+  // const X_NCP_APIGW_API_KEY_ID = "lzyp7jzxro"
+  // const X_NCP_APIGW_API_KEY = "CrXHLpd2o9Fh7ow6ScjEh7WC3KiSMuQ7V21M7BBt" 
   // const headers = {
   //   "X-NCP-APIGW-API-KEY-ID": X_NCP_APIGW_API_KEY_ID
   //   "X-NCP-APIGW-API-KEY": X_NCP_APIGW_API_KEY
-  // }0
+  // }
 
   const [zoom, setZoom] = useState(16)
   // const [start, setStart] = useState("126.8116,35.2053") // 출발지
@@ -126,20 +128,20 @@ export default function NaverMapApi() {
       })
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      axios({
-        url: `https://k7c207.p.ssafy.io:8000/gps-service/gps/2`,
-        method: 'get'
-      }).then((res) => {
-        setStart(res.data.longitude + ',' + res.data.latitude)
-      })
-      setParamsTemp(params_temp + 1)
-      // setCenter((parseFloat(center.split(',')[0]) + 0.001) + ',' + center.split(',')[1])
-      // setStart((parseFloat(center.split(',')[0]) + 0.001) + ',' + center.split(',')[1])
-    }
-      , 3000)
-  }, [params_temp])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     axios({
+  //       url: `https://k7c207.p.ssafy.io:8000/gps-service/gps/2`,
+  //       method: 'get'
+  //     }).then((res) => {
+  //       setStart(res.data.longitude + ',' + res.data.latitude)
+  //     })
+  //     setParamsTemp(params_temp + 1)
+  //     // setCenter((parseFloat(center.split(',')[0]) + 0.001) + ',' + center.split(',')[1])
+  //     // setStart((parseFloat(center.split(',')[0]) + 0.001) + ',' + center.split(',')[1])
+  //   }
+  //     , 3000)
+  // }, [params_temp])
 
   useEffect(() => {
     cal_course()
