@@ -206,7 +206,7 @@ public class UserController {
         return userService.getProfile(userId);
     }
 
-    @GetMapping("/user/specialkey/{userId}")
+    @GetMapping("/fcm/specialkey/{userId}")
     public String getSpecialkey(@PathVariable("userId") int userId){
         String specialkey = userService.getSpecialKey(userId);
         if(!specialkey.isEmpty()){
