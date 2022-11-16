@@ -23,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -232,10 +233,20 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDate(Region region, LocalDate localDate) throws Exception {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDate(region, localDate);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
-
+        HashMap<String, Integer> univ = new HashMap<>();
         findRouteList.forEach(route -> {
             log.info("getRouteByRegionAndDate 내에 route: {}", route);
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(route.getRouteName())
+            String univName = route.getRouteName();
+            if(univ.containsKey(route.getRouteName())){
+                char c = (char)(univ.get(univName) +'0');
+                univ.put(univName, univ.get(univName)+1);
+                univName += String.valueOf(c);
+            } else {
+                univ.put(univName, 65);
+                char c = (char)65;
+                univName += String.valueOf(c);
+            }
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(univName)
                     .routeType(route.getRouteType()).done(route.isDone()).build();
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
             try {
@@ -263,8 +274,19 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteName(Region region, LocalDate localDate, String routeName) throws Exception {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDateAndRouteName(region, localDate, routeName);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
+        HashMap<String, Integer> univ = new HashMap<>();
         findRouteList.forEach(route -> {
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(route.getRouteName())
+            String univName = route.getRouteName();
+            if(univ.containsKey(route.getRouteName())){
+                char c = (char)(univ.get(univName) +'0');
+                univ.put(univName, univ.get(univName)+1);
+                univName += String.valueOf(c);
+            } else {
+                univ.put(univName, 65);
+                char c = (char)65;
+                univName += String.valueOf(c);
+            }
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(univName)
                     .routeType(route.getRouteType()).done(route.isDone()).build();
 
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
@@ -323,8 +345,20 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteNameAndRouteType(Region region, LocalDate localDate, String routeName, RouteType routeType) throws Exception {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDateAndRouteNameAndRouteType(region, localDate, routeName, routeType);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
+        HashMap<String, Integer> univ = new HashMap<>();
         findRouteList.forEach(route -> {
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(route.getRouteName())
+            String univName = route.getRouteName();
+            if(univ.containsKey(route.getRouteName())){
+                char c = (char)(univ.get(univName) +'0');
+                univ.put(univName, univ.get(univName)+1);
+                univName += String.valueOf(c);
+            } else {
+                univ.put(univName, 65);
+                char c = (char)65;
+                univName += String.valueOf(c);
+            }
+
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(univName)
                     .routeType(route.getRouteType()).done(route.isDone()).build();
 
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
