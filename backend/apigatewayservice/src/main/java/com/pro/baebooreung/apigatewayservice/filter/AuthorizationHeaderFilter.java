@@ -1,9 +1,11 @@
 package com.pro.baebooreung.apigatewayservice.filter;
 
+import com.pro.baebooreung.apigatewayservice.client.UserServiceClient;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.env.Environment;
@@ -21,10 +23,13 @@ import java.util.Date;
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
     Environment env;
+    UserServiceClient userServiceClient;
 
-    public AuthorizationHeaderFilter(Environment env) {
+    public AuthorizationHeaderFilter(Environment env){
+//            ,UserServiceClient userServiceClient) {
         super(Config.class);
         this.env = env;
+//        this.userServiceClient = userServiceClient;
     }
 
     public static class Config {
@@ -47,14 +52,14 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", ""); //헤더에 있는지 확인
             //String 값으로 Bearer라는 값을 토큰 정보 전달됨 -> 그 값을 비어있는 문자열로 바꾸고 나머지 값이 토큰 값
+            int userId = Integer.valueOf(request.getHeaders().get("id").get(0));
 
-            // Create a cookie object
-//            ServerHttpResponse response = exchange.getResponse();
-//            ResponseCookie c1 = ResponseCookie.from("my_token", "test1234").maxAge(60 * 60 * 24).build();
-//            response.addCookie(c1);
-            
+            String specialkey = request.getHeaders().get("specialkey").get(0);
+
+
+
             //토큰 검증
-            if (!isJwtValid(jwt)) {
+            if (!isJwtValid(jwt,userId,specialkey)) {
                 return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
             }
 
@@ -62,7 +67,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         };
     }
 
-    private boolean isJwtValid(String jwt) {
+    private boolean isJwtValid(String jwt, int userId, String specialkey) {
         boolean returnValue = true;
 
         String subject = null; // jwt에서 원했던 데이터 타입이 정상적인지 확인하는 것
@@ -81,7 +86,16 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         if (subject == null || subject.isEmpty() || expiration.before(new Date())) { //null이거나 속이 비어있거나 만료일자가 지나면 false
             returnValue = false;
         }
-        //userId와 같은 값인지도 확인하면 좋음
+        //userId와 같은 값인지도 확인하기
+        log.info(">>>subject: "+subject);
+        log.info(">>>specialkey: "+specialkey);
+        log.info(">>>equal? "+ specialkey.equals(subject));
+//        String returnKey = userServiceClient.getSpecialkey(userId);
+//        log.info(">>>feign returnKey: "+returnKey);
+//        if(!returnKey.equals(subject)){
+//            log.info(">>>not equal");
+//            returnValue = false;
+//        }
 
         return returnValue;
     }
