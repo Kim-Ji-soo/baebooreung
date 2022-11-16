@@ -7,10 +7,13 @@ import $, { now } from "jquery";
 
 const { naver } = window;
 
-const NowLocation = () => {
+const NowLocation = (props) => {
+  const myuniv = []
+  const cloudStoneLatLng = [126.8523, 35.1423]
   // const [start, setStart] = useState("126.8116,35.2053") // SSAFY 광주 캠퍼스 출발지
+  // const [now_loc, setStart] = useState([126.8938, 35.1785]) // 전남대A출발지
   const [zoom, setZoom] = useState(15)
-  const [now_loc, setStart] = useState([126.8938, 35.1785]) // 전남대A출발지
+  const [now_loc, setStart] = useState([126.8523, 35.1423]) // 전남대A출발지
   const [center, setCenter] = useState(now_loc)
   let waypoints = [
     [126.8982, 35.1786], // 킹스샌드
@@ -26,9 +29,12 @@ const NowLocation = () => {
     [126.8997, 35.1765], // 8동생활관콜라자판기옆
     [126.9108, 35.1804]  // 생활관5동입구
   ]
+  function make_waypoints(waypoints_temp) {
+    return waypoints_temp.join('|') + ':'
+  }
 
   const route = {
-    start: make_LatLng(now_loc),
+    start: make_LatLng(waypoints[0]),
     goal: make_LatLng(waypoints[waypoints.length - 1]),
     option: "trafast",
     waypoints: make_waypoints(waypoints)
@@ -44,9 +50,6 @@ const NowLocation = () => {
   const [test_course_now, setTestCourseNow] = useState([])
 
 
-  function make_waypoints(waypoints_temp) {
-    return waypoints_temp.join('|') + ':'
-  }
 
   function make_LatLng(now_loc_temp) {
     return `${now_loc_temp.join(',')}`
@@ -69,6 +72,7 @@ const NowLocation = () => {
         for (let i = 0; i <= path.length - 1; i++) {
           course.push(new naver.maps.LatLng(path[i][1], path[i][0]))
         }
+        console.log(course)
         setTestCourse(course)
       })
     await axios({
@@ -134,32 +138,21 @@ const NowLocation = () => {
       strokeStyle: "solid",
       strokeLineCap: "round",
       strokeWeight: 8
-
     })
-  }, [test_course_now]);
+  }, [test_course_now, zoom, center]);
 
 
   useEffect(() => {
     setTimeout(() => {
-      // axios({
-      //   url: `https://k7c207.p.ssafy.io:8000/gps-service/gps/2`,
-      //   method: 'get'
-      // }).then((res) => {
-      //   console.log(res.data.longitude + ',' + res.data.latitude)
-      //   setStart(res.data.longitude + ',' + res.data.latitude)
-      // })
       setParamsTemp(params_temp + 1)
-      console.log(now_loc)
       cal_course()
-      setStart([parseFloat(now_loc[0]) - 0.001, now_loc[1]])
-      setCenter(now_loc)
-    }
-      , 3000000)
+    }, 3000)
   }, [params_temp])
 
   useEffect(() => {
     cal_course()
-  }, [now_loc, params_temp])
+
+  }, [params_temp, zoom])
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
@@ -167,39 +160,14 @@ const NowLocation = () => {
         <div className={styles.app_width}>
           <div>
             <div className={styles.profileList}>
-              <button className={styles.profileImageContent}>
-                <img className={styles.profileImage} src={jnu} alt="" />
-                <div className={styles.profileContent}>전남대A</div>
-              </button>
-              <button className={styles.profileImageContent}>
-                <img className={styles.profileImage} src={jnu} alt="" />
-                <div className={styles.profileContent}>전남대B</div>
-              </button>
-              <div className={styles.profileImageContent}>
-                <img className={styles.profileImage} src={jnu} alt="" />
-                <div className={styles.profileContent}>전남대C</div>
-              </div>
-              <button className={styles.profileImageContent}>
-                <img className={styles.profileImage} src={gist} alt="" />
-                <div className={styles.profileContent}>지스트A</div>
-              </button>
-              <button className={styles.profileImageContent}>
-                <img className={styles.profileImage} src={gist} alt="" />
-                <div className={styles.profileContent}>지스트B</div>
-              </button>
-              <button className={styles.profileImageContent}>
-                <img className={styles.profileImage} src={gist} alt="" />
-                <div className={styles.profileContent}>지스트C</div>
-              </button>
-              {/* <input
-                type="text"
-                onChange={(e) => {
-                  setZoom(e.target.value);
-                }
-                }
-                style={{ width: "20px" }}
-                value={zoom}
-              ></input> */}
+              {myuniv.map((univ, index) => {
+                return <div>
+                  <button className={styles.profileImageContent}>
+                    <img className={styles.profileImage} src={jnu} alt="" />
+                    <div className={styles.profileContent}>{univ}</div>
+                  </button>
+                </div>
+              })}
             </div>
           </div>
           <div id="map" style={{ width: '100%', height: '100%' }}></div>

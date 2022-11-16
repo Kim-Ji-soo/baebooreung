@@ -92,3 +92,20 @@
   margin:0px;
   padding:0px;
 }
+
+
+.searchBUtton {
+  border:none;
+  cursor: pointer;
+  background-color: transparent;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.menu_setting {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
