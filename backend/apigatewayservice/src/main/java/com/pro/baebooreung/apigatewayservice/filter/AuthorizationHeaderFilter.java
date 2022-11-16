@@ -90,12 +90,12 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         log.info(">>>subject: "+subject);
         log.info(">>>specialkey: "+specialkey);
         log.info(">>>equal? "+ specialkey.equals(subject));
-        String returnKey = userServiceClient.getSpecialkey(userId);
-        log.info(">>>feign returnKey: "+returnKey);
-        if(!returnKey.equals(subject)){
-            log.info(">>>not equal");
-            returnValue = false;
-        }
+//        String returnKey = userServiceClient.getSpecialkey(userId);
+//        log.info(">>>feign returnKey: "+returnKey);
+//        if(!returnKey.equals(subject)){
+//            log.info(">>>not equal");
+//            returnValue = false;
+//        }
 
         return returnValue;
     }
