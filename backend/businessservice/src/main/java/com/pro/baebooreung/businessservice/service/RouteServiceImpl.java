@@ -238,7 +238,7 @@ public class RouteServiceImpl implements RouteService {
             log.info("getRouteByRegionAndDate 내에 route: {}", route);
             String univName = route.getRouteName();
             if(univ.containsKey(route.getRouteName())){
-                char c = (char)(univ.get(univName) +'0');
+                char c = (char)(univ.get(univName)-'0');
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
@@ -251,6 +251,25 @@ public class RouteServiceImpl implements RouteService {
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
             try {
                 deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+                    if(orderList == null || orderList.size() == 0){
+                        delivery.setOrderNum(0);
+                    } else {
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+                    if(orderList != null && orderList.size() != 0){
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+
                 regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -278,7 +297,7 @@ public class RouteServiceImpl implements RouteService {
         findRouteList.forEach(route -> {
             String univName = route.getRouteName();
             if(univ.containsKey(route.getRouteName())){
-                char c = (char)(univ.get(univName) +'0');
+                char c = (char)(univ.get(univName)-'0');
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
@@ -292,6 +311,24 @@ public class RouteServiceImpl implements RouteService {
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
             try {
                 deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+                    if(orderList == null || orderList.size() == 0){
+                        delivery.setOrderNum(0);
+                    } else {
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+                    if(orderList != null && orderList.size() != 0){
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
                 regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -349,7 +386,7 @@ public class RouteServiceImpl implements RouteService {
         findRouteList.forEach(route -> {
             String univName = route.getRouteName();
             if(univ.containsKey(route.getRouteName())){
-                char c = (char)(univ.get(univName) +'0');
+                char c = (char)(univ.get(univName)-'0');
                 univ.put(univName, univ.get(univName)+1);
                 univName += String.valueOf(c);
             } else {
@@ -364,6 +401,24 @@ public class RouteServiceImpl implements RouteService {
             List<DeliveryDto> deliveryDtoList = new ArrayList<>();
             try {
                 deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+                    if(orderList == null || orderList.size() == 0){
+                        delivery.setOrderNum(0);
+                    } else {
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+                    if(orderList != null && orderList.size() != 0){
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
                 regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
             } catch (Exception e) {
                 e.printStackTrace();
