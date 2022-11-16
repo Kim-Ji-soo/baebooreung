@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
 
-    @GetMapping("/user/specialkey/{userId}")
+    @GetMapping("/fcm/specialkey/{userId}")
     public String getSpecialkey(@PathVariable("userId") int userId);
 }
