@@ -92,7 +92,14 @@ public class UserServiceImpl implements UserService {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         log.info("userDto:"+userDto.toString());
-        UserEntity userEntity = UserEntity.builder().email(userDto.getEmail()).name(userDto.getName()).specialKey(userDto.getSpecialKey()).phone(userDto.getPhone()).region(userDto.getRegion()).build();
+        UserEntity userEntity = UserEntity.builder()
+                .email(userDto.getEmail())
+                .name(userDto.getName())
+                .encryptedPwd(passwordEncoder.encode(userDto.getPassword()))
+                .specialKey(userDto.getSpecialKey())
+                .phone(userDto.getPhone())
+                .region(userDto.getRegion())
+                .build();
 //        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
         log.info("userEntity: "+userEntity.toString());
 
@@ -100,7 +107,7 @@ public class UserServiceImpl implements UserService {
             userEntity.builder().grade(Grade.UNAUTHORIZED).build();// 드라이버로 가입한 사람은 임시권한
         }else userEntity.builder().grade(Grade.MANAGER).build();
 
-        userEntity.builder().encryptedPwd(passwordEncoder.encode(userDto.getPassword())).build(); // 비밀번호 암호화
+//        userEntity.builder().encryptedPwd(passwordEncoder.encode(userDto.getPassword())).build(); // 비밀번호 암호화
 
         userRepository.save(userEntity);
         log.info("userEntity2: "+userEntity.toString());
