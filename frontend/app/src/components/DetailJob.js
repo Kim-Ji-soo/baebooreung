@@ -3,29 +3,47 @@ import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
 import camera from '../assets/images/camera.png';
 import {useEffect} from 'react';
 import {requestStoragePermission} from '../utils/permission';
-import {camera_service} from '../api/api';
+import {camera_service, business_service} from '../api/api';
 import axios from 'axios';
 import Cam from '../components/Cam';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
-import ImagePicker, {
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
-import {getLocationPermission} from '../utils/permission';
-import Geolocation from 'react-native-geolocation-service';
-import {sendGps} from '../api/kafka';
-import {useDispatch, useSelector} from 'react-redux';
-import {setLat, setLng, setWatchId} from '../redux/gps';
+import {launchCamera} from 'react-native-image-picker';
+import {useSelector} from 'react-redux';
+import {NotificationListener} from './push';
 
 const DetailJob = props => {
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
-  console.log('lat, lng', lat, lng);
   const [targetLocation, setTargetLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(false);
   const [markerCoords, setMarkerCoords] = useState(false);
+  //<-------------------------checkin---------------------------->
+  const userId = useSelector(state => state.auth.id);
+  const [isCheckIn, setIsCheckIn] = useState(false);
+  const [checkMessage, setCheckMessage] = useState('');
+
+  function checkin(userId, deliveryId, image) {
+    axios({
+      method: 'post',
+      url: business_service.checkIn() + `${userId}`,
+      data: {
+        deliveryId: deliveryId,
+        img: image,
+      },
+    })
+      .then(res => {
+        console.log('checkin--------->', res);
+        setIsCheckIn(true);
+        setCheckMessage('체크인 성공');
+      })
+      .catch(err => {
+        console.log('체크인 실패', err);
+        setIsCheckIn(false);
+        setCheckMessage('체크인 실패');
+      });
+  }
   //<---------------------------cam------------------------------>
-  const activeCam = () => {
+  function activeCam() {
     const image = {
       uri: '',
       type: 'image/jpeg',
@@ -68,6 +86,7 @@ const DetailJob = props => {
           })
             .then(result => {
               console.log('체크인 이미지 가져오기', result.data);
+              checkin(userId, props.item.id, result.data);
             })
             .catch(e => {
               console.log(e);
@@ -78,16 +97,20 @@ const DetailJob = props => {
         });
     });
     return <Cam />;
-  };
+  }
 
   useEffect(() => {
     requestStoragePermission();
+    // NotificationListener(userId, props.item.id, props.item.delName);
   }, []);
 
   useEffect(() => {
     setTargetLocation(
       String(props.item.longitude) + ',' + String(props.item.latitude),
     );
+    if (props !== undefined) {
+      NotificationListener();
+    }
   }, []);
 
   useEffect(() => {

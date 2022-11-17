@@ -1,4 +1,4 @@
-import {React, useState, useEffect} from 'react';
+import {React, useState, useEffect, useRef} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import DetailJob from '../../components/DetailJob';
@@ -30,7 +30,7 @@ export const DetailRoutePage = props => {
       if (granted) {
         this.watchId = Geolocation.watchPosition(
           position => {
-            console.log(position.coords);
+            // console.log(position.coords);
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             const date = new Date(position.timestamp)
@@ -63,7 +63,7 @@ export const DetailRoutePage = props => {
     }
   }, [watchLocation]);
 
-  console.log('root', watchLocation.latitude, watchLocation.longitude);
+  // console.log('root', watchLocation.latitude, watchLocation.longitude);
   // <-------------------------kill watch position-------------------------->
   function killWatchLocation() {
     if (this.watchId !== null) {
@@ -81,9 +81,25 @@ export const DetailRoutePage = props => {
       </View>
     );
   }
-
+  const scrollRef = useRef(null);
   return (
-    <SwiperFlatList data={props.route.params.data} renderItem={renderItem} />
+    <SwiperFlatList
+      ref={scrollRef}
+      data={props.route.params.data}
+      renderItem={({item}) => (
+        <View style={{width: width}}>
+          <DetailJob item={item} />
+        </View>
+      )}
+      renderAll={false}
+      showPagination
+      paginationStyle={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      paginationStyleItem={{width: 7, height: 7, borderRadius: 4}}
+      paginationActiveColor={'crimson'}
+    />
   );
 };
 
