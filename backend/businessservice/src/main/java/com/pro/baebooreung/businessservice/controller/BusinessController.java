@@ -3,6 +3,8 @@ package com.pro.baebooreung.businessservice.controller;
 import com.netflix.discovery.converters.Auto;
 import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.dto.*;
+import com.pro.baebooreung.businessservice.service.DeliveryService;
+import com.pro.baebooreung.businessservice.service.OrderService;
 import com.pro.baebooreung.businessservice.service.RouteService;
 import com.pro.baebooreung.businessservice.vo.RequestCheckBusiness;
 import com.pro.baebooreung.businessservice.vo.RequestCheckIn;
@@ -27,10 +29,15 @@ import java.util.List;
 public class BusinessController {
 
     RouteService routeService;
+    OrderService orderService;
+
+    private DeliveryService deliveryService;
 
     @Autowired
-    public BusinessController(RouteService routeService){
+    public BusinessController(RouteService routeService, DeliveryService deliveryService, OrderService orderService){
         this.routeService=routeService;
+        this.deliveryService = deliveryService;
+        this.orderService=orderService;
     }
 
    //유저의 모든 루트들 가져오기
@@ -144,12 +151,24 @@ public class BusinessController {
         }
     }
 
-    // 지역, 날짜에 모든 안내 경로 얻기
+    // 지역, 날짜, 대학에 모든 안내 경로 얻기
     @PostMapping("/route/navigps/univ")
     public ResponseEntity<?> getRouteAndNavigationsByUniv(@RequestBody RouteAndNaviByRouteNameRequestDto requestDto){
         log.info("request navigpsByUniv data : {}", requestDto.toString());
         try {
             return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDateAndRouteName(requestDto.getRegion(), requestDto.getDate(), requestDto.getRouteName()));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    // 지역, 날짜, 대학, 루트타입(점심, 저녁)에 모든 안내 경로 얻기
+    @PostMapping("/route/navigps/routetype")
+    public ResponseEntity<?> getRouteAndNavigationsByRouteType(@RequestBody RouteAndNaviByRouteTypeRequestDto requestDto){
+        log.info("request navigpsByRouteType data : {}", requestDto.toString());
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(routeService.getRouteByRegionAndDateAndRouteNameAndRouteType(requestDto.getRegion(), requestDto.getDate(), requestDto.getRouteName(), requestDto.getRouteType()));
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
@@ -190,6 +209,39 @@ public class BusinessController {
         } catch (IllegalStateException e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 경로 입니다.");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    @PostMapping("/delivery/save/Img")
+    public void saveImg(@RequestBody CheckResponse res){
+        System.out.println("왜 안돼!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        deliveryService.saveImg(res);
+    }
+
+    @GetMapping("/delivery/Img/{delId}")
+    public String getImg(@PathVariable("delId") int delId){
+        return deliveryService.getImg(delId);
+    }
+
+    // 루트 번호로 해당하는 모든 경유지 리스트 가져오기
+    @GetMapping("/delivery/{routeId}")
+    public ResponseEntity<?> getDeliveryByRouteId(@PathVariable("routeId") int routeId) {
+        log.info("getDeliveryByRouteId request path date = {}", routeId);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(deliveryService.getDeliveryList(routeId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    @GetMapping("/order/cnt/{routeId}")
+    public ResponseEntity<?> getOrderCntByDeliveryId(@PathVariable("routeId") int routeId){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCntByRoute(routeId));
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");

@@ -14,7 +14,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "delivery")
+@ToString
 public class Delivery {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,7 +37,7 @@ public class Delivery {
     @Column(name = "sequence", nullable = false)
     private int sequence;
 
-    @Column(name="type", nullable = false)
+    @Column(name="type", nullable = true)
     @Enumerated(EnumType.STRING)
     private Type type;
 
@@ -67,6 +69,8 @@ public class Delivery {
     public void updateDelActualTime(LocalTime time){
         this.delActualTime = time;
     }
+
+    public void updateImg(String imgUrl) {this.img = imgUrl;}
 
 
     //builder에 id 안넣음

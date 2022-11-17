@@ -2,10 +2,9 @@ package com.pro.baebooreung.businessservice.service;
 
 import com.pro.baebooreung.businessservice.client.GpsServiceClient;
 import com.pro.baebooreung.businessservice.client.UserServiceClient;
-import com.pro.baebooreung.businessservice.domain.Delivery;
-import com.pro.baebooreung.businessservice.domain.Region;
-import com.pro.baebooreung.businessservice.domain.Route;
+import com.pro.baebooreung.businessservice.domain.*;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
+import com.pro.baebooreung.businessservice.domain.repository.OrderRepository;
 import com.pro.baebooreung.businessservice.domain.repository.RouteRepository;
 import com.pro.baebooreung.businessservice.dto.*;
 import com.pro.baebooreung.businessservice.vo.*;
@@ -24,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,17 +37,23 @@ public class RouteServiceImpl implements RouteService {
     GpsServiceClient gpsServiceClient;
     NavigationService navigationService;
 
+    DeliveryService deliveryService;
+
+    OrderRepository orderRepository;
+
     @PersistenceContext
     private final EntityManager em;
 
     @Autowired
-    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient, GpsServiceClient gpsServiceClient, NavigationService navigationService){
+    public RouteServiceImpl(RouteRepository routeRepository, EntityManager em,DeliveryRepository deliveryRepository, UserServiceClient userServiceClient, GpsServiceClient gpsServiceClient, NavigationService navigationService, DeliveryService deliveryService, OrderRepository orderRepository){
         this.routeRepository = routeRepository;
         this.deliveryRepository = deliveryRepository;
         this.em = em;
         this.userServiceClient = userServiceClient;
         this.gpsServiceClient = gpsServiceClient;
         this.navigationService = navigationService;
+        this.deliveryService = deliveryService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -77,7 +83,23 @@ public class RouteServiceImpl implements RouteService {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             responseRoute = mapper.map(routeEntity,ResponseRoute.class);
         }
+        for(int i=0;i<responseRoute.getDeliveryList().size();i++){
+            ResponseDelivery delivery = responseRoute.getDeliveryList().get(i);
+            List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+            if(orderList == null || orderList.size() == 0){
+                delivery.setOrderNum(0);
+            } else {
+                delivery.setOrderNum(orderList.size());
+            }
+        }
 
+        for(int i=0;i<responseRoute.getDeliveryList().size();i++){
+            ResponseDelivery delivery = responseRoute.getDeliveryList().get(i);
+            List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+            if(orderList != null && orderList.size() != 0){
+                delivery.setOrderNum(orderList.size());
+            }
+        }
         return responseRoute;
     }
 
@@ -211,11 +233,50 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDate(Region region, LocalDate localDate) throws Exception {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDate(region, localDate);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
-
+        HashMap<String, Integer> univ = new HashMap<>();
         findRouteList.forEach(route -> {
             log.info("getRouteByRegionAndDate 내에 route: {}", route);
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
+            String univName = route.getRouteName();
+            if(univ.containsKey(route.getRouteName())){
+                int i = Integer.parseInt(univ.get(univName).toString());
+                char c = (char)i;
+                univ.put(univName, univ.get(univName)+1);
+                univName += String.valueOf(c);
+            } else {
+                univ.put(univName, 66);
+                char c = (char)65;
+                univName += String.valueOf(c);
+            }
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(univName)
                     .routeType(route.getRouteType()).done(route.isDone()).build();
+            List<DeliveryDto> deliveryDtoList = new ArrayList<>();
+            try {
+                deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+                    if(orderList == null || orderList.size() == 0){
+                        delivery.setOrderNum(0);
+                    } else {
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+                    if(orderList != null && orderList.size() != 0){
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+
+                regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
             try {
                 List<NavigationDto> navigationDtoList = navigationService.getNavigationGpsByRouteId(route.getId());
                 if(navigationDtoList != null && navigationDtoList.size() != 0){
@@ -233,15 +294,56 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteName(Region region, LocalDate localDate, String routeName) throws Exception {
         Iterable<Route> findRouteList = routeRepository.findByRegionAndDateAndRouteName(region, localDate, routeName);
         List<RouteByRegionAndDateDto> list = new ArrayList<>();
+        HashMap<String, Integer> univ = new HashMap<>();
         findRouteList.forEach(route -> {
-            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).routeName(route.getRouteName())
+            String univName = route.getRouteName();
+            if(univ.containsKey(route.getRouteName())){
+                int i = Integer.parseInt(univ.get(univName).toString());
+                char c = (char)i;
+                univ.put(univName, univ.get(univName)+1);
+                univName += String.valueOf(c);
+            } else {
+                univ.put(univName, 66);
+                char c = (char)65;
+                univName += String.valueOf(c);
+            }
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(univName)
                     .routeType(route.getRouteType()).done(route.isDone()).build();
+
+            List<DeliveryDto> deliveryDtoList = new ArrayList<>();
+            try {
+                deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+                    if(orderList == null || orderList.size() == 0){
+                        delivery.setOrderNum(0);
+                    } else {
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+                    if(orderList != null && orderList.size() != 0){
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
             try {
                 List<NavigationDto> navigationDtoList = navigationService.getNavigationGpsByRouteId(route.getId());
                 if(navigationDtoList != null && navigationDtoList.size() != 0){
                     regionAndDateDto.setNavigationList(navigationDtoList);
                 }
             } catch (Exception e){
+                e.printStackTrace();
             }
             list.add(regionAndDateDto);
         });
@@ -286,5 +388,66 @@ public class RouteServiceImpl implements RouteService {
             throw new Exception("id : "+routeId+ " 를 가진 경로가 없습니다.");
         }
     }
+    @Override
+    public List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteNameAndRouteType(Region region, LocalDate localDate, String routeName, RouteType routeType) throws Exception {
+        Iterable<Route> findRouteList = routeRepository.findByRegionAndDateAndRouteNameAndRouteType(region, localDate, routeName, routeType);
+        List<RouteByRegionAndDateDto> list = new ArrayList<>();
+        HashMap<String, Integer> univ = new HashMap<>();
+        findRouteList.forEach(route -> {
+            String univName = route.getRouteName();
+            if(univ.containsKey(route.getRouteName())){
+                int i = Integer.parseInt(univ.get(univName).toString());
+                char c = (char)i;
+                univ.put(univName, univ.get(univName)+1);
+                univName += String.valueOf(c);
+            } else {
+                univ.put(univName, 66);
+                char c = (char)65;
+                univName += String.valueOf(c);
+            }
+
+            RouteByRegionAndDateDto regionAndDateDto = RouteByRegionAndDateDto.builder().routeId(route.getId()).userId(route.getUserId()).routeName(univName)
+                    .routeType(route.getRouteType()).done(route.isDone()).build();
+
+            List<DeliveryDto> deliveryDtoList = new ArrayList<>();
+            try {
+                deliveryDtoList = deliveryService.getDeliveryList(route.getId());
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDeliveryId(delivery.getId());
+                    if(orderList == null || orderList.size() == 0){
+                        delivery.setOrderNum(0);
+                    } else {
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                for(int i=0;i<deliveryDtoList.size();i++){
+                    DeliveryDto delivery = deliveryDtoList.get(i);
+                    List<Order> orderList = orderRepository.findByDropId(delivery.getId());
+                    if(orderList != null && orderList.size() != 0){
+                        delivery.setOrderNum(orderList.size());
+                    }
+                }
+
+                regionAndDateDto.setDeliveryDtoList(deliveryDtoList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
+            try {
+                List<NavigationDto> navigationDtoList = navigationService.getNavigationGpsByRouteId(route.getId());
+                if(navigationDtoList != null && navigationDtoList.size() != 0){
+                    regionAndDateDto.setNavigationList(navigationDtoList);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            list.add(regionAndDateDto);
+        });
+        return list;
+    }
+
 
 }
