@@ -14,7 +14,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "delivery")
+@ToString
 public class Delivery {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,12 +37,15 @@ public class Delivery {
     @Column(name = "sequence", nullable = false)
     private int sequence;
 
-    @Column(name="type", nullable = false)
+    @Column(name="type", nullable = true)
     @Enumerated(EnumType.STRING)
     private Type type;
 
     @Column(name="check", nullable = false)
     private boolean check;
+
+    @Column(name="img", nullable = true)
+    private String img;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -65,6 +70,7 @@ public class Delivery {
         this.delActualTime = time;
     }
 
+    public void updateImg(String imgUrl) {this.img = imgUrl;}
 
 
     //builder에 id 안넣음
@@ -83,4 +89,12 @@ public class Delivery {
         this.check = check;
         this.route = route;
     }
+
+    // 체크인 처리
+    public void checkIn(boolean check, String img){
+        this.check = true;
+        this.img = img;
+        this.delActualTime = LocalTime.now();
+    }
+
 }

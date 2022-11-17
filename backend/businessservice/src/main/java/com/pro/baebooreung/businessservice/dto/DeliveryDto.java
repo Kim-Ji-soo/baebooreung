@@ -1,14 +1,13 @@
 package com.pro.baebooreung.businessservice.dto;
 
 import com.pro.baebooreung.businessservice.domain.Type;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalTime;
 
 @Data
+@NoArgsConstructor
+@ToString
 public class DeliveryDto {
     private int id;
     private String delName;
@@ -18,8 +17,23 @@ public class DeliveryDto {
     private int sequence;
     private Type type;
     private boolean check;
-
+    private LocalTime delActualTime;
     private LocalTime delScheduledTime;
 
     private int orderNum;
+
+    @Builder
+    public DeliveryDto(int id, String delName, String address, double latitude, double longitude, int sequence, Type type, boolean check, LocalTime delScheduledTime, int orderNum, LocalTime delActualTime){
+        this.id = id;
+        this.delName = delName;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.sequence = sequence;
+        this.type = type;
+        this.check = check;
+        this.delScheduledTime = delScheduledTime;
+        this.orderNum = orderNum;
+        this.delActualTime = delActualTime;
+    }
 }

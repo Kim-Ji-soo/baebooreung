@@ -1,5 +1,6 @@
 package com.pro.baebooreung.businessservice.controller;
 
+import com.pro.baebooreung.businessservice.domain.Delivery;
 import com.pro.baebooreung.businessservice.domain.Navigation;
 import com.pro.baebooreung.businessservice.dto.NavigationDto;
 import com.pro.baebooreung.businessservice.dto.NavigationRequestDto;
@@ -15,16 +16,17 @@ import java.util.List;
 public class NavigationController {
 
     NavigationService navigationService;
+    Delivery deliveryService;
 
     @Autowired
     public NavigationController(NavigationService navigationService){
         this.navigationService = navigationService;
     }
 
-    @GetMapping("/navigps/{route_id}")
-    public ResponseEntity<?> getNavigationGps(@PathVariable int route_id){
+    @GetMapping("/navigps/{routeId}")
+    public ResponseEntity<?> getNavigationGps(@PathVariable int routeId){
         try {
-            List<NavigationDto> path = navigationService.getNavigationGpsByRouteId(route_id);
+            List<NavigationDto> path = navigationService.getNavigationGpsByRouteId(routeId);
             return new ResponseEntity<>(path, HttpStatus.OK);
         } catch (Exception e){
             e.printStackTrace();
@@ -32,10 +34,10 @@ public class NavigationController {
         }
     }
 
-    @PostMapping("/navigps/{route_id}")
-    public ResponseEntity<?> saveNavigationGps(@PathVariable("route_id") int route_id, @RequestBody NavigationRequestDto requestDto){
+    @PostMapping("/navigps/{routeId}")
+    public ResponseEntity<?> saveNavigationGps(@PathVariable("routeId") int routeId, @RequestBody NavigationRequestDto requestDto){
         try {
-            navigationService.saveNavigationGps(route_id, requestDto.getList());
+            navigationService.saveNavigationGps(routeId, requestDto.getList());
             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
         } catch (Exception e){
             e.printStackTrace();
