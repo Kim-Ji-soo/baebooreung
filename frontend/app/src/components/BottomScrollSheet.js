@@ -21,6 +21,7 @@ import {business_service} from '../api/api';
 // import {sendGps} from '../api/kafka';
 
 const BottomScrollSheet = props => {
+  const abc = '123';
   const navigation = useNavigation();
   const ButtonStyle = {
     borderWidth: 0.5,
