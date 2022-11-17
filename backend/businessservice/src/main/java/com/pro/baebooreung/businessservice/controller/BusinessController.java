@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,8 +99,8 @@ public class BusinessController {
         // User에다가 routeId,deliveryId,workStatus 를 바꿔주고,
         // Route의 actual_start_time에 현재 시간을 넣어줌
 
-        RouteDto result = routeService.startWork(userId, routeId);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        routeService.endWork(userId, routeId);
+        return ResponseEntity.status(HttpStatus.OK).body("업무 완료");
     }
 
     //한 안내 경로에 대한 정보 얻기
@@ -176,6 +177,19 @@ public class BusinessController {
         } catch (IllegalStateException e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 목적지 입니다.");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
+
+    @GetMapping("/route/actualstartTime/{routeId}")
+    public ResponseEntity<String> getRouteActualStartTime(@PathVariable("routeId") int routeId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(String.valueOf(routeService.getRouteActualStartTime(routeId)));
+        } catch (IllegalStateException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 경로 입니다.");
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");

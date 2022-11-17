@@ -278,5 +278,13 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
+    public LocalTime getRouteActualStartTime(int routeId) throws Exception {
+        Optional<Route> findRoute = routeRepository.findById(routeId);
+        if(findRoute.isPresent()){
+            return findRoute.get().getActualStartTime();
+        }else{
+            throw new Exception("id : "+routeId+ " 를 가진 경로가 없습니다.");
+        }
+    }
 
 }

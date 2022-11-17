@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface RouteService {
@@ -26,5 +27,5 @@ public interface RouteService {
     List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteName(Region region, LocalDate localDate, String routeName) throws Exception;
     DriverRouteAndDeliveryDto getDriverRouteAndDelivery(int user_id) throws Exception;
     public String getDeliveryName(int deliveryId) throws Exception;
-
+    public LocalTime getRouteActualStartTime(int routeId) throws Exception;
 }
