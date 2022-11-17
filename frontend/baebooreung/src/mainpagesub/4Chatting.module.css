@@ -11,29 +11,7 @@
     flex-direction: column;
     width:30%;
     height:100%;
-
 }
-.chatLayout {
-    display:flex;
-    flex-direction: column;
-    width:100%;
-    height:100%;
-}
-.chatRoomLayout{
-    background-color: red;
-    display : flex;
-    flex-direction: column;
-    width:100%;
-    height:100%;
-}
-
-.chatRoomListLayout{
-    background-color: green;
-    display:flex;
-    width:100%;
-    height:100%;
-}
-
 .userList{
     display :flex;
 
@@ -42,4 +20,135 @@
 .userListName {
     display:flex;
     background-color:aqua;
+}
+
+.chatLayout {
+    display:flex;
+    flex-direction: row;
+    width:100%;
+    height:100%;
+}
+.chatRoomLayout{
+    background-color: red;
+    display : flex;
+    flex-direction: column;
+    width:150%;
+    height:100%;
+}
+
+.chatRoomListLayout{
+    background-color: green;
+    display:flex;
+    flex-direction : column;
+    width:100%;
+    height:100%;
+}
+.chatRoomList{
+    display:flex;
+}
+
+
+.myChatComponent{
+    display :flex;
+    flex-direction: 'row-reverse';
+}
+
+.otherChatComponent {
+    display :flex;
+    flex-direction : 'row';
+}
+
+.otherChatProfile{
+
+}
+
+.noticeChatLayout{
+    display:flex;
+}
+
+.otherChatName {
+    margin-left : 2%;
+    padding-left :2%;
+    font-weight: bold;
+}
+.noticeChat {
+    display :flex;
+    margin : 1%;
+    align-items: center;
+}
+.myChat {
+    background-color: #58ACFA;
+    border-radius :10%;
+    margin : 5%;
+    padding : 7%;
+}
+.otherChat{
+    background-color : white;
+    border-radius :10%;
+    margin : 5%;
+    padding : 7%;
+}
+.noticeChatText {
+    color: #BDBDBD;
+    font-weight: bold;
+}
+
+.myChatText{
+    color: white;
+}
+.otherChatText{
+    color :black;
+}
+
+.bottomContainer {
+    flex-direction: row;
+    background-color: aqua;
+}
+
+.messageInput {
+
+}
+.createModal{
+    display:flex;
+    justify-content: center;
+    background-color: 'rgba(0,0,0,0.7)',
+}
+.modalView {
+    margin :20;
+    background-color: white;
+}
+
+.createRoomNameLayout{
+    margin : 10;
+    align-items: center;
+}
+.createChatListStyle {
+    display :flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: yellow;
+    padding :2%;
+    margin :1%;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.userListDetailText{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10%;
+    font-weight: bold;
+}
+.userListDetailCheckBox{
+    display :flex;
+    flex-direction: row;
+    justify-content : flex-end;
+}
+.buttonStyle{
+}
+
+
+.buttonLayout{
+    flex-direction:  row;
+    justify-content : flex-end;
 }
