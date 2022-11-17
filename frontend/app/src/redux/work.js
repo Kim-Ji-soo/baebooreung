@@ -41,6 +41,7 @@ const initialState = {
   dinnerDone: false,
   dinnerDate: '',
   dinnerScheduledStartTime: '',
+  isWorkDone: false,
 };
 const workSlice = createSlice({
   name: 'work',

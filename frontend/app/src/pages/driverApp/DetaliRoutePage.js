@@ -7,12 +7,14 @@ import Geolocation from 'react-native-geolocation-service';
 import {sendGps} from '../../api/kafka';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLat, setLng, setWatchId} from '../../redux/gps';
+import {NotificationListener} from '../../components/push';
+
 export const DetailRoutePage = props => {
   const dispatch = useDispatch();
-  const id = useSelector(state => state.auth.id);
+  const userId = useSelector(state => state.auth.id);
   function setKafka() {
     const kafka = {
-      userId: id,
+      userId: userId,
       latitude: watchLocation.latitude,
       longitude: watchLocation.longitude,
       requestDateTime: String(watchLocation.requestDateTime),
@@ -46,7 +48,7 @@ export const DetailRoutePage = props => {
           error => {
             console.log("driverApp/Gps => getWatchLocation's error", error);
           },
-          {enableHighAccuracy: true, fastestInterval: 4000, distanceFilter: 0},
+          {enableHighAccuracy: true, fastestInterval: 3000, distanceFilter: 0},
         );
       }
     });
@@ -54,6 +56,7 @@ export const DetailRoutePage = props => {
 
   useEffect(() => {
     getWatchLocation();
+    // NotificationListener(userId, props.item.id, props.item.delName);
   }, []);
   useEffect(() => {
     if (watchLocation !== false) {
