@@ -69,6 +69,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     .type(delivery.getType())
                     .check(delivery.isCheck())
                     .delScheduledTime(delivery.getDelScheduledTime())
+                    .delActualTime(delivery.getDelActualTime())
                     .orderNum(0).build();
             log.info("getDeliveryList {}", deliveryDto.toString());
             deliveryDtoList.add(deliveryDto);
