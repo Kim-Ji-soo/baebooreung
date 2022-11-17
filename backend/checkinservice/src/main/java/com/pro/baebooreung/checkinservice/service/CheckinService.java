@@ -31,7 +31,7 @@ public class CheckinService {
         log.info("거리 계산 결과 : {} m", dist);
 
         // 거리가 체크인 범위 안 -> webhook logic
-        if(dist <= 10.0){
+        if(dist <= 15.0){
             String title = "체크인 가능";
             String body = delivery.getDelName()+" 체크인이 가능한 위치입니다. 사진을 찍어 체크인해주세요!";
             fcmService.sendMessageCheckIn(
