@@ -195,15 +195,29 @@ public class RouteServiceImpl implements RouteService {
 //        }
 //    }
 
-    public void endWork(int userId,int routeId){ //,int deliveryId
+    public EndWorkDto endWork(int userId,int routeId){ //,int deliveryId
         //if 끝이라면 work_status와 route_id,delivery_id 비어주기 (그럼 user에서 delivery_id만 넣어줘도 될듯..)
         Optional<Route> findRoute = routeRepository.findById(routeId);
         if(findRoute.isPresent()){
             findRoute.get().updateDone(true);
             routeRepository.save(findRoute.get());
             userServiceClient.endWork(userId);
-        }else{
 
+            // 늦은 시각이 있는지 확인
+            boolean late = false;
+            List<Delivery> deliveryList = findRoute.get().getDeliveryList();
+            for (Delivery d:deliveryList) {
+                if(d.getDelActualTime().isAfter(d.getDelScheduledTime())){
+                    late = true;
+                    break;
+                }
+            }
+
+            EndWorkDto endWorkDto = new EndWorkDto(routeId,late);
+            return endWorkDto;
+
+        }else{
+            throw new NullPointerException();
         }
 
 
