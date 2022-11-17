@@ -44,8 +44,6 @@ public class UserController {
     RestTemplate restTemplate;
 
 
-//    public ResponseEntity<Object> getData() {
-//        String url = "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=126.8950,35.1790&goal=126.9108,35.1804&waypoints=126.9153,35.1810&option=trafast";
     @PostMapping("/map")
     public ResponseEntity<Object> getData(@RequestBody RequestNaverMap request) {
         String url =
@@ -61,8 +59,8 @@ public class UserController {
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders header = new HttpHeaders();
-            header.add("X-NCP-APIGW-API-KEY-ID","i3oq00t777");
-            header.add("X-NCP-APIGW-API-KEY","SKQeRSOuZty3XKmuYfGHjQ2GNGUUS6c3wGhroXsG");
+            header.add("X-NCP-APIGW-API-KEY-ID","g05t2a43ik");
+            header.add("X-NCP-APIGW-API-KEY","K2jWBmNcWQ3vgKdPE95fexbTrS2Mz4fDXQvfSeFt");
             HttpEntity<?> entity = new HttpEntity<>(header);
 
             UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
