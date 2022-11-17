@@ -22,7 +22,7 @@ public interface RouteService {
     public ResponseRoute getRoute(int routeId);
 
     public RouteDto startWork(int userId, int routId);
-    public void endWork(int userId,int routeId);
+    public EndWorkDto endWork(int userId,int routeId);
     public CheckinResponseDto checkIn(int userId, CheckInDto checkInDto) throws Exception;
     public List<RouteByRegionAndDateDto> getRouteByRegionAndDate(Region region, LocalDate localDate) throws Exception;
     List<RouteByRegionAndDateDto> getRouteByRegionAndDateAndRouteName(Region region, LocalDate localDate, String routeName) throws Exception;

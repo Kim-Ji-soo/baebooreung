@@ -102,12 +102,12 @@ public class BusinessController {
 
     // 업무 끝
     @PutMapping("/{userId}/end/{routeId}")
-    public ResponseEntity<?> endWork(@PathVariable("userId") int userId,@PathVariable("routeId") int routeId){
+    public ResponseEntity<EndWorkDto> endWork(@PathVariable("userId") int userId,@PathVariable("routeId") int routeId){
         // User에다가 routeId,deliveryId,workStatus 를 바꿔주고,
         // Route의 actual_start_time에 현재 시간을 넣어줌
 
-        routeService.endWork(userId, routeId);
-        return ResponseEntity.status(HttpStatus.OK).body("업무 완료");
+        EndWorkDto result = routeService.endWork(userId, routeId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     //한 안내 경로에 대한 정보 얻기
