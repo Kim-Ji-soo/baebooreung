@@ -24,13 +24,9 @@ public class StompHandler implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        System.out.println("presend");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        System.out.println("acceesor.getCommand = " + accessor.getCommand());
         if(StompCommand.CONNECT == accessor.getCommand()){ //웹 소켓 연결 요청
-            System.out.println("웹 소켓 연결 요청");
         } else if(StompCommand.SUBSCRIBE == accessor.getCommand()){ // 채팅룸 구독 요청
-            System.out.println("구독 요청");
             //header 정보에서 구독 destination 정보를 얻고, roomId를 추출한다.
             String roomId = chatService.getRoomId(Optional.ofNullable((String)message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             //채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
@@ -58,9 +54,6 @@ public class StompHandler implements ChannelInterceptor {
 
         return message;
     }
-
-
-
 
 
 }
