@@ -17,13 +17,13 @@ public class DeliveryDto {
     private int sequence;
     private Type type;
     private boolean check;
-
+    private LocalTime delActualTime;
     private LocalTime delScheduledTime;
 
     private int orderNum;
 
     @Builder
-    public DeliveryDto(int id, String delName, String address, double latitude, double longitude, int sequence, Type type, boolean check, LocalTime delScheduledTime, int orderNum){
+    public DeliveryDto(int id, String delName, String address, double latitude, double longitude, int sequence, Type type, boolean check, LocalTime delScheduledTime, int orderNum, LocalTime delActualTime){
         this.id = id;
         this.delName = delName;
         this.address = address;
@@ -34,5 +34,6 @@ public class DeliveryDto {
         this.check = check;
         this.delScheduledTime = delScheduledTime;
         this.orderNum = orderNum;
+        this.delActualTime = delActualTime;
     }
 }
