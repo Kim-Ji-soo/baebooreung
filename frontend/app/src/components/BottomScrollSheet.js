@@ -21,6 +21,7 @@ import {business_service} from '../api/api';
 // import {sendGps} from '../api/kafka';
 
 const BottomScrollSheet = props => {
+  console.log('bottomscrollSheet------->', props.RouteId);
   const navigation = useNavigation();
   const ButtonStyle = {
     borderWidth: 0.5,
@@ -38,11 +39,14 @@ const BottomScrollSheet = props => {
     })
       .then(res => {
         console.log('workStart is success', res);
-        navigation.navigate('Detail', {data: props.data});
+        navigation.navigate('Detail', {
+          data: props.data,
+          RouteId: props.RouteId,
+        });
       })
       .catch(err => console.log('workStart is err', err));
   }
-  // render items
+  // render itemss
   const renderPickup = ({item}) => {
     return (
       <>
@@ -112,7 +116,7 @@ const BottomScrollSheet = props => {
             <CustomButton
               ButtonStyle={ButtonStyle}
               onPress={() => {
-                start(id, props.Id);
+                start(id, props.RouteId);
                 bottomSheet.current.close();
               }}>
               <Text style={{color: 'blue'}}>시작하기</Text>
