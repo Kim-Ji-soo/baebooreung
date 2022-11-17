@@ -8,6 +8,7 @@ import {sendGps} from '../../api/kafka';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLat, setLng, setWatchId} from '../../redux/gps';
 export const DetailRoutePage = props => {
+  console.log('DetailRoutePage-------->', props.route.params.RouteId);
   const dispatch = useDispatch();
   const id = useSelector(state => state.auth.id);
   function setKafka() {
@@ -57,7 +58,7 @@ export const DetailRoutePage = props => {
   }, []);
   useEffect(() => {
     if (watchLocation !== false) {
-      // sendGps(setKafka());
+      sendGps(setKafka());
       dispatch(setLat(watchLocation.latitude));
       dispatch(setLng(watchLocation.longitude));
     }
@@ -83,7 +84,11 @@ export const DetailRoutePage = props => {
     }
     return (
       <View style={{width: width}}>
-        <DetailJob item={item} scrollRef={scrollRef} />
+        <DetailJob
+          item={item}
+          scrollRef={scrollRef}
+          RouteId={props.route.params.RouteId}
+        />
       </View>
     );
   }

@@ -25,119 +25,136 @@ const Route = ({navigation}) => {
 
   return (
     <View style={styles.workRootContainer}>
-      <View style={styles.lunchWorkContainer}>
-        <View style={styles.workTitle}>
-          <View style={styles.workDate}>
-            <Text style={styles.workDateText}>{lunchDate}</Text>
-            <Text style={styles.routeName}>{lunchRouteName}</Text>
+      {lunchRouteId !== -1 ? (
+        <View style={styles.lunchWorkContainer}>
+          <View style={styles.workTitle}>
+            <View style={styles.workDate}>
+              <Text style={styles.workDateText}>{lunchDate}</Text>
+              <Text style={styles.routeName}>{lunchRouteName}</Text>
+            </View>
+            <View>
+              {lunchScheduledStartTime === null && lunchDone === false ? (
+                <View style={styles.workReady}>
+                  <Text style={styles.workIndicatorText}>배송 예정 - 점심</Text>
+                </View>
+              ) : null}
+              {lunchScheduledStartTime !== null && lunchDone === false ? (
+                <View style={styles.workStart}>
+                  <Text style={styles.workIndicatorText}>배송 중 - 점심</Text>
+                </View>
+              ) : null}
+              {lunchScheduledStartTime !== null && lunchDone !== false ? (
+                <View style={styles.workEnd}>
+                  <Text style={styles.workIndicatorText}>배송 완료 - 점심</Text>
+                </View>
+              ) : null}
+            </View>
           </View>
-          <View>
-            {lunchScheduledStartTime === null && lunchDone === false ? (
-              <View style={styles.workReady}>
-                <Text style={styles.workIndicatorText}>배송 예정 - 점심</Text>
-              </View>
-            ) : null}
-            {lunchScheduledStartTime !== null && lunchDone === false ? (
-              <View style={styles.workStart}>
-                <Text style={styles.workIndicatorText}>배송 중 - 점심</Text>
-              </View>
-            ) : null}
-            {lunchScheduledStartTime !== null && lunchDone !== false ? (
-              <View style={styles.workEnd}>
-                <Text style={styles.workIndicatorText}>배송 완료 - 점심</Text>
-              </View>
-            ) : null}
+          <View style={styles.workRoute}>
+            <View style={styles.workRouteDate}>
+              <Text style={styles.routeTime}>배송 시작</Text>
+              <Text style={styles.routeTime}>
+                {lunchScheduledStartTime.split(':')[0]} :{' '}
+                {lunchScheduledStartTime.split(':')[1]}
+              </Text>
+            </View>
+            <View style={styles.routeImage}>
+              <Image source={line} style={styles.lineImage} />
+            </View>
+            <View style={styles.arrival}>
+              {lunchRoute[0].delName !== undefined ? (
+                <>
+                  <Text style={styles.arrivalText}>
+                    {lunchRoute[0].delName}
+                  </Text>
+                  <Text style={styles.arrivalText}>
+                    {lunchRoute[lunchRoute.length - 1].delName}
+                  </Text>
+                </>
+              ) : null}
+            </View>
           </View>
-        </View>
-        <View style={styles.workRoute}>
-          <View style={styles.workRouteDate}>
-            <Text style={styles.routeTime}>배송 시작</Text>
-            <Text style={styles.routeTime}>
-              {lunchScheduledStartTime.split(':')[0]} :{' '}
-              {lunchScheduledStartTime.split(':')[1]}
-            </Text>
-          </View>
-          <View style={styles.routeImage}>
-            <Image source={line} style={styles.lineImage} />
-          </View>
-          <View style={styles.arrival}>
-            {lunchRoute[0].delName !== undefined ? (
-              <>
-                <Text style={styles.arrivalText}>{lunchRoute[0].delName}</Text>
-                <Text style={styles.arrivalText}>
-                  {lunchRoute[lunchRoute.length - 1].delName}
-                </Text>
-              </>
-            ) : null}
-          </View>
-        </View>
-        <View style={styles.footer}>
-          <BottomScrollSheet
-            title="상세보기"
-            ButtonStyle={ButtonStyle}
-            TextStyle={TextStyle}
-            data={lunchRoute}
-            Id={lunchRouteId}
-          />
-        </View>
-      </View>
-      <View style={styles.dinnerWorkContainer}>
-        <View style={styles.workTitle}>
-          <View style={styles.workDate}>
-            <Text style={styles.workDateText}>{dinnerDate}</Text>
-            <Text style={styles.routeName}>{dinnerRouteName}</Text>
-          </View>
-          <View>
-            {dinnerScheduledStartTime === null && dinnerDone === false ? (
-              <View style={styles.workReady}>
-                <Text style={styles.workIndicatorText}>배송 예정 - 저녁</Text>
-              </View>
-            ) : null}
-            {dinnerScheduledStartTime !== null && dinnerDone === false ? (
-              <View style={styles.workStart}>
-                <Text style={styles.workIndicatorText}>배송 중 - 저녁</Text>
-              </View>
-            ) : null}
-            {dinnerScheduledStartTime !== null && dinnerDone !== false ? (
-              <View style={styles.workEnd}>
-                <Text style={styles.workIndicatorText}>배송 완료 - 저녁</Text>
-              </View>
-            ) : null}
+          <View style={styles.footer}>
+            <BottomScrollSheet
+              title="상세보기"
+              ButtonStyle={ButtonStyle}
+              TextStyle={TextStyle}
+              data={lunchRoute}
+              RouteId={lunchRouteId}
+            />
           </View>
         </View>
-        <View style={styles.workRoute}>
-          <View style={styles.workRouteDate}>
-            <Text style={styles.routeTime}>배송 시작</Text>
-            <Text style={styles.routeTime}>
-              {dinnerScheduledStartTime.split(':')[0]} :{' '}
-              {dinnerScheduledStartTime.split(':')[1]}
-            </Text>
+      ) : (
+        <View style={styles.nolunchWork}>
+          <Text>점심 업무가 할당되지 않았습니다.</Text>
+        </View>
+      )}
+
+      {dinnerRouteId !== -1 ? (
+        <View style={styles.dinnerWorkContainer}>
+          <View style={styles.workTitle}>
+            <View style={styles.workDate}>
+              <Text style={styles.workDateText}>{dinnerDate}</Text>
+              <Text style={styles.routeName}>{dinnerRouteName}</Text>
+            </View>
+            <View>
+              {dinnerScheduledStartTime === null && dinnerDone === false ? (
+                <View style={styles.workReady}>
+                  <Text style={styles.workIndicatorText}>배송 예정 - 저녁</Text>
+                </View>
+              ) : null}
+              {dinnerScheduledStartTime !== null && dinnerDone === false ? (
+                <View style={styles.workStart}>
+                  <Text style={styles.workIndicatorText}>배송 중 - 저녁</Text>
+                </View>
+              ) : null}
+              {dinnerScheduledStartTime !== null && dinnerDone !== false ? (
+                <View style={styles.workEnd}>
+                  <Text style={styles.workIndicatorText}>배송 완료 - 저녁</Text>
+                </View>
+              ) : null}
+            </View>
           </View>
-          <View style={styles.routeImage}>
-            <Image source={line} style={styles.lineImage} />
+          <View style={styles.workRoute}>
+            <View style={styles.workRouteDate}>
+              <Text style={styles.routeTime}>배송 시작</Text>
+              <Text style={styles.routeTime}>
+                {dinnerScheduledStartTime.split(':')[0]} :{' '}
+                {dinnerScheduledStartTime.split(':')[1]}
+              </Text>
+            </View>
+            <View style={styles.routeImage}>
+              <Image source={line} style={styles.lineImage} />
+            </View>
+            <View style={styles.arrival}>
+              {dinnerRoute[0].delName !== undefined ? (
+                <>
+                  <Text style={styles.arrivalText}>
+                    {dinnerRoute[0].delName}
+                  </Text>
+                  <Text style={styles.arrivalText}>
+                    {dinnerRoute[dinnerRoute.length - 1].delName}
+                  </Text>
+                </>
+              ) : null}
+            </View>
           </View>
-          <View style={styles.arrival}>
-            {dinnerRoute[0].delName !== undefined ? (
-              <>
-                <Text style={styles.arrivalText}>{dinnerRoute[0].delName}</Text>
-                <Text style={styles.arrivalText}>
-                  {dinnerRoute[dinnerRoute.length - 1].delName}
-                </Text>
-              </>
-            ) : null}
+          <View style={styles.footer}>
+            <BottomScrollSheet
+              title="상세보기"
+              ButtonStyle={ButtonStyle}
+              TextStyle={TextStyle}
+              data={dinnerRoute}
+              navigation={navigation}
+              RouteId={dinnerRouteId}
+            />
           </View>
         </View>
-        <View style={styles.footer}>
-          <BottomScrollSheet
-            title="상세보기"
-            ButtonStyle={ButtonStyle}
-            TextStyle={TextStyle}
-            data={dinnerRoute}
-            navigation={navigation}
-            Id={dinnerRouteId}
-          />
+      ) : (
+        <View style={styles.nodinnerWork}>
+          <Text>저녁 업무가 할당되지 않았습니다.</Text>
         </View>
-      </View>
+      )}
     </View>
   );
 };
@@ -163,6 +180,35 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     // paddingHorizontal: 10,
   },
+  nolunchWork: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '95%',
+    height: 180,
+    borderRadius: 8,
+    marginVertical: 8,
+    backgroundColor: '#e8e8e8',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    // paddingHorizontal: 10,
+  },
+  nodinnerWork: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '95%',
+    height: 180,
+    borderRadius: 8,
+    marginVertical: 8,
+    backgroundColor: '#e8e8e8',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    // paddingHorizontal: 10,
+  },
+
   dinnerWorkContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',

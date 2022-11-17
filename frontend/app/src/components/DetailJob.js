@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  FlatList,
+  Alert,
+} from 'react-native';
 import camera from '../assets/images/camera.png';
 import {useEffect} from 'react';
 import {requestStoragePermission} from '../utils/permission';
@@ -10,8 +18,9 @@ import NaverMapView, {Marker, Path} from 'react-native-nmap';
 import {launchCamera} from 'react-native-image-picker';
 import {useSelector} from 'react-redux';
 import {NotificationListener} from './push';
-
+import {useNavigation} from '@react-navigation/native';
 const DetailJob = props => {
+  console.log('DetailJob.props=-------->', props.RouteId);
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
   const [targetLocation, setTargetLocation] = useState(false);
@@ -21,6 +30,7 @@ const DetailJob = props => {
   const userId = useSelector(state => state.auth.id);
   const [isCheckIn, setIsCheckIn] = useState(false);
   const [checkMessage, setCheckMessage] = useState('');
+  const navigation = useNavigation();
 
   function checkin(userId, deliveryId, image) {
     axios({
@@ -32,7 +42,42 @@ const DetailJob = props => {
       },
     })
       .then(res => {
-        console.log('checkin--------->', res);
+        console.log('checkin--------->', res.data);
+        if (res.data.deliveryId === -1) {
+          Alert.alert(
+            '배송 완료',
+            '업무를 종료하시겠습니까?',
+            [
+              {
+                text: '아니오',
+                style: 'cancel',
+              },
+              {
+                text: '예',
+                onPress: () => {
+                  axios({
+                    url:
+                      business_service.workDone() +
+                      `${userId}` +
+                      '/end/' +
+                      `${props.RouteId}`,
+                    method: 'put',
+                  })
+                    .then(res => {
+                      console.log('workDone!!!', res.data);
+                      Alert.alert('업무 종료', '업무가 종료되었습니다');
+                      navigation.navigate('home');
+                    })
+                    .catch(Err => {
+                      console.log('workDone is error', Err);
+                      Alert.alert('업무 종료 실패', '관리자에게 문의해주세요');
+                    });
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        }
         setIsCheckIn(true);
         setCheckMessage('체크인 성공');
       })
