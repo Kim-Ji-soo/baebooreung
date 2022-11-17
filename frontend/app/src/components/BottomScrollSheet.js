@@ -113,6 +113,7 @@ const BottomScrollSheet = props => {
               ButtonStyle={ButtonStyle}
               onPress={() => {
                 start(id, props.Id);
+                bottomSheet.current.close();
               }}>
               <Text style={{color: 'blue'}}>시작하기</Text>
             </CustomButton>
