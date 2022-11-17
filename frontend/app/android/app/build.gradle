@@ -1,8 +1,9 @@
 apply plugin: "com.android.application"
-
+apply plugin: "com.google.gms.google-services"
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
 
+// apply plugin: 'com.google.gms.google-services'
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -83,7 +84,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
-
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -135,12 +136,14 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
+        missingDimensionStrategy 'react-native-camera', 'general'
         applicationId "com.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        // missingDimensionStrategy 'react-native-camera', 'general'
 
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.
@@ -249,13 +252,23 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    // implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    // implementation 'com.google.firebase:firebase-inappmessaging'
+    // implementation 'com.google.firebase:firebase-inappmessaging-display'
+    // implementation 'com.google.firebase:firebase-auth'
+    // implementation 'com.google.firebase:firebase-firestore'
     implementation fileTree(dir: "libs", include: ["*.jar"])
-
+    // naver map sdk
+    implementation 'com.naver.maps:map-sdk:3.16.0'
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    implementation project(':react-native-sound-recorder')
+    
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
@@ -277,6 +290,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    
+    // compile project(':react-native-sound-recorder')
 }
 
 if (isNewArchitectureEnabled()) {

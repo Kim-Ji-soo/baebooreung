@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, ScrollView, Dimensions, FlatList, TouchableOpacity} from 'react-native';
-import ManagerHome from '../components/MangaerHome';
+import ManagerHome from '../../components/MangaerHome';
 
 
 const {height : SCREEN_HEIGHT, width : SCREEN_WIDTH} = Dimensions.get('window');
