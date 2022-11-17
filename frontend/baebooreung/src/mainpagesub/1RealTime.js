@@ -40,6 +40,7 @@ const RealTime = (props) => {
   const [routeId, setRouteId] = useState(0);
   const [driverId, setDriverId] = useState(0);
   const [driverProfile, setDriverProfile] = useState('')
+  const [menuControl, setMenuControl] = useState(1)
 
   function make_LatLng(now_loc_temp) {
     return `${now_loc_temp.join(",")}`;
@@ -90,10 +91,10 @@ const RealTime = (props) => {
       .then((res) => {
         setAllTask(
           res.data.sort(function (a, b) {
-            if (a.routeName < b.routeName) {
+            if (a.routeName > b.routeName) {
               return 1;
             }
-            if (a.routeName > b.routeName) {
+            if (a.routeName < b.routeName) {
               return -1;
             }
             return 0;
@@ -127,10 +128,10 @@ const RealTime = (props) => {
         .then((res) => {
           setAllTask(
             res.data.sort(function (a, b) {
-              if (a.routeName < b.routeName) {
+              if (a.routeName > b.routeName) {
                 return 1;
               }
-              if (a.routeName > b.routeName) {
+              if (a.routeName < b.routeName) {
                 return -1;
               }
               return 0;
@@ -165,13 +166,13 @@ const RealTime = (props) => {
           routeType: props.myParams.taskTime
         },
       }).then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setAllTask(
           res.data.sort(function (a, b) {
-            if (a.routeName < b.routeName) {
+            if (a.routeName > b.routeName) {
               return 1;
             }
-            if (a.routeName > b.routeName) {
+            if (a.routeName < b.routeName) {
               return -1;
             }
             return 0;
@@ -541,7 +542,6 @@ const RealTime = (props) => {
                       <img className={styles.profileImage} src={jnu} alt="" />
                       <div className={styles.profileContent}>
                         {route.routeName}&nbsp;
-                        {String.fromCharCode(index + 65)}
                       </div>
                     </button>
                   </div>
@@ -571,7 +571,6 @@ const RealTime = (props) => {
                       <img className={styles.profileImage} src={gist} alt="" />
                       <div className={styles.profileContent}>
                         {route.routeName}&nbsp;
-                        {String.fromCharCode(index + 65)}
                       </div>
                     </button>
                   </div>
@@ -579,7 +578,7 @@ const RealTime = (props) => {
               });
             } else if (props.myParams.region === "GWANGJU") {
               return allTask.map((route, index) => {
-                if (route.routeName === "전남대학교") {
+                if (route.routeName.slice(0, 5) === "전남대학교") {
                   return (
                     <div>
                       <button
@@ -599,12 +598,11 @@ const RealTime = (props) => {
                         <img className={styles.profileImage} src={jnu} alt="" />
                         <div className={styles.profileContent}>
                           {route.routeName}&nbsp;
-                          {String.fromCharCode(index + 65)}
                         </div>
                       </button>
                     </div>
                   );
-                } else if (route.routeName === "광주과학기술원") {
+                } else if (route.routeName.slice(0, 7) === "광주과학기술원") {
                   return (
                     <div>
                       <button
@@ -628,7 +626,6 @@ const RealTime = (props) => {
                         />
                         <div className={styles.profileContent}>
                           {route.routeName}&nbsp;
-                          {String.fromCharCode(index + 59)}
                         </div>
                       </button>
                     </div>
@@ -663,7 +660,7 @@ const RealTime = (props) => {
                       />
                       <div className={styles.profileContent}>
                         {route.routeName}&nbsp;
-                        {String.fromCharCode(index + 65)}
+
                       </div>
                     </button>
                   </div>
@@ -694,7 +691,6 @@ const RealTime = (props) => {
                       />
                       <div className={styles.profileContent}>
                         {route.routeName}&nbsp;
-                        {String.fromCharCode(index + 65)}
                       </div>
                     </button>
                   </div>
@@ -721,33 +717,62 @@ const RealTime = (props) => {
                 </div>
               </div>
               <hr width="100%" />
-              <div>
-                <button>픽업 장소</button>
-                <button>수령 장소</button>
+              <div style={{ width: "100%" }}>
+                <button style={{ width: "50%", height: "50px" }} onClick={() => setMenuControl(1)}>픽업 장소</button>
+                <button style={{ width: "50%", height: "50px" }} onClick={() => setMenuControl(2)}>수령 장소</button>
               </div>
-              {
-                oneTask.deliveryDtoList.map((delivery, index) => {
-                  return (
+              {/* {
+                function () {
+                  if (menuControl === 2) {
+                    {
+                      oneTask.deliveryDtoList.map((delivery, index) => {
+                        return (
+                          <div style={{ width: "100%", display: "flex", flexDirection: "row", alignContent: "center" }}>
+                            <div style={{ display: "flex", flexDirection: "column", width: "65%" }}>
+                              <div>
+                                {delivery.delName}
+                              </div>
+                              <div>
+                                {delivery.orderNum}
+                              </div>
+                            </div>
+                            <div stlye={{ width: "30%" }}>
+                              시간
+                            </div>
+                            <div stlye={{ width: "20%" }}>
+                              완료 여부
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                  } else {
+                    {
+                      oneTask.deliveryDtoList.map((delivery, index) => {
+                        return (
+                          <div style={{ width: "100%", display: "flex", flexDirection: "row", alignContent: "center" }}>
+                            <div style={{ display: "flex", flexDirection: "column", width: "65%" }}>
+                              <div>
+                                {delivery.delName}
+                              </div>
+                              <div>
+                                {delivery.orderNum}
+                              </div>
+                            </div>
+                            <div stlye={{ width: "30%" }}>
+                              시간
+                            </div>
+                            <div stlye={{ width: "20%" }}>
+                              완료 여부
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                  }
+                }
+              } */}
 
-                    <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: "center" }}>
-                      <div stlye={{ display: "flex", flexDirection: "column" }}>
-                        <div>
-                          {delivery.delName}
-                        </div>
-                        <div>
-                          {delivery.orderNum}
-                        </div>
-                      </div>
-                      <div>
-                        시간
-                      </div>
-                      <div>
-                        완료 여부
-                      </div>
-                    </div>
-                  )
-                })
-              }
 
             </div>
             : <></>
