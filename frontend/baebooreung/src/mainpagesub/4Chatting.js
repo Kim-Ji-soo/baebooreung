@@ -16,9 +16,6 @@ const Chatting = () => {
   const [messages, setMessages] = useState([]); // 채팅 목록
   const [createChatVisible, setCreateChatVisible] = useState(false); // 채팅창 생성 모달창
   const [createChatCheckBox, setCreateChatCheckBox] = useState([]);
-  const [roomNamePlaceholder, setRoomNamePlaceholder] = useState("black");
-  const [quitChatVisible, setQuitChatVisible] = useState(false); // 채팅방 수정/나가기 모달창
-  const [quitChatRoomInfo, setQuitChatRoomInfo] = useState({});
   const userList = useSelector((state) => state.userList.userList);
   const user = useSelector((state) => state.user);
   const [userProfileList, setUserProfileList] = useState([]);
@@ -340,9 +337,7 @@ const Chatting = () => {
             <div
               className={styles.buttonLayout}
               onClick={async () => {
-                if (roomName === "") {
-                  setRoomNamePlaceholder("red");
-                } else {
+                if (roomName !== "") {
                   await axios({
                     method: "post",
                     url: chat.createRoom(),
@@ -383,7 +378,6 @@ const Chatting = () => {
                   });
 
                   setRoomName("");
-                  setRoomNamePlaceholder("black");
                   setChatRoomList([]);
                   findAllRooms();
                   setCreateChatVisible(!createChatVisible);
@@ -558,7 +552,10 @@ const Chatting = () => {
           >
             채팅방 생성
           </button>
+          {/* 채팅방 생성 모달 불러오기 */}
           {createChatVisible && createRoomModal()}
+
+          {/* 채팅방 리스트 출력 */}
           {chatRoomList.map((item, idx) => {
             return (
               <div key={idx} className={styles.chatRoomList}>
@@ -574,6 +571,26 @@ const Chatting = () => {
                   }}
                 >
                   {item.roomName}
+                </button>
+                <button
+                  onClick={() => {
+                    setPage(false);
+                    axios({
+                      method: "delete",
+                      url: chat.exitRoom() + `${item.roomId}/${user.email}`,
+                    })
+                      .then((res) => {
+                        // console.log('채팅방 삭제', res.data);
+                        quit(item.roomId, user.email);
+                      })
+                      .catch((e) => {
+                        console.log(e);
+                      });
+                    setChatRoomList([]);
+                    findAllRooms();
+                  }}
+                >
+                  채팅방 나가기
                 </button>
               </div>
             );
