@@ -132,7 +132,6 @@ const Login = ({ history }) => {
         axios.defaults.headers.common["id"] = res.headers.id;
         axios.defaults.headers.common["specialkey"] = res.headers.specialkey;
         // 로그아웃 시 토큰 없애고, 디폴트 헤더 커몬 어스에 빈 문자열 넣기
-        // document.location.href = '/main'
         fetchUserInfo(res.headers.id);
         fetchOthersInfo();
       })
@@ -157,7 +156,6 @@ const Login = ({ history }) => {
             clearInterval(timerInterval);
           },
         }).then((result) => {
-          /* Read more about handling dismissals below */
           if (result.dismiss === Swal.DismissReason.timer) {
             console.log("I was closed by the timer");
           }
