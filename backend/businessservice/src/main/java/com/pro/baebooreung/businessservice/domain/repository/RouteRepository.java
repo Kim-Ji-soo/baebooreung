@@ -25,6 +25,6 @@ public interface RouteRepository extends JpaRepository<Route,Integer> {
     @Query("SELECT r FROM Route as r WHERE r.region = :region and r.date = :date and r.routeName = :routeName and r.routeType = :routeType")
     Iterable<Route> findByRegionAndDateAndRouteNameAndRouteType(@Param("region") Region region, @Param("date") LocalDate date, @Param("routeName") String routeName, @Param("routeType") RouteType routeType);
 
-//    @Override
-//    Optional<Route> findById(int id);
+
+    Optional<Route> findById(int id);
 }
