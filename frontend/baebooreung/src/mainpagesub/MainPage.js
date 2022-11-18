@@ -4,11 +4,8 @@ import styles from './MainPage.module.css';
 
 import RealTime from './1RealTime';
 import AllWork from './2AllWork';
-import RouteAnalysis from './3RouteAnalysis';
 import Chatting from './4Chatting';
 import MainFrame from './MainFrame';
-import NowLocation from '../nowlocation/NowLocation';
-import Testpage from './testpage';
 
 // import NaverMapApi from '../navermap/NaverMapApi';
 import fold_on from '../assets/images/fold_on.png'
@@ -72,7 +69,22 @@ const MainPage = () => {
   const [region, setRegion] = React.useState('');
   const [univ, setUniv] = React.useState('');
   const [taskTime, setTaskTime] = React.useState('');
-  const [pickDate, pickDateValue] = React.useState(new Date().getMonth() + 1 > 10 ? (new Date().getDate() > 10 ? `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}` : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-0${new Date().getDate()}`) : `${new Date().getFullYear()}-0${new Date().getMonth() + 1}-0${new Date().getDate()}`);
+  let today = new Date(new Date().setDate(new Date().getDate()));
+  let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+  const [pickDate2, pickDateValue2] = React.useState(
+    yesterday.getMonth() + 1 > 10
+      ? (yesterday.getDate() > 10
+        ? `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate() - 1}`
+        : `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-0${yesterday.getDate() - 1}`)
+      : `${yesterday.getFullYear()}-0${yesterday.getMonth() + 1}-0${yesterday.getDate() - 1}`
+  );
+  const [pickDate, pickDateValue] = React.useState(
+    today.getMonth() + 1 > 10
+      ? (today.getDate() > 10
+        ? `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+        : `${today.getFullYear()}-${today.getMonth() + 1}-0${today.getDate()}`)
+      : `${today.getFullYear()}-0${today.getMonth() + 1}-0${today.getDate()}`
+  );
 
   const handleChange1 = (event) => {
     setRegion(event.target.value);
@@ -98,28 +110,32 @@ const MainPage = () => {
     region: region,
     univ: univ,
     taskTime: taskTime,
-    pickDate: pickDate
+  }
+  const myParams1 = {
+    ...myParams,
+    pickDate: pickDate,
+  }
+  const myParams2 = {
+    ...myParams,
+    pickDate: pickDate2
   }
 
   const contents = {
-    0: <RealTime myParams={myParams} />,
-    1: <AllWork myParams={myParams} />,
-    2: <RouteAnalysis myParams={myParams} />,
-    3: <Chatting />,
-    // 4: <NowLocation myParams={myParams} />,
+    0: <RealTime myParams={myParams1} />,
+    1: <AllWork myParams={myParams2} />,
+    2: <Chatting />,
   }
   const menu_header = {
     0: '실시간 업무 현황',
     1: '업무 내역',
-    2: '경로 분석',
-    3: '채팅',
-    // 4: '테스트',
+    2: '채팅',
   }
   React.useEffect(() => {
     setRegion('')
     setUniv('')
     setTaskTime('')
-    pickDateValue(new Date().getMonth() + 1 > 10 ? (new Date().getDate() > 10 ? `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}` : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-0${new Date().getDate()}`) : `${new Date().getFullYear()}-0${new Date().getMonth() + 1}-0${new Date().getDate()}`)
+    pickDateValue(today.getMonth() + 1 > 10 ? (today.getDate() > 10 ? `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` : `${today.getFullYear()}-${today.getMonth() + 1}-0${today.getDate()}`) : `${today.getFullYear()}-0${today.getMonth() + 1}-0${today.getDate()}`)
+    pickDateValue2(yesterday.getMonth() + 1 > 10 ? (yesterday.getDate() > 10 ? `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}` : `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-0${yesterday.getDate()}`) : `${yesterday.getFullYear()}-0${yesterday.getMonth() + 1}-0${yesterday.getDate()}`)
   }, [MainId])
 
   React.useEffect(() => {
@@ -142,174 +158,353 @@ const MainPage = () => {
         <div style={{ height: "100%", width: "100%" }}>
           <div className={styles.menu_header_after} id="menu_header">
             <div>{menu_header[MenuId]}</div>
-            <div className={styles.menu_setting}>
+            {
+              MenuId < 2
+                ? (
+                  MenuId < 1
+                    // 0인 부분, 실시간 today
+                    ? <div className={styles.menu_setting}>
+                      <ThemeProvider theme={theme}>
+                        {/* 지역 선택 */}
+                        <FormControl autofocus color="mymaincolor" sx={{ m: 0, minWidth: 120 }} size="small">
+                          <InputLabel
+                            id="demo-select-small"
+                            color="mymaincolor"
+                            sx={{
+                              fontFamily: "BMJUA",
+                              color: "mymaincolor"
+                            }}>지역</InputLabel>
+                          <Select
+                            autoFocus
+                            labelId="demo-select-small"
+                            id="demo-select-small"
+                            value={region}
+                            label="Age"
+                            onChange={handleChange1}
+                            sx={{
+                              color: "warning",
+                            }}
+                          >
+                            <MenuItem sx={{ fontFamily: "BMJUA" }} value={"SEOUL"}>서울</MenuItem>
+                            <MenuItem sx={{ fontFamily: "BMJUA" }} value={"GWANGJU"}>광주</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {/* 대학 선택 */}
+                        {
+                          region === "" ?
+                            <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} disabled size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={univ}
+                                label="Age"
+                                onChange={handleChange2}
+                              >
+                              </Select>
+                            </FormControl>
+                            :
+                            <></>
+                        }
+                        {
+                          region === "SEOUL" ?
+                            <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={univ}
+                                label="Age"
+                                onChange={handleChange2}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={'연세대학교'}>연세대학교</MenuItem>
+                              </Select>
+                            </FormControl>
+                            :
+                            <></>
+                        }
+                        {
+                          region === "GWANGJU" ?
+                            <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={univ}
+                                label="Age"
+                                onChange={handleChange2}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={'전남대학교'}>전남대학교</MenuItem>
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={'광주과학기술원'}>광주과학기술원</MenuItem>
+                              </Select>
+                            </FormControl>
+                            :
+                            <></>
+                        }
+                        {/* 시간 선택 */}
+                        {
+                          univ !== "" ?
+                            <FormControl color="mymaincolor" sx={{ marginRight: 2, marginLeft: 2, minWidth: 120, fontFamily: "BMJUA" }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} placeholder="시간" color="mymaincolor" id="demo-select-small">시간</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={taskTime}
+                                label="Age"
+                                onChange={handleChange3}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"lunch"}>점심</MenuItem>
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"dinner"}>저녁</MenuItem>
+                              </Select>
+                            </FormControl>
+                            : <FormControl disabled color="mymaincolor" sx={{ marginRight: 2, marginLeft: 2, minWidth: 120, fontFamily: "BMJUA" }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} placeholder="시간" color="mymaincolor" id="demo-select-small">시간</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={taskTime}
+                                label="Age"
+                                onChange={handleChange3}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"lunch"}>점심</MenuItem>
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"dinner"}>저녁</MenuItem>
+                              </Select>
+                            </FormControl>
+                        }
+                        {/* 날짜 선택 */}
+                        {
+                          MainId !== 0
+                            ? <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                inputFormat='YYYY년 MM월 DD일'
+                                fontFamily="BMJUA"
+                                color="mymaincolor"
+                                label="날짜"
+                                value={pickDate}
+                                sx={{ fontFamily: "BMJUA" }}
+                                maxDate={new Date(new Date().setDate(new Date().getDate() - 1))}
+                                onChange={(newValue) => {
+                                  pickDateValue(newValue);
+                                }}
+                                renderInput={(params) => (
+                                  <TextField color="mymaincolor"
+                                    size="small"
+                                    sx={{ marginRight: 2, marginLeft: 0, width: 200, fontFamily: "BMJUA" }}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                      placeholder: "2022년 01월 01일"
+                                    }}
+                                  />
+                                )}
+                              />
+                            </LocalizationProvider>
+                            : <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                inputFormat='YYYY년 MM월 DD일'
+                                fontFamily="BMJUA"
+                                color="mymaincolor"
+                                label="날짜"
+                                disabled={true}
+                                value={pickDate}
+                                sx={{ fontFamily: "BMJUA" }}
+                                maxDate={new Date()}
+                                onChange={(newValue) => {
+                                  pickDateValue(newValue);
+                                }}
+                                renderInput={(params) => (
+                                  <TextField color="mymaincolor"
+                                    size="small"
+                                    sx={{ marginRight: 2, marginLeft: 0, width: 200, fontFamily: "BMJUA" }}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                      placeholder: "2022년 01월 01일"
+                                    }}
+                                  />
+                                )}
+                              />
+                            </LocalizationProvider>
+                        }
+                      </ThemeProvider>
+                      {/* <button className={styles.searchBUtton} >
+                      <img style={{ width: "25px", height: "25px", marginTop: "2px", marginRight: "10px" }} src={search} alt="" />
+                    </button> */}
+                    </div>
 
-              <ThemeProvider theme={theme}>
-                {/* 지역 선택 */}
-                <FormControl color="mymaincolor" sx={{ m: 0, minWidth: 120 }} size="small">
-                  <InputLabel
-                    id="demo-select-small"
-                    color="mymaincolor"
-                    sx={{
-                      fontFamily: "BMJUA",
-                      color: "mymaincolor"
-                    }}>지역</InputLabel>
-                  <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
-                    value={region}
-                    label="Age"
-                    onChange={handleChange1}
-                    sx={{
-                      color: "warning",
-                    }}
-                  >
-                    <MenuItem sx={{ fontFamily: "BMJUA" }} value={"SEOUL"}>서울</MenuItem>
-                    <MenuItem sx={{ fontFamily: "BMJUA" }} value={"GWANGJU"}>광주</MenuItem>
-                  </Select>
-                </FormControl>
-                {/* 대학 선택 */}
-                {
-                  region === "" ?
-                    <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} disabled size="small">
-                      <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
-                      <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={univ}
-                        label="Age"
-                        onChange={handleChange2}
-                      >
-                      </Select>
-                    </FormControl>
-                    :
-                    <></>
-                }
-                {
-                  region === "SEOUL" ?
-                    <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} size="small">
-                      <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
-                      <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={univ}
-                        label="Age"
-                        onChange={handleChange2}
-                      >
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={'연세대학교'}>연세대학교</MenuItem>
-                      </Select>
-                    </FormControl>
-                    :
-                    <></>
-                }
-                {
-                  region === "GWANGJU" ?
-                    <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} size="small">
-                      <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
-                      <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={univ}
-                        label="Age"
-                        onChange={handleChange2}
-                      >
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={'전남대학교'}>전남대학교</MenuItem>
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={'광주과학기술원'}>광주과학기술원</MenuItem>
-                      </Select>
-                    </FormControl>
-                    :
-                    <></>
-                }
-                {/* 시간 선택 */}
-                {
-                  univ !== "" ?
-                    <FormControl color="mymaincolor" sx={{ marginRight: 2, marginLeft: 2, minWidth: 120, fontFamily: "BMJUA" }} size="small">
-                      <InputLabel sx={{ fontFamily: "BMJUA" }} placeholder="시간" color="mymaincolor" id="demo-select-small">시간</InputLabel>
-                      <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={taskTime}
-                        label="Age"
-                        onChange={handleChange3}
-                      >
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={"lunch"}>점심</MenuItem>
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={"dinner"}>저녁</MenuItem>
-                      </Select>
-                    </FormControl>
-                    : <FormControl disabled color="mymaincolor" sx={{ marginRight: 2, marginLeft: 2, minWidth: 120, fontFamily: "BMJUA" }} size="small">
-                      <InputLabel sx={{ fontFamily: "BMJUA" }} placeholder="시간" color="mymaincolor" id="demo-select-small">시간</InputLabel>
-                      <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={taskTime}
-                        label="Age"
-                        onChange={handleChange3}
-                      >
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={"lunch"}>점심</MenuItem>
-                        <MenuItem sx={{ fontFamily: "BMJUA" }} value={"dinner"}>저녁</MenuItem>
-                      </Select>
-                    </FormControl>
-                }
-                {/* 날짜 선택 */}
-                {
-                  MainId !== 0
-                    ? <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        inputFormat='YYYY년 MM월 DD일'
-                        fontFamily="BMJUA"
-                        color="mymaincolor"
-                        label="날짜"
-                        value={pickDate}
-                        sx={{ fontFamily: "BMJUA" }}
-                        maxDate={new Date()}
-                        onChange={(newValue) => {
-                          pickDateValue(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField color="mymaincolor"
-                            size="small"
-                            sx={{ marginRight: 2, marginLeft: 0, width: 200, fontFamily: "BMJUA" }}
-                            {...params}
-                            inputProps={{
-                              ...params.inputProps,
-                              placeholder: "2022년 01월 01일"
+                    // 1인 부분, 과거 내역 yesterday
+                    : <div className={styles.menu_setting}>
+                      <ThemeProvider theme={theme}>
+                        {/* 지역 선택 */}
+                        <FormControl autofocus color="mymaincolor" sx={{ m: 0, minWidth: 120 }} size="small">
+                          <InputLabel
+                            id="demo-select-small"
+                            color="mymaincolor"
+                            sx={{
+                              fontFamily: "BMJUA",
+                              color: "mymaincolor"
+                            }}>지역</InputLabel>
+                          <Select
+                            autoFocus
+                            labelId="demo-select-small"
+                            id="demo-select-small"
+                            value={region}
+                            label="Age"
+                            onChange={handleChange1}
+                            sx={{
+                              color: "warning",
                             }}
-                          />
-                        )}
-                      />
-                    </LocalizationProvider>
-                    : <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        inputFormat='YYYY년 MM월 DD일'
-                        fontFamily="BMJUA"
-                        color="mymaincolor"
-                        label="날짜"
-                        disabled={true}
-                        value={pickDate}
-                        sx={{ fontFamily: "BMJUA" }}
-                        maxDate={new Date()}
-                        onChange={(newValue) => {
-                          pickDateValue(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField color="mymaincolor"
-                            size="small"
-                            sx={{ marginRight: 2, marginLeft: 0, width: 200, fontFamily: "BMJUA" }}
-                            {...params}
-                            inputProps={{
-                              ...params.inputProps,
-                              placeholder: "2022년 01월 01일"
-                            }}
-                          />
-                        )}
-                      />
-                    </LocalizationProvider>
-                }
-              </ThemeProvider>
-              {/* <button className={styles.searchBUtton} >
-                <img style={{ width: "25px", height: "25px", marginTop: "2px", marginRight: "10px" }} src={search} alt="" />
-              </button> */}
-            </div>
+                          >
+                            <MenuItem sx={{ fontFamily: "BMJUA" }} value={"SEOUL"}>서울</MenuItem>
+                            <MenuItem sx={{ fontFamily: "BMJUA" }} value={"GWANGJU"}>광주</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {/* 대학 선택 */}
+                        {
+                          region === "" ?
+                            <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} disabled size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={univ}
+                                label="Age"
+                                onChange={handleChange2}
+                              >
+                              </Select>
+                            </FormControl>
+                            :
+                            <></>
+                        }
+                        {
+                          region === "SEOUL" ?
+                            <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={univ}
+                                label="Age"
+                                onChange={handleChange2}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={'연세대학교'}>연세대학교</MenuItem>
+                              </Select>
+                            </FormControl>
+                            :
+                            <></>
+                        }
+                        {
+                          region === "GWANGJU" ?
+                            <FormControl color="mymaincolor" sx={{ marginLeft: 2, minWidth: 120 }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} color="mymaincolor" id="demo-select-small">대학</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={univ}
+                                label="Age"
+                                onChange={handleChange2}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={'전남대학교'}>전남대학교</MenuItem>
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={'광주과학기술원'}>광주과학기술원</MenuItem>
+                              </Select>
+                            </FormControl>
+                            :
+                            <></>
+                        }
+                        {/* 시간 선택 */}
+                        {
+                          univ !== "" ?
+                            <FormControl color="mymaincolor" sx={{ marginRight: 2, marginLeft: 2, minWidth: 120, fontFamily: "BMJUA" }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} placeholder="시간" color="mymaincolor" id="demo-select-small">시간</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={taskTime}
+                                label="Age"
+                                onChange={handleChange3}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"lunch"}>점심</MenuItem>
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"dinner"}>저녁</MenuItem>
+                              </Select>
+                            </FormControl>
+                            : <FormControl disabled color="mymaincolor" sx={{ marginRight: 2, marginLeft: 2, minWidth: 120, fontFamily: "BMJUA" }} size="small">
+                              <InputLabel sx={{ fontFamily: "BMJUA" }} placeholder="시간" color="mymaincolor" id="demo-select-small">시간</InputLabel>
+                              <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={taskTime}
+                                label="Age"
+                                onChange={handleChange3}
+                              >
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"lunch"}>점심</MenuItem>
+                                <MenuItem sx={{ fontFamily: "BMJUA" }} value={"dinner"}>저녁</MenuItem>
+                              </Select>
+                            </FormControl>
+                        }
+                        {/* 날짜 선택 */}
+                        {
+                          MainId !== 0
+                            ? <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                inputFormat='YYYY년 MM월 DD일'
+                                fontFamily="BMJUA"
+                                color="mymaincolor"
+                                label="날짜"
+                                value={pickDate2}
+                                sx={{ fontFamily: "BMJUA" }}
+                                maxDate={new Date(new Date().setDate(new Date().getDate() - 1))}
+                                onChange={(newValue) => {
+                                  pickDateValue2(newValue);
+                                }}
+                                renderInput={(params) => (
+                                  <TextField color="mymaincolor"
+                                    size="small"
+                                    sx={{ marginRight: 2, marginLeft: 0, width: 200, fontFamily: "BMJUA" }}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                      placeholder: "2022년 01월 01일"
+                                    }}
+                                  />
+                                )}
+                              />
+                            </LocalizationProvider>
+                            : <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                inputFormat='YYYY년 MM월 DD일'
+                                fontFamily="BMJUA"
+                                color="mymaincolor"
+                                label="날짜"
+                                disabled={true}
+                                value={pickDate2}
+                                sx={{ fontFamily: "BMJUA" }}
+                                maxDate={new Date()}
+                                onChange={(newValue) => {
+                                  pickDateValue2(newValue);
+                                }}
+                                renderInput={(params) => (
+                                  <TextField color="mymaincolor"
+                                    size="small"
+                                    sx={{ marginRight: 2, marginLeft: 0, width: 200, fontFamily: "BMJUA" }}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                      placeholder: "2022년 01월 01일"
+                                    }}
+                                  />
+                                )}
+                              />
+                            </LocalizationProvider>
+                        }
+                      </ThemeProvider>
+                      {/* <button className={styles.searchBUtton} >
+                      <img style={{ width: "25px", height: "25px", marginTop: "2px", marginRight: "10px" }} src={search} alt="" />
+                    </button> */}
+                    </div>
+                )
+                : <></>
+            }
+
           </div>
           <div className={styles.menu_content}>{contents[MainId]}</div>
         </div>
