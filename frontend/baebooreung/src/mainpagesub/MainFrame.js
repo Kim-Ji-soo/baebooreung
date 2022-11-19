@@ -16,10 +16,15 @@ import tracking from "../assets/images/tracking.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setToken } from "../redux/user";
+import Swal from "sweetalert2";
+
 
 
 
 const MainFrame = ({ setMainId, changeMenuHeader }) => {
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user);
   const [profileUrl, setProfileUrl] = useState('')
 
@@ -53,6 +58,8 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
     document.getElementById("button_3").className = styles.button_style;
     document.getElementById(id).className = styles.button_style_pick;
   }
+
+
 
   return (
     <div className={styles.main_display_flex} style={{ height: "100%" }}>
@@ -109,17 +116,33 @@ const MainFrame = ({ setMainId, changeMenuHeader }) => {
               />
               &nbsp;&nbsp;&nbsp;<div style={{ fontFamily: "BMHANNAAir" }}>{userInfo.name}</div>
             </div>
-            <button className={styles.button_style_profile}>
+            <a href="/" className={styles.button_style_profile} onClick={() => {
+              setTimeout(
+                Swal.fire({
+                  imageUrl:
+                    "https://user-images.githubusercontent.com/97590478/201513112-c13e3dd5-b4e0-432a-a900-deffb3a03400.gif",
+                  html: '<div style="font-family:BMJUA;"><strong>ID</strong> 혹은 <strong>Password</strong>를 잘못 입력하셨거나 <br><strong>등록되지 않은 ID</strong>입니다. <br><br> <strong style="color:red;"><b></b></strong>초 후 창이 닫힙니다.</div>',
+                  confirmButtonText: "닫기",
+                  confirmButtonColor: "#0F1839",
+                })
+                , 3000)
+
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = ``;
+              dispatch(setToken(''))
+            }}
+            >
               <img
                 style={{ width: "20px", height: "20px" }}
                 src={logout}
                 alt=""
               />
-            </button>
+            </a>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
