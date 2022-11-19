@@ -12,20 +12,15 @@ import {
 } from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
-import Truck from '../assets/images/truck.png';
-import Sample from '../assets/images/sample.png';
-// import ManagerMap from './ManagerMap';
 import axios from 'axios';
 import {gps_service} from '../api/api';
-import NaverMapView, {
-  Circle,
-  Marker,
-  Path,
-  Polyline,
-  Polygon,
-} from 'react-native-nmap';
+import NaverMapView, {Marker} from 'react-native-nmap';
 import user from '../redux/user';
 import {user_service} from '../api/api';
+import logo from '../assets/images/logo.png';
+import yonsei from '../assets/images/yonsei.png';
+import CNU from '../assets/images/CNU.png';
+import GIST from '../assets/images/gist.png';
 
 const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
 const identityColor = '#0B0B3B';
@@ -33,7 +28,6 @@ const identityTextColor = '#F7FE2E';
 
 export default function DetailGPS(props) {
   const userList = useSelector(state => state.userList.userList);
-  const [ok, setOk] = useState(false);
   const [ID, setID] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [driverList, setDriverList] = useState([]);
@@ -56,15 +50,7 @@ export default function DetailGPS(props) {
           return newDriverList;
         });
       });
-    setOk(true);
   }, []);
-
-  useEffect(() => {
-    //프로필 사진 정보 저장
-    if (driverList.length !== 0) {
-      driverList.map((item, idx) => {});
-    }
-  }, [ok]);
 
   return (
     <View style={styles.container}>
@@ -87,17 +73,23 @@ export default function DetailGPS(props) {
             ]}>
             <View style={styles.markerInnerView}>
               <View style={{flex: 1, margin: 5}}>
-                <Image
-                  source={
-                    profile !== ''
-                      ? {uri: profile}
-                      : require('../assets/images/truck.png')
-                  }
-                  style={[
-                    profile !== ''
-                      ? styles.markerImage
-                      : styles.defaultMarkerImage,
-                  ]}></Image>
+                {profile !== null ? (
+                  <Image
+                    source={profile !== '' ? {uri: profile} : logo}
+                    style={[
+                      profile !== ''
+                        ? styles.markerImage
+                        : styles.defaultMarkerImage,
+                    ]}></Image>
+                ) : (
+                  <Image
+                    source={logo}
+                    style={[
+                      profile !== ''
+                        ? styles.markerImage
+                        : styles.defaultMarkerImage,
+                    ]}></Image>
+                )}
               </View>
             </View>
           </View>
@@ -115,43 +107,70 @@ export default function DetailGPS(props) {
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() => {
-                    if (ID !== item.id) {
-                      setID(item.id);
-                      axios({
-                        method: 'get',
-                        url: gps_service.getRealTimeGPS() + `${item.id}`,
-                      })
-                        .then(res => {
-                          // console.log('gps 정보 출력', res.data);
-                          const latitude = parseFloat(res.data.latitude);
-                          const longitude = parseFloat(res.data.longitude);
-                          setLocation({
-                            latitude: latitude,
-                            longitude: longitude,
-                          });
-                        })
-                        .catch(e => {
-                          console.log(e);
+                    setID(item.id);
+                    axios({
+                      method: 'get',
+                      url: gps_service.getRealTimeGPS() + `${item.id}`,
+                    })
+                      .then(res => {
+                        // console.log('gps 정보 출력', res.data);
+                        const latitude = parseFloat(res.data.latitude);
+                        const longitude = parseFloat(res.data.longitude);
+                        setLocation({
+                          latitude: latitude,
+                          longitude: longitude,
                         });
-                      axios({
-                        method: 'get',
-                        url: user_service.getProfile() + `${item.id}`,
                       })
-                        .then(res => {
-                          setProfile(res.data);
-                        })
-                        .catch(e => {
-                          console.log(e);
-                        });
-                    }
+                      .catch(e => {
+                        console.log(e);
+                      });
+                    axios({
+                      method: 'get',
+                      url: user_service.getProfile() + `${item.id}`,
+                    })
+                      .then(res => {
+                        setProfile(res.data);
+                      })
+                      .catch(e => {
+                        console.log(e);
+                      });
                   }}>
-                  <View>
+                  <View style={{flex: 1}}>
                     <View
                       style={
                         ID === item.id
-                          ? styles.driverListClick
+                          ? [
+                              styles.driverListClick,
+                              item.routeInfo.routeName === '전남대학교' && {
+                                backgroundColor: '#CCFFE5',
+                              },
+                              item.routeInfo.routeName === '연세대학교' && {
+                                backgroundColor: '#CCFFFF',
+                              },
+                              item.routeInfo.routeName === '광주과학기술원' && {
+                                backgroundColor: '#FFCCE5',
+                              },
+                            ]
                           : styles.driverList
                       }>
+                      {/* 대학 로고 Layout */}
+                      <View style={styles.universityLogoLayout}>
+                        {item.routeInfo.routeName === '전남대학교' && (
+                          <Image
+                            source={CNU}
+                            style={styles.universityLogo}></Image>
+                        )}
+                        {item.routeInfo.routeName === '연세대학교' && (
+                          <Image
+                            source={yonsei}
+                            style={styles.universityLogo}></Image>
+                        )}
+                        {item.routeInfo.routeName === '광주과학기술원' && (
+                          <Image
+                            source={GIST}
+                            style={styles.universityLogo}></Image>
+                        )}
+                      </View>
                       <View style={styles.driverListTextLayout}>
                         <Text
                           style={
@@ -159,11 +178,8 @@ export default function DetailGPS(props) {
                               ? styles.driverListClickText
                               : styles.driverListText
                           }>
-                          {item.routeInfo.routeName} {item.name} 드라이버
+                          {item.name} 기사님
                         </Text>
-                      </View>
-                      <View style={styles.driverListImageLayout}>
-                        <Image source={Truck} style={styles.image} />
                       </View>
                     </View>
                   </View>
@@ -204,7 +220,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 15,
     alignItems: 'center',
-    backgroundColor: 'black',
     borderRadius: 10,
     shadowOffset: {width: 0, height: 1},
     shadowRadius: 2,
@@ -212,8 +227,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
   },
   driverListTextLayout: {
-    flex: 1,
+    flex: 4,
     alignItems: 'center',
+    paddingRight: 10,
   },
   driverListText: {
     fontSize: 15,
@@ -222,7 +238,6 @@ const styles = StyleSheet.create({
   driverListClickText: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: 'white',
   },
   driverListImageLayout: {
     felx: 1,
@@ -275,5 +290,16 @@ const styles = StyleSheet.create({
   },
   MarkerColor: {
     backgroundColor: 'gray',
+  },
+  universityLogoLayout: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  universityLogo: {
+    flex: 1,
+    width: SCREEN_WIDTH / 6,
+    height: SCREEN_HEIGHT / 6,
+    opacity: 0.7,
   },
 });
