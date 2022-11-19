@@ -131,7 +131,7 @@
   }
 
   .taskDiv {
-    width:300px;
+    width:350px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -218,7 +218,7 @@
   .toggle {
     position: absolute;
     top:20px;
-    right:365px;
+    right:415px;
     z-index: 2;
     padding:10px;
     display: flex ;
