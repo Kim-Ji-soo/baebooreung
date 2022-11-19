@@ -39,10 +39,10 @@ const RealTime = (props) => {
   const ssafy_cloudstone_route_temp = {
     start: make_LatLng(ssafyLatLng),
     goal: make_LatLng(cloudStoneLatLng),
-    option: "traoptimal",
+    option: "trafast",
   };
   const [center, setCenter] = useState(
-    [126.82222, 35.1755]
+    setTwoCenter(ssafyLatLng, cloudStoneLatLng)
   );
 
 
@@ -93,7 +93,7 @@ const RealTime = (props) => {
       method: "post",
       data: requestBody,
     }).then((res) => {
-      const path = res.data.route.traoptimal[0].path;
+      const path = res.data.route.trafast[0].path;
       for (let i = 0; i <= path.length - 1; i++) {
         course.push(new naver.maps.LatLng(path[i][1], path[i][0]));
       }
@@ -540,7 +540,7 @@ const RealTime = (props) => {
                   allTask[i].deliveryDtoList[allTask[i].deliveryDtoList.length - 1].latitude,
                 ]
               ),
-              option: "traoptimal",
+              option: "trafast",
               waypoints: make_waypoints(waypoints_temp),
             };
             // 해당하는 모든 루트 경로 찍기

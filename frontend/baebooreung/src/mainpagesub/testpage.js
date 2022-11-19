@@ -70,7 +70,7 @@ const TestPage = (props) => {
   const ssafy_cloudstone_route_temp = {
     start: make_LatLng(ssafyLatLng),
     goal: make_LatLng(cloudStoneLatLng),
-    option: "traoptimal", // traoptimal는 traffic fast 가장 빠른 길이라는 뜻
+    option: "trafast", // trafast는 traffic fast 가장 빠른 길이라는 뜻
     // waypoints: make_waypoints(waypoints) // 경유지는 임시 주석 처리, 사용가능한 상태임.
   }
   // SSAFY부터 CloudStone까지 모든 경로를 담을 리스트
@@ -87,7 +87,7 @@ const TestPage = (props) => {
       data: requestBody,
     }).then((res) => {
       // requestBody를 통해 경유지가 포함된 모든 경로를 계산한 값이 저장되는 path
-      const path = res.data.route.traoptimal[0].path
+      const path = res.data.route.trafast[0].path
       // path의 모든 값들을 빈 배열인 course에 push 한다.
       for (let i = 0; i <= path.length - 1; i++) {
         course.push(new naver.maps.LatLng(path[i][1], path[i][0]))
