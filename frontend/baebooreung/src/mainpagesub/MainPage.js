@@ -66,10 +66,19 @@ const CssTextField = styled(TextField)({
 
 const MainPage = () => {
 
+  const [test_temp, setTestTemp] = useState([])
+
   const [region, setRegion] = React.useState('');
   const [univ, setUniv] = React.useState('');
   const [taskTime, setTaskTime] = React.useState('');
   let today = new Date(new Date().setDate(new Date().getDate()));
+  const [pickDate, pickDateValue] = React.useState(
+    today.getMonth() + 1 > 10
+      ? (today.getDate() > 10
+        ? `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+        : `${today.getFullYear()}-${today.getMonth() + 1}-0${today.getDate()}`)
+      : `${today.getFullYear()}-0${today.getMonth() + 1}-0${today.getDate()}`
+  );
   let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
   const [pickDate2, pickDateValue2] = React.useState(
     yesterday.getMonth() + 1 > 10
@@ -77,13 +86,6 @@ const MainPage = () => {
         ? `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate() - 1}`
         : `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-0${yesterday.getDate() - 1}`)
       : `${yesterday.getFullYear()}-0${yesterday.getMonth() + 1}-0${yesterday.getDate() - 1}`
-  );
-  const [pickDate, pickDateValue] = React.useState(
-    today.getMonth() + 1 > 10
-      ? (today.getDate() > 10
-        ? `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
-        : `${today.getFullYear()}-${today.getMonth() + 1}-0${today.getDate()}`)
-      : `${today.getFullYear()}-0${today.getMonth() + 1}-0${today.getDate()}`
   );
 
   const handleChange1 = (event) => {
@@ -451,10 +453,13 @@ const MainPage = () => {
                                 color="mymaincolor"
                                 label="날짜"
                                 value={pickDate2}
+                                // value={pickDate2}
                                 sx={{ fontFamily: "BMJUA" }}
+                                // maxDate={new Date()}
                                 maxDate={new Date(new Date().setDate(new Date().getDate() - 1))}
                                 onChange={(newValue) => {
                                   pickDateValue2(newValue);
+                                  // pickDateValue2(newValue);
                                 }}
                                 renderInput={(params) => (
                                   <TextField color="mymaincolor"
@@ -509,6 +514,13 @@ const MainPage = () => {
           <div className={styles.menu_content}>{contents[MainId]}</div>
         </div>
       </div>
+      {/* <button onClick={() => { setTestTemp([1, 3, 5]) }}>테스트템프로바꾸기</button>
+      <button onClick={() => { setTestTemp([2, 4, 6]) }}>어림없다로바꾸기</button>
+      {
+        test_temp.map((item, index) => {
+          return item === 1 ? <div>홀수</div> : <div>짝수</div>
+        })
+      } */}
     </div>
   );
 };

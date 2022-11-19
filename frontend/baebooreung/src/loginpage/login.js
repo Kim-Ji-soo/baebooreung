@@ -106,7 +106,7 @@ const Login = ({ history }) => {
             // console.log(item.id);
             userList.push(item);
           });
-        console.log(userList);
+        // console.log(userList);
         dispatch(setUserList(userList));
       })
       .catch((e) => {
