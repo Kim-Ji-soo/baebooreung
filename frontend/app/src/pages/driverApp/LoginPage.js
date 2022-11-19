@@ -65,10 +65,10 @@ const Login = ({navigation}) => {
       url: business_service.getDriverRoute() + `${id}` + '/routes/today/undone',
     })
       .then(res => {
+        console.log('드라이버 업무 불러오기 성공', res.data);
         const workList = res.data;
-        console.log(workList);
         for (let i = 0; i < workList.length; i++) {
-          console.log(i, workList[i].id);
+          console.log('드라이버 업무리스트', workList[i]);
           if (workList[i].routeType === 'lunch') {
             dispatch(
               setLunchRouteInfo({
@@ -97,7 +97,7 @@ const Login = ({navigation}) => {
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log('드라이버 업무 불러오기 실패', err);
       });
   };
   const fetchUserInfo = async id => {
@@ -156,50 +156,55 @@ const Login = ({navigation}) => {
         email: id,
         password: password,
       },
-    }).then(res => {
-      // axios global header configuration.
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${res.headers.token}`;
-      axios.defaults.headers.common['id'] = res.headers.id;
-      axios.defaults.headers.common['specialkey'] = res.headers.specialkey;
-      //redux
-      dispatch(
-        setUserInfo({
-          id: res.headers.id,
-          accessToken: res.headers.token,
-          specialkey: res.headers.specialkey,
-          name: res.headers.name,
-        }),
-      );
-      fetchUserInfo(res.headers.id);
-      fetchUserProfile(res.headers.id);
-      getDriverWorkRoute(res.headers.id);
-      console.log('Login Success!');
-      // send fcmToken to server
-      messaging()
-        .getToken()
-        .then(token => {
-          axios({
-            method: 'put',
-            url: user_service.saveFCMToken(),
-            data: {
-              id: res.headers.id,
-              fcmToken: token,
-            },
-          })
-            .then(res => {
-              // console.log(res);
+    })
+      .then(res => {
+        console.log('유저네임--------->', res.headers.name);
+        // axios global header configuration.
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${res.headers.token}`;
+        axios.defaults.headers.common['id'] = res.headers.id;
+        axios.defaults.headers.common['specialkey'] = res.headers.specialkey;
+        //redux
+        dispatch(
+          setUserInfo({
+            id: res.headers.id,
+            accessToken: res.headers.token,
+            specialkey: res.headers.specialkey,
+            name: res.headers.name,
+          }),
+        );
+        fetchUserInfo(res.headers.id);
+        fetchUserProfile(res.headers.id);
+        getDriverWorkRoute(res.headers.id);
+        console.log('로그인성공');
+        // send fcmToken to server
+        messaging()
+          .getToken()
+          .then(token => {
+            axios({
+              method: 'put',
+              url: user_service.saveFCMToken(),
+              data: {
+                id: res.headers.id,
+                fcmToken: token,
+              },
             })
-            .catch(err => {
-              console.log(err);
-            });
-        })
-        .catch(err => {
-          console.log(err);
-          console.log('Login failed!');
-        });
-    });
+              .then(res => {
+                // console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        Alert.alert('로그인', '아이디 혹은 비밀번호가 틀렸습니다.');
+        console.log('로그인 실패');
+      });
   };
   // id 유효성 검사
   const onChangeId = event => {

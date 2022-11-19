@@ -8,7 +8,7 @@ import {sendGps} from '../../api/kafka';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLat, setLng, setWatchId} from '../../redux/gps';
 export const DetailRoutePage = props => {
-  console.log('DetailRoutePage-------->', props.route.params.RouteId);
+  // console.log('DetailRoutePage-------->', props.route.params.RouteId);
   const dispatch = useDispatch();
   const id = useSelector(state => state.auth.id);
   function setKafka() {
@@ -25,13 +25,12 @@ export const DetailRoutePage = props => {
   const watchId = null;
   const [watchLocation, setWatchLocation] = useState(false);
   const getWatchLocation = () => {
-    console.log('running WatchLocation');
     const permission = getLocationPermission();
     permission.then(granted => {
       if (granted) {
         this.watchId = Geolocation.watchPosition(
           position => {
-            // console.log(position.coords);
+            console.log('geolocation gps data', position.coords);
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             const date = new Date(position.timestamp)
@@ -42,12 +41,12 @@ export const DetailRoutePage = props => {
               longitude: longitude,
               requestDateTime: date,
             });
-            // dispatch(setWatchId(this.watchId));
+            dispatch(setWatchId(this.watchId));
           },
           error => {
             console.log("driverApp/Gps => getWatchLocation's error", error);
           },
-          {enableHighAccuracy: true, fastestInterval: 4000, distanceFilter: 0},
+          {enableHighAccuracy: true, fastestInterval: 3000, distanceFilter: 0},
         );
       }
     });
@@ -58,7 +57,7 @@ export const DetailRoutePage = props => {
   }, []);
   useEffect(() => {
     if (watchLocation !== false) {
-      sendGps(setKafka());
+      // sendGps(setKafka());
       dispatch(setLat(watchLocation.latitude));
       dispatch(setLng(watchLocation.longitude));
     }

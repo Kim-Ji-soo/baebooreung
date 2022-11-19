@@ -13,7 +13,7 @@ import BottomSheet from 'react-native-gesture-bottom-sheet';
 import CustomButton from './CustomButton';
 import axios from 'axios';
 import {business_service} from '../api/api';
-
+import {setDinnerActualStartTime, setLunchActualStartTime} from '../redux/work';
 // gps 관련 import
 // import Geolocation from 'react-native-geolocation-service';
 // import {getLocationPermission} from '../utils/permission';
@@ -21,7 +21,10 @@ import {business_service} from '../api/api';
 // import {sendGps} from '../api/kafka';
 
 const BottomScrollSheet = props => {
-  console.log('bottomscrollSheet------->', props.RouteId);
+  const dispatch = useDispatch();
+  const lunchRouteId = useSelector(state => state.work.lunchRouteId);
+  const dinnerRouteId = useSelector(state => state.work.dinnerRouteId);
+  // console.log('bottomscrollSheet------->', props.RouteId);
   const navigation = useNavigation();
   const ButtonStyle = {
     borderWidth: 0.5,
@@ -31,6 +34,37 @@ const BottomScrollSheet = props => {
     width: '50%',
   };
   const id = useSelector(state => state.auth.id);
+
+  function GetLunchActualstartTime() {
+    if (lunchRouteId !== -1) {
+      axios({
+        url: business_service.getActualStartTime() + `${lunchRouteId}`,
+        method: 'get',
+      })
+        .then(res => {
+          console.log('점심 실제 시작 시간', res.data);
+          setLunchActualStartTime(res.data);
+        })
+        .catch(err => {
+          console.log("getActualStartTime's", err);
+        });
+    }
+  }
+  function GetDinnerActualStartTime() {
+    if (dinnerRouteId !== -1) {
+      axios({
+        url: business_service.getActualStartTime() + `${dinnerRouteId}`,
+        method: 'get',
+      })
+        .then(res => {
+          console.log('저녁 실제 시작 시간', res.data);
+          setDinnerActualStartTime(res.data);
+        })
+        .catch(err => {
+          console.log("getActualStartTime's", err);
+        });
+    }
+  }
   // 업무 시작
   function start(id, routeId) {
     axios({
@@ -43,6 +77,8 @@ const BottomScrollSheet = props => {
           data: props.data,
           RouteId: props.RouteId,
         });
+        GetDinnerActualStartTime();
+        GetLunchActualstartTime();
       })
       .catch(err => console.log('workStart is err', err));
   }
