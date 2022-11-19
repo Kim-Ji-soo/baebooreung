@@ -39,13 +39,15 @@ const business_service = {
   getDriverRoute: () => BASE_URL + BUSINESS_SERVICE,
   getRoute: () => BASE_URL + BUSINESS_SERVICE + 'route/',
   getNotDone: () => BASE_URL + BUSINESS_SERVICE + 'routes/',
-
+  getActualStartTime: () =>
+    BASE_URL + BUSINESS_SERVICE + 'route/actualstartTime/',
   // POST
   workStart: () => BASE_URL + BUSINESS_SERVICE,
   workDone: () => BASE_URL + BUSINESS_SERVICE,
   checkIn: () => BASE_URL + BUSINESS_SERVICE + 'check-in/',
   takePhoto: () => BASE_URL + BUSINESS_SERVICE + 'photo',
   getOrderCount: () => BASE_URL + BUSINESS_SERVICE + 'order/cnt/',
+  getCheckStatus: () => BASE_URL + BUSINESS_SERVICE + 'delivery/check/',
 };
 const GPS_SERVICE = 'gps-service/';
 const gps_service = {

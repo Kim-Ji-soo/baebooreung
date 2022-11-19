@@ -113,9 +113,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    margin: 5,
-    padding: 5,
-    borderRadius: 10,
+    margin: 10,
+    padding: 10,
+    borderRadius: 50,
     shadowOffset: {width: 0, height: 1},
     shadowRadius: 2,
     elevation: 10,
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: 'stretch',
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
   },
 });

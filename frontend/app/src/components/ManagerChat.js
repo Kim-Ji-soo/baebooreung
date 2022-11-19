@@ -13,14 +13,18 @@ import {
   Modal,
   Pressable,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
-import {chat, user, user_service} from '../api/api';
+import {camera_service, chat, user, user_service} from '../api/api';
 import CheckBox from '@react-native-community/checkbox';
 import Truck from '../assets/images/truck.png';
+import logo from '../assets/images/logo.png';
 import AudioRecord from '../components/AudioRecord';
 const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
+const identityColor = '#0B0B3B';
+const identityTextColor = '#FACC2E';
 
 export default function ManagerChat({navigation}) {
   const [page, setPage] = useState('user'); // 유저 / 채팅방목록 / 채팅방 분기처리
@@ -32,7 +36,7 @@ export default function ManagerChat({navigation}) {
   const [messages, setMessages] = useState([]); // 채팅 목록
   const [createChatVisible, setCreateChatVisible] = useState(false); // 채팅창 생성 모달창
   const [createChatCheckBox, setCreateChatCheckBox] = useState([]);
-  const [roomNamePlaceholder, setRoomNamePlaceholder] = useState('black');
+  const [roomNamePlaceholder, setRoomNamePlaceholder] = useState('#A4A4A4');
   const [quitChatVisible, setQuitChatVisible] = useState(false); // 채팅방 수정/나가기 모달창
   const [quitChatRoomInfo, setQuitChatRoomInfo] = useState({});
   const userList = useSelector(state => state.userList.userList);
@@ -259,36 +263,42 @@ export default function ManagerChat({navigation}) {
   }, []);
 
   useEffect(() => {
-    // 유저목록 프로필사진 가능하면...?
-    // if (userList.length !== 0 && userList !== undefined) {
-    //   userList.map(item => {
-    //     axios({
-    //       method: 'get',
-    //       url: user_service.getProfile() + `${item.id}`,
-    //     })
-    //       .then(res => {
-    //         console.log('파일가져오기', res.data);
-    //         setUserProfileList(userProfileList => {
-    //           const newUserProfileList = [...userProfileList];
-    //           newUserProfileList.push({
-    //             email: item.email,
-    //             grade: item.grade,
-    //             id: item.id,
-    //             name: item.name,
-    //             profile: res.data,
-    //           });
-    //         });
-    //       })
-    //       .catch(e => {});
-    //   });
-    // }
     connect();
     return () => disconnect();
   }, []);
 
   useEffect(() => {
-    console.log(messages);
-  }, [messages]);
+    if (userList.length !== 0) {
+      // console.log(userList);
+      userList.map(item => {
+        // console.log(item.email, item.grade, item.id, item.name);
+        axios({
+          method: 'get',
+          url: camera_service.getFile(),
+          params: {
+            userId: item.id,
+          },
+        })
+          .then(res => {
+            // console.log('파일가져오기', res.data);
+            setUserProfileList(userProfileList => {
+              const newUserProfileList = [...userProfileList];
+              newUserProfileList.push({
+                email: item.email,
+                grade: item.grade,
+                id: item.id,
+                name: item.name,
+                profile: res.data,
+              });
+              return newUserProfileList;
+            });
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      });
+    }
+  }, [userList]);
 
   return (
     <View style={styles.container}>
@@ -312,22 +322,31 @@ export default function ManagerChat({navigation}) {
           <View style={styles.rightBar}>
             <FlatList
               style={styles.list}
-              data={userList}
+              data={userProfileList}
               keyExtractor={(item, idx) => idx}
               renderItem={({item}) => (
                 <View style={styles.userListStyle}>
                   <View style={styles.userListDetailText}>
-                    {<Image source={Truck} style={styles.image} />}
+                    {item.profile !== null ? (
+                      <Image
+                        source={
+                          item.profile !== '' ? {uri: item.profile} : logo
+                        }
+                        style={styles.image}
+                      />
+                    ) : (
+                      <Image source={logo} style={styles.image} />
+                    )}
                     <Text style={styles.userListTextStyle}>
                       {item.name} {item.grade === 'MANAGER' && '관리자'}
-                      {item.grade === 'DRIVER' && '드라이버'}
+                      {item.grade === 'DRIVER' && '기사님'}
                     </Text>
                   </View>
-                  {/* <View style={styles.userListDetailIcon}>
+                  <View style={styles.userListDetailIcon}>
                     <TouchableOpacity>
                       <Icon name="phone-forwarded" size={30}></Icon>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       onPress={() => {
                         chatRoomList.forEach(value => {
                           subscribe(roomId, user.email);
@@ -338,8 +357,8 @@ export default function ManagerChat({navigation}) {
                         name="textsms"
                         size={30}
                         style={styles.userMessageIcon}></Icon>
-                    </TouchableOpacity>
-                  </View> */}
+                    </TouchableOpacity> */}
+                  </View>
                 </View>
               )}
             />
@@ -385,7 +404,7 @@ export default function ManagerChat({navigation}) {
                 <Pressable
                   activeOpacity={0.6}
                   onLongPress={() => {
-                    console.log('방정보', item);
+                    // console.log('방정보', item);
                     setQuitChatRoomInfo(() => {
                       return item;
                     });
@@ -548,8 +567,11 @@ export default function ManagerChat({navigation}) {
                   </View>
                 </View>
               )}></FlatList>
-            <View style={styles.bottomContainer}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 6}}></View>
               <AudioRecord propFunction={handleChange}></AudioRecord>
+            </View>
+            <View style={styles.bottomContainer}>
               <TextInput
                 style={styles.messageInput}
                 multiline={true}
@@ -558,12 +580,23 @@ export default function ManagerChat({navigation}) {
                   handleChange(text);
                 }}
                 value={message}></TextInput>
-              <TouchableOpacity
-                style={styles.buttonStyle}
-                onPress={sendMessage}
-                disabled={message === ''}>
-                <Text style={styles.buttonTextStyle}>전송</Text>
-              </TouchableOpacity>
+              <View
+                style={{flex: 1, backgroundColor: 'black', borderRadius: 10}}>
+                <TouchableOpacity
+                  style={[
+                    styles.buttonStyle,
+                    {
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 10,
+                    },
+                  ]}
+                  onPress={sendMessage}
+                  disabled={message === ''}>
+                  <Text style={styles.buttonTextStyle}>전송</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -580,29 +613,61 @@ export default function ManagerChat({navigation}) {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.createRoomNameLayout}>
-              <Text>방 제목</Text>
-              <TextInput
-                style={styles.roomNameInput}
-                placeholder={'방 제목을 입력하세요'}
-                placeholderTextColor={roomNamePlaceholder}
-                onChangeText={text => {
-                  RoomNameChange(text);
-                }}
-                value={roomName}
-                maxLength={45}></TextInput>
+            <View style={[styles.createRoomNameLayout, {}]}>
+              <View style={{alignItems: 'flex-end'}}>
+                <Pressable
+                  style={styles.cancelButton}
+                  onPress={() => {
+                    createChatCheckBox.map((item, idx) => {
+                      if (item === true) {
+                        setCreateChatCheckBox(createChatCheckBox => {
+                          const newArr = [...createChatCheckBox];
+                          newArr[idx] = false;
+                          return newArr;
+                        });
+                      }
+                    });
+                    setCreateChatVisible(!createChatVisible);
+                    setRoomName('');
+                    setRoomNamePlaceholder('#A4A4A4');
+                  }}>
+                  <Text style={styles.createChatButtonTextStyle}>X</Text>
+                </Pressable>
+              </View>
+              <View style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>방 제목</Text>
+
+                <TextInput
+                  style={styles.roomNameInput}
+                  placeholder={'방 제목을 입력하세요'}
+                  placeholderTextColor={roomNamePlaceholder}
+                  onChangeText={text => {
+                    RoomNameChange(text);
+                  }}
+                  value={roomName}
+                  maxLength={45}></TextInput>
+              </View>
             </View>
             <FlatList
               contentContainerStyle={{}}
-              data={userList}
+              data={userProfileList}
               keyExtractor={(item, index) => index}
               renderItem={({item, index}) => (
                 <View style={styles.createChatListStyle}>
                   <View style={styles.userListDetailText}>
-                    <Icon name="person" size={30}></Icon>
+                    {item.profile !== null ? (
+                      <Image
+                        source={
+                          item.profile !== '' ? {uri: item.profile} : logo
+                        }
+                        style={styles.image}
+                      />
+                    ) : (
+                      <Image source={logo} style={styles.image} />
+                    )}
                     <Text style={styles.userListTextStyle}>
                       {item.name} {item.grade === 'MANAGER' && '관리자'}
-                      {item.grade === 'DRIVER' && '드라이버'}
+                      {item.grade === 'DRIVER' && '기사님'}
                     </Text>
                   </View>
                   <View style={styles.userListDetailIcon}>
@@ -645,7 +710,7 @@ export default function ManagerChat({navigation}) {
                               method: 'post',
                               url:
                                 chat.invite() +
-                                `${res.data.roomId}/${userList[idx].email}/`,
+                                `${res.data.roomId}/${userProfileList[idx].email}/`,
                             })
                               .then(res => {
                                 console.log('초대', res.data);
@@ -670,30 +735,12 @@ export default function ManagerChat({navigation}) {
                     });
                     setCreateChatVisible(!createChatVisible);
                     setRoomName('');
-                    setRoomNamePlaceholder('black');
+                    setRoomNamePlaceholder('#A4A4A4');
                     setChatRoomList([]);
                     findAllRooms();
                   }
                 }}>
                 <Text style={styles.createChatButtonTextStyle}>초대</Text>
-              </Pressable>
-              <Pressable
-                style={styles.cancelButton}
-                onPress={() => {
-                  createChatCheckBox.map((item, idx) => {
-                    if (item === true) {
-                      setCreateChatCheckBox(createChatCheckBox => {
-                        const newArr = [...createChatCheckBox];
-                        newArr[idx] = false;
-                        return newArr;
-                      });
-                    }
-                  });
-                  setCreateChatVisible(!createChatVisible);
-                  setRoomName('');
-                  setRoomNamePlaceholder('black');
-                }}>
-                <Text style={styles.createChatButtonTextStyle}>취소</Text>
               </Pressable>
             </View>
           </View>
@@ -949,7 +996,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   messageInput: {
-    flex: 5,
+    flex: 4,
     maxHeight: SCREEN_HEIGHT / 7.3,
     fontSize: 15,
     borderTopLeftRadius: 10,
@@ -961,7 +1008,6 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: 'black',
-
     paddingHorizontal: 10,
     justifyContent: 'center',
   },
@@ -975,7 +1021,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.7)',
   },
   modalView: {
+    borderRadius: 10,
     margin: 20,
+    maxHeight: (SCREEN_HEIGHT * 2) / 3,
+    maxWidth: SCREEN_WIDTH,
     backgroundColor: 'white',
   },
   createChatListStyle: {
@@ -994,19 +1043,22 @@ const styles = StyleSheet.create({
   },
   buttonLayout: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-evenly',
+    marginHorizontal: 50,
   },
   submitButton: {
     alignItems: 'center',
     padding: 10,
     margin: 10,
-    backgroundColor: '#58ACFA',
+    backgroundColor: identityColor,
+    borderRadius: 10,
   },
   cancelButton: {
     alignItems: 'center',
-    padding: 10,
-    margin: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
     backgroundColor: 'red',
+    borderRadius: 10,
   },
   createChatButtonTextStyle: {
     fontSize: 16,
@@ -1014,10 +1066,17 @@ const styles = StyleSheet.create({
   },
   createRoomNameLayout: {
     margin: 10,
-    alignItems: 'center',
   },
   roomNameInput: {
+    width: (SCREEN_WIDTH * 2) / 3,
     fontSize: 15,
+    borderRadius: 10,
+    shadowOffset: {width: 0, height: 1},
+    shadowRadius: 2,
+    elevation: 4,
+    shadowOpacity: 0.4,
+    backgroundColor: 'white',
+    marginVertical: 5,
   },
   quitModalView: {
     margin: 20,
@@ -1066,8 +1125,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   image: {
-    resizeMode: 'stretch',
     width: 50,
-    height: 40,
+    height: 50,
   },
 });
