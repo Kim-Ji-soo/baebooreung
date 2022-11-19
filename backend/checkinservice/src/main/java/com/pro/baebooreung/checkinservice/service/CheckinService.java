@@ -18,6 +18,7 @@ public class CheckinService {
     private final FCMService fcmService;
 
     public void checkin(GpsSaveDto gpsSaveDto) throws Exception {
+        log.warn(">>>>gpsDTO: "+ gpsSaveDto.toString());
         // 유저 찾기
         User user = userRepository.findOne(gpsSaveDto.getUserId());
         if(user == null) throw new IllegalStateException("해당 회원이 존재하지 않습니다.");
