@@ -4,15 +4,16 @@ import Route from '../../components/Route';
 import {useSelector, useDispatch} from 'react-redux';
 import {business_service} from '../../api/api';
 import axios from 'axios';
-import {
-  setDinnerActualStartTime,
-  setLunchActualStartTime,
-} from '../../redux/work';
 
 const HomePage = ({navigation}) => {
   const dispatch = useDispatch();
   const lunchRouteId = useSelector(state => state.work.lunchRouteId);
   const dinnerRouteId = useSelector(state => state.work.dinnerRouteId);
+  const today = useSelector(state => state.work.lunchDate);
+  const [lunchActualStartTime, setLunchActualStartTime] = React.useState(null);
+  const [dinnerActualStartTime, setDinnerActualStartTime] =
+    React.useState(null);
+
   function GetLunchActualstartTime() {
     if (lunchRouteId !== -1) {
       axios({
@@ -21,7 +22,8 @@ const HomePage = ({navigation}) => {
       })
         .then(res => {
           console.log('점심 실제 시작 시간', res.data);
-          dispatch(setLunchActualStartTime(res.data));
+          // dispatch(setLunchActualStartTime(res.data));
+          setLunchActualStartTime(res.data);
         })
         .catch(err => {
           console.log("getActualStartTime's", err);
@@ -36,7 +38,8 @@ const HomePage = ({navigation}) => {
       })
         .then(res => {
           console.log('저녁 실제 시작 시간', res.data);
-          dispatch(setDinnerActualStartTime(res.data));
+          // dispatch(setDinnerActualStartTime(res.data));
+          setDinnerActualStartTime(res.data);
         })
         .catch(err => {
           console.log("getActualStartTime's", err);
@@ -53,10 +56,16 @@ const HomePage = ({navigation}) => {
     <View style={styles.MainRootContainer}>
       <View style={styles.MainHeader}>
         <Text style={styles.MainHeaderText}>안녕하세요 {name}님</Text>
-        <Text style={styles.todayList}>오늘의 배송 목록</Text>
+        <View style={styles.today}>
+          <Text style={styles.todayList}>오늘의 배송 목록</Text>
+          <Text style={styles.todayList}>{today}</Text>
+        </View>
       </View>
       <ScrollView style={styles.scrollContainer}>
-        <Route navigation={navigation} />
+        <Route
+          navigation={navigation}
+          actualStartTime={{lunchActualStartTime, dinnerActualStartTime}}
+        />
       </ScrollView>
     </View>
   );
@@ -71,13 +80,18 @@ const styles = StyleSheet.create({
   MainHeader: {
     marginTop: 10,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  today: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    borderBottomWidth: 0.6,
   },
   todayList: {
     fontSize: 20,
-    marginVertical: 15,
+    marginTop: 20,
     fontWeight: '600',
-    borderBottomWidth: 0.5,
-    width: '95%',
     textAlign: 'left',
   },
   MainHeaderText: {
@@ -86,6 +100,5 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     borderRadius: 8,
-    height: '80%',
   },
 });

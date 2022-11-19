@@ -5,8 +5,10 @@ import line from '../assets/images/separator.png';
 import BottomScrollSheet from './BottomScrollSheet';
 import {business_service} from '../api/api';
 import axios from 'axios';
+import finalPropsSelectorFactory from 'react-redux/es/connect/selectorFactory';
+import {produceWithPatches} from 'immer';
 
-const Route = ({navigation}) => {
+const Route = (props, {navigation}) => {
   const lunchRoute = useSelector(state => state.work.lunchRoute);
   const dinnerRoute = useSelector(state => state.work.dinnerRoute);
   const lunchRouteId = useSelector(state => state.work.lunchRouteId);
@@ -30,22 +32,26 @@ const Route = ({navigation}) => {
   const dinnerDone = useSelector(state => state.work.dinnerDone);
   const lunchDone = useSelector(state => state.work.lunchDone);
 
+  console.log('route', lunchActualStartTime);
+  console.log('route', dinnerActualStartTime);
+  console.log('route lunchDone', lunchDone);
+  console.log('route dinnerDone', dinnerDone);
   return (
     <View style={styles.workRootContainer}>
       {lunchRouteId !== -1 ? (
         <View style={styles.lunchWorkContainer}>
           <View style={styles.workTitle}>
             <View style={styles.workDate}>
-              <Text style={styles.workDateText}>{lunchDate}</Text>
               <Text style={styles.routeName}>{lunchRouteName}</Text>
             </View>
             <View>
-              {lunchActualStartTime === null ? (
+              {props.actualStartTime.lunchActualStartTime === null ? (
                 <View style={styles.workReady}>
                   <Text style={styles.workIndicatorText}>배송 예정 - 점심</Text>
                 </View>
               ) : null}
-              {lunchActualStartTime !== null && lunchDone === false ? (
+              {props.actualStartTime.lunchActualStartTime !== null &&
+              lunchDone === false ? (
                 <View style={styles.workStart}>
                   <Text style={styles.workIndicatorText}>배송 중 - 점심</Text>
                 </View>
@@ -59,7 +65,7 @@ const Route = ({navigation}) => {
           </View>
           <View style={styles.workRoute}>
             <View style={styles.workRouteDate}>
-              <Text style={styles.routeTime}>배송 시작</Text>
+              <Text style={styles.routeTimeTitle}>배송 시작</Text>
               <Text style={styles.routeTime}>
                 {lunchScheduledStartTime.split(':')[0]} :{' '}
                 {lunchScheduledStartTime.split(':')[1]}
@@ -101,16 +107,16 @@ const Route = ({navigation}) => {
         <View style={styles.dinnerWorkContainer}>
           <View style={styles.workTitle}>
             <View style={styles.workDate}>
-              <Text style={styles.workDateText}>{dinnerDate}</Text>
               <Text style={styles.routeName}>{dinnerRouteName}</Text>
             </View>
             <View>
-              {dinnerActualStartTime === null ? (
+              {props.actualStartTime.dinnerActualStartTime === null ? (
                 <View style={styles.workReady}>
                   <Text style={styles.workIndicatorText}>배송 예정 - 저녁</Text>
                 </View>
               ) : null}
-              {dinnerActualStartTime !== null && dinnerDone === false ? (
+              {props.actualStartTime.dinnerActualStartTime !== null &&
+              dinnerDone === false ? (
                 <View style={styles.workStart}>
                   <Text style={styles.workIndicatorText}>배송 중 - 저녁</Text>
                 </View>
@@ -124,7 +130,7 @@ const Route = ({navigation}) => {
           </View>
           <View style={styles.workRoute}>
             <View style={styles.workRouteDate}>
-              <Text style={styles.routeTime}>배송 시작</Text>
+              <Text style={styles.routeTimeTitle}>배송 시작</Text>
               <Text style={styles.routeTime}>
                 {dinnerScheduledStartTime.split(':')[0]} :{' '}
                 {dinnerScheduledStartTime.split(':')[1]}
@@ -180,12 +186,13 @@ const styles = StyleSheet.create({
     height: 180,
     borderRadius: 8,
     marginVertical: 8,
-    backgroundColor: '#e8e8e8',
+    // backgroundColor: '#e8e8e8',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
     paddingTop: 20,
     // paddingHorizontal: 10,
+    backgroundColor: '#0F1839',
   },
   nolunchWork: {
     flexDirection: 'column',
@@ -212,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8e8e8',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 6,
     // paddingHorizontal: 10,
   },
 
@@ -223,11 +230,12 @@ const styles = StyleSheet.create({
     height: 180,
     borderRadius: 8,
     marginVertical: 8,
-    backgroundColor: '#e8e8e8',
+    // backgroundColor: '#e8e8e8',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 6,
     paddingTop: 20,
+    backgroundColor: '#0F1839',
     // paddingHorizontal: 10,
   },
   workTitle: {
@@ -238,16 +246,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   routeName: {
-    fontSize: 15,
+    fontSize: 25,
     fontWeight: 'bold',
+    color: '#F5CC1F',
   },
   workDateText: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: 'white',
   },
   workReady: {
     // borderWidth: 1,
-    backgroundColor: '#5d91de',
+    backgroundColor: 'gray',
     padding: 5,
     borderRadius: 5,
     shadowOpacity: 0.25,
@@ -256,7 +266,7 @@ const styles = StyleSheet.create({
   },
   workStart: {
     // borderWidth: 1,
-    backgroundColor: '#a091ec',
+    backgroundColor: '#f5cc1f',
     padding: 5,
     borderRadius: 5,
     shadowOpacity: 0.25,
@@ -265,7 +275,8 @@ const styles = StyleSheet.create({
   },
   workEnd: {
     // borderWidth: 1,
-    backgroundColor: '#ec9191',
+    // backgroundColor: '#a091ec',
+    backgroundColor: '#f21800',
     padding: 5,
     borderRadius: 5,
     shadowOpacity: 0.25,
@@ -274,6 +285,7 @@ const styles = StyleSheet.create({
   },
   workIndicatorText: {
     fontSize: 15,
+    fontWeight: 'bold',
     color: 'white',
   },
   workRoute: {
@@ -284,19 +296,28 @@ const styles = StyleSheet.create({
   },
   workRouteDate: {},
   routeTime: {
-    fontSize: 15,
+    fontSize: 18,
     marginBottom: 3,
+    color: '#F5CC1F',
   },
+  routeTimeTitle: {
+    fontSize: 18,
+    marginBottom: 3,
+    color: 'white',
+  },
+
   lineImage: {
     width: 37,
     height: 37,
   },
   arrivalText: {
-    fontSize: 15,
+    fontSize: 18,
     marginBottom: 3,
+    color: 'white',
+    // color: '#F5CC1F',
   },
   footer: {
-    marginBottom: 16,
+    marginBottom: 15,
     width: '100%',
   },
   deliveryReady: {},
@@ -307,7 +328,7 @@ const styles = StyleSheet.create({
 const ButtonStyle = {
   height: 30,
   width: '100%',
-  backgroundColor: '#5d91de',
+  backgroundColor: 'white',
   borderBottomLeftRadius: 8,
   borderBottomRightRadius: 8,
   alignItems: 'center',
@@ -318,6 +339,7 @@ const ButtonStyle = {
   elevation: 4,
 };
 const TextStyle = {
-  color: 'white',
+  color: 'black',
+  fontSize: 16,
   fontWeight: '600',
 };
