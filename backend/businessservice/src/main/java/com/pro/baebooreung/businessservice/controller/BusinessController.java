@@ -248,7 +248,7 @@ public class BusinessController {
         }
     }
 
-    @GetMapping("delivery/check/{deliveryId")
+    @GetMapping("/delivery/check/{deliveryId}")
     public ResponseEntity<?> getCheckDelivery(@PathVariable("deliveryId") int deliveryId){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(deliveryService.getCheckDelivery(deliveryId));
