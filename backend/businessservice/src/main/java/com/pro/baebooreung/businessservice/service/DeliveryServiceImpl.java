@@ -1,6 +1,7 @@
 package com.pro.baebooreung.businessservice.service;
 
 import com.pro.baebooreung.businessservice.domain.Delivery;
+import com.pro.baebooreung.businessservice.domain.Route;
 import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.businessservice.domain.repository.NavigationRepository;
 import com.pro.baebooreung.businessservice.dto.CheckResponse;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.print.DocFlavor;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,5 +79,12 @@ public class DeliveryServiceImpl implements DeliveryService {
         return deliveryDtoList;
     }
 
-
+    public boolean getCheckDelivery(int deliveryId) throws Exception {
+        Optional<Delivery> findDelivery = deliveryRepository.findById(deliveryId);
+        if(findDelivery.isPresent()){
+            return findDelivery.get().isCheck();
+        }else{
+            throw new Exception("id : "+deliveryId+ " 를 가진 경로가 없습니다.");
+        }
+    }
 }

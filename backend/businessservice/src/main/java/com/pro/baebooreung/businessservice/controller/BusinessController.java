@@ -247,4 +247,14 @@ public class BusinessController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
         }
     }
+
+    @GetMapping("delivery/check/{deliveryId")
+    public ResponseEntity<?> getCheckDelivery(@PathVariable("deliveryId") int deliveryId){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(deliveryService.getCheckDelivery(deliveryId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SERVER ERROR");
+        }
+    }
 }
