@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "./1RealTime.module.css";
 import jnu from "../assets/images/전남대학교.png";
 import gist from "../assets/images/지스트.png";
@@ -19,35 +19,58 @@ const { naver } = window;
 const BASE_URL = "https://k7c207.p.ssafy.io:8000";
 
 const RealTime = (props) => {
+  let [tempList, setTempList] = useState([])
+
+  // 포커스는 0이다.
   const [focus, setFocus] = useState(0)
+  const [checkIn, setCheckIn] = useState([])
+  // 대학교 리스트
   const [myuniv, setMyUniv] = useState([]);
   const JNU = [126.9063, 35.1767];
   const GIST = [126.8465, 35.224];
   const GWANGJU = [126.88, 35.198];
   const YONSEI = [126.938, 37.5628];
   const SEOUL = [126.9901, 37.5258];
+
+  // 초기 CS, SSAFY 위치, 센터 값
   const ssafyLatLng = [126.8116, 35.2053];
   const cloudStoneLatLng = [126.85224, 35.14228];
   const [SsafyCloudStoneCourse, setSsafyCloudStoneCourse] = useState([]);
+  const zoom = 13
   const ssafy_cloudstone_route_temp = {
     start: make_LatLng(ssafyLatLng),
     goal: make_LatLng(cloudStoneLatLng),
     option: "trafast",
   };
-  const zoom = 13
   const [center, setCenter] = useState(
     setTwoCenter(ssafyLatLng, cloudStoneLatLng)
   );
+
+
   const [temp_test, setTempTest] = useState(0);
   const [params_temp, setParamsTemp] = useState(0);
+
+  // 루트 경로 색상
   const [routeColor, setRouteColor] = useState([]);
+  // 선택한 루트ID
   const [routeId, setRouteId] = useState(0);
+  // 내가 선택한 음식점 좌표 설정용 
   const [positionLoc, setPositionLoc] = useState([]);
+  // 드라이버 정보
   const [driverId, setDriverId] = useState(0);
   const [driverProfile, setDriverProfile] = useState('')
+  const [driverInfo, setDirverInfo] = useState([]);
+
+  // menu 컨트롤
   const [menuControl, setMenuControl] = useState(1)
+  // 새로고침을 위한 자료
   const [refresh, setRefresh] = useState(0)
   const [autoRefresh, setAutoRefresh] = useState(6000000)
+  // 모든 업무, 하나의 업무
+  const [allTask, setAllTask] = useState([]);
+  const [oneTask, setOneTask] = useState([]);
+
+
   function make_LatLng(now_loc_temp) {
     return `${now_loc_temp.join(",")}`;
   }
@@ -76,9 +99,9 @@ const RealTime = (props) => {
     });
     return course;
   }
-  const [allTask, setAllTask] = useState([]);
-  const [driverInfo, setDirverInfo] = useState([]);
-  const [oneTask, setOneTask] = useState([]);
+
+
+
   async function searchRegionDate() {
     await axios({
       url: BASE_URL + "/business-service/route/navigps",
@@ -97,6 +120,7 @@ const RealTime = (props) => {
       },
     })
       .then((res) => {
+        console.log(allTask)
         setAllTask(
           res.data.sort(function (a, b) {
             if (a.routeName > b.routeName) {
@@ -107,9 +131,12 @@ const RealTime = (props) => {
             }
             return 0;
           })
-        );
+        )
+        console.log(allTask)
+
       })
   }
+
   async function searchRegionDateUniv() {
     if (props.myParams.univ) {
       await axios({
@@ -183,6 +210,7 @@ const RealTime = (props) => {
       searchRegionDateUniv();
     }
   }
+
   let allTaskList = []
   for (let i = 0; i <= allTask.length - 1; i++) {
     let temp_list = []
@@ -200,11 +228,10 @@ const RealTime = (props) => {
       deliveryDtoList: temp_list
     })
   }
-  // console.log(allTask)
-  // console.log(allTaskList)
-
-  // 메인
+  // 메인 useEffect
   useEffect(() => {
+    setAllTask(allTask)
+    // console.log(allTask)
     if (document.getElementById('map')) {
       let map = new naver.maps.Map("map", {
         center: center,
@@ -221,7 +248,9 @@ const RealTime = (props) => {
       });
       map.destroy();
     }
+
     routeColor.length = 0;
+
     let map = new naver.maps.Map("map", {
       center: center,
       zoom: zoom,
@@ -235,6 +264,7 @@ const RealTime = (props) => {
       mapTypeControl: false,
       mapDataControl: false,
     });
+
     let marker_default_1 = new naver.maps.Marker({
       map: map,
       position: new naver.maps.LatLng(cloudStoneLatLng),
@@ -247,8 +277,8 @@ const RealTime = (props) => {
         size: new naver.maps.Size(22, 35),
         anchor: new naver.maps.Point(11, 35),
       },
-
     });
+
     let marker_default_2 = new naver.maps.Marker({
       map: map,
       position: new naver.maps.LatLng(ssafyLatLng),
@@ -262,6 +292,7 @@ const RealTime = (props) => {
         anchor: new naver.maps.Point(11, 35),
       },
     });
+
     let polyline_default = new naver.maps.Polyline({
       map: map,
       path: SsafyCloudStoneCourse,
@@ -273,23 +304,27 @@ const RealTime = (props) => {
       strokeLineJoin: "round",
     });
     let markerSet_default = [marker_default_1, marker_default_2];
+
     if (props.myParams.region) {
       markerSet_default.map((marker, idx) => {
         marker.setMap(null);
         polyline_default.setMap(null);
       });
     }
+
     // 결과를 받아왔다면
     if (allTask.length) {
       for (let i = 0; i <= allTask.length - 1; i++) {
+        // 가야할 경유지가 있다면
         if (allTask[i].deliveryDtoList.length) {
+          // 루트ID가 없거나, routeId가 정해져있거나(선택되었을 때)
           if (!routeId || allTask[i].routeId === routeId) {
             axios({
               url: `https://k7c207.p.ssafy.io:8000/gps-service/gps/${allTask[i].userId}`,
               method: "get",
             }).then((res) => {
+              // focus 여부에 체크되어 있다면 줌, 센터
               if (focus) {
-                // map.morph([res.data.longitude, res.data.latitude], 15, { duration: 5000 })
                 map.setCenter([res.data.longitude, res.data.latitude])
                 map.setZoom(18)
                 setCenter([res.data.longitude, res.data.latitude])
@@ -299,8 +334,11 @@ const RealTime = (props) => {
         }
       }
     }
+    // 결과를 받아왔다면
     if (allTask.length) {
+      // 내가 음식점을 선택하지 않았고, 루트ID도 없고, 포커스도 아닐 때
       if (positionLoc.length === 0 && routeId === 0 && focus === 0) {
+        // 지역과 대학으로 분기처리 후 줌
         if (props.myParams.region === "GWANGJU") {
           if (props.myParams.univ === "전남대학교") {
             // map.morph(JNU, 13, { duration: 5000 })
@@ -333,11 +371,12 @@ const RealTime = (props) => {
         }
       }
 
-
+      // 결과를 받아왔다면, 그 결과를 반복문 처리한다.
       for (let i = 0; i <= allTask.length - 1; i++) {
         // if (i <= 2) {
         //
-        myuniv.push(allTask[i].routeName);
+        myuniv.push(allTask[i].routeName); // route이름을 집어넣는다.
+        // 배달할 곳이 남아있다면
         if (allTask[i].deliveryDtoList.length) {
           let randomBrightColor = () => {
             let color_r = Math.floor(Math.random() * 217 + 38).toString(16);
@@ -346,19 +385,24 @@ const RealTime = (props) => {
             return `#${color_r + color_g + color_b}`;
           };
           let color_temp = "";
+
+          // 루트 아이디가 정해져있지 않다.
           if (routeId === 0) {
             color_temp = randomBrightColor();
             routeColor.push(color_temp);
+            // 루트 아이디가 정해져있다.
           } else {
+            // 정해진 색만 노랑, 나머지는 남색으로 변환 
             if (routeId === allTask[i].routeId) {
               color_temp = "#F5CC1F";
             } else {
-              color_temp = "#0F1839";
+              color_temp = "gray";
             }
             routeColor.push(color_temp);
           }
+
+          // 경로가 선택되어있고, 내가 선택한 경로에 한정해서 보여주기
           if (routeId && allTask[i].routeId === routeId) {
-            // 선택 루트 있는 상태에서 1명 기사 마커, 경로 찍기
             axios({
               url: `https://k7c207.p.ssafy.io:8000/s3-service/getProfile`,
               method: "get",
@@ -382,9 +426,8 @@ const RealTime = (props) => {
                   },
                   animation: 1,
                 })
-
+                // 기사 경로부터 다음 목적지까지 길을 표시해준다.
                 if (allTaskList[i].deliveryDtoList.length) {
-
                   const temp_course = {
                     start: make_LatLng([res.data.longitude, res.data.latitude]),
                     goal: make_LatLng([
@@ -393,7 +436,6 @@ const RealTime = (props) => {
                     ]),
                     option: "trafast",
                   };
-                  // 기사 경로 찍기
                   cal_course(temp_course).then((appData) => {
                     new naver.maps.Polyline({
                       map: map,
@@ -406,15 +448,11 @@ const RealTime = (props) => {
                       strokeLineJoin: "round",
                     });
                   });
-
                 }
-
-
               });
             })
-            // 기사 마커, 경로 찍기
+            // 경로가 선택되어있지 않았을 때
           } else if (!routeId) {
-            // 선택 루트 없는 상태에서 모든 기사 마커, 경로 찍기
             axios({
               url: `https://k7c207.p.ssafy.io:8000/s3-service/getProfile`,
               method: "get",
@@ -438,10 +476,7 @@ const RealTime = (props) => {
                   },
                   animation: 1,
                 })
-
                 if (allTaskList[i].deliveryDtoList.length) {
-
-
                   const temp_course = {
                     start: make_LatLng([res.data.longitude, res.data.latitude]),
                     goal: make_LatLng([
@@ -450,8 +485,6 @@ const RealTime = (props) => {
                     ]),
                     option: "trafast",
                   };
-
-                  // 기사 경로 찍기
                   cal_course(temp_course).then((appData) => {
                     new naver.maps.Polyline({
                       map: map,
@@ -464,39 +497,33 @@ const RealTime = (props) => {
                       strokeLineJoin: "round",
                     });
                   });
-
                 }
-
               });
             })
-            // 기사 마커, 경로 찍기
           }
-          if (allTask[i].deliveryDtoList.length) {
-            if (!routeId || allTask[i].routeId === routeId) {
-              const waypoints_temp = [];
-              let temp_lat = 0
-              let temp_lng = 0
-              // 모든 루트 순회 경로 찍기
-              for (let j = 0; j <= allTaskList[i].deliveryDtoList.length - 1; j++) {
-                // 경로 선택 있고, 경유지 선택 있을 시
-                if (allTaskList[i].deliveryDtoList.length) {
-                  waypoints_temp.push([
-                    allTaskList[i].deliveryDtoList[j].longitude,
-                    allTaskList[i].deliveryDtoList[j].latitude,
-                  ]);
-                }
-              }
-              for (let j = 0; j <= allTask[i].deliveryDtoList.length - 1; j++) {
-                if (allTask[i].routeId === routeId && positionLoc.length) {
-                  new naver.maps.Marker({
-                    map: map,
-                    position: new naver.maps.LatLng([
-                      allTask[i].deliveryDtoList[j].longitude,
-                      allTask[i].deliveryDtoList[j].latitude,
-                    ]),
-                    animation: 0,
-                    icon: {
-                      content: `
+
+          // 루트 선택되어있지 않거나, 
+          if (!routeId || allTask[i].routeId === routeId) {
+            const waypoints_temp = [];
+            let temp_lat = 0
+            let temp_lng = 0
+            // 모든 루트 순회 경로 찍기
+            for (let j = 0; j <= allTask[i].deliveryDtoList.length - 1; j++) {
+              waypoints_temp.push([
+                allTask[i].deliveryDtoList[j].longitude,
+                allTask[i].deliveryDtoList[j].latitude,
+              ]);
+              // 루트 선택, 목적지 선택을 했다면
+              if (allTask[i].routeId === routeId && positionLoc.length) {
+                new naver.maps.Marker({
+                  map: map,
+                  position: new naver.maps.LatLng([
+                    allTask[i].deliveryDtoList[j].longitude,
+                    allTask[i].deliveryDtoList[j].latitude,
+                  ]),
+                  animation: 0,
+                  icon: {
+                    content: `
                       <div class=${styles.myIcon}>
                       <div class=${styles.myIconName} style="font-size:20px; margin-bottom:5px;">${allTask[i].deliveryDtoList[j].delName}</div>
                       <div style="font-size:18px;">${allTask[i].deliveryDtoList[j].delScheduledTime.slice(0, 5)}</div>
@@ -505,112 +532,108 @@ const RealTime = (props) => {
                           ${j + 1}
                         </div>
                       `,
-                      size: new naver.maps.Size(22, 35),
-                      anchor: new naver.maps.Point(11, 35),
-                    },
-                  });
-                  // 경로 선택 있고, 경유지 선택 없을 시
-                } else if (allTask[i].routeId === routeId) {
-                  new naver.maps.Marker({
-                    map: map,
-                    position: new naver.maps.LatLng([
-                      allTask[i].deliveryDtoList[j].longitude,
-                      allTask[i].deliveryDtoList[j].latitude,
-                    ]),
-                    animation: 0,
-                    icon: {
-                      content: `
-                        <div class=${styles.mydiv} style="outline-style:solid; outline-width:7px; outline-color:${routeId > 0 ? "#F5CC1F" : color_temp};">
-                          ${j + 1}
-                        </div>
-                      `,
-                      size: new naver.maps.Size(22, 35),
-                      anchor: new naver.maps.Point(11, 35),
-                    },
-                  });
-                  // 경로 선택도 없을 시
-                } else {
-                  new naver.maps.Marker({
-                    map: map,
-                    position: new naver.maps.LatLng([
-                      allTask[i].deliveryDtoList[j].longitude,
-                      allTask[i].deliveryDtoList[j].latitude,
-                    ]),
-                    animation: 0,
-                    icon: {
-                      content: `
-                        <div class=${styles.mydiv} style="outline-style:solid; outline-width:7px; outline-color:${routeId > 0 ? "#F5CC1F" : color_temp};">
-                          ${j + 1}
-                        </div>
-                      `,
-                      size: new naver.maps.Size(22, 35),
-                      anchor: new naver.maps.Point(11, 35),
-                    },
-                  });
-                }
-                temp_lat += allTask[i].deliveryDtoList[j].latitude
-                temp_lng += allTask[i].deliveryDtoList[j].longitude
-              }
-              // 루트 하나 선택할 때
-              if (allTask[i].routeId === routeId) {
-                if (positionLoc.length === 0 & focus === 0) {
-                  // map.morph([temp_lng / allTask[i].deliveryDtoList.length, temp_lat / allTask[i].deliveryDtoList.length], 14, { duration: 5000 })
-                  map.setCenter([temp_lng / allTask[i].deliveryDtoList.length, temp_lat / allTask[i].deliveryDtoList.length])
-                  map.setZoom(14)
-                  setCenter([temp_lng / allTask[i].deliveryDtoList.length, temp_lat / allTask[i].deliveryDtoList.length])
-                }
-                setDriverId(allTask[i].userId)
-                setOneTask(allTask[i])
-                axios({
-                  url: `https://k7c207.p.ssafy.io:8000/user-service/user/${allTask[i].userId}`,
-                  method: "get"
-                }).then((res) => {
-                  setDirverInfo(res.data)
-                })
-                axios({
-                  url: `https://k7c207.p.ssafy.io:8000/s3-service/getProfile`,
-                  method: "get",
-                  params: {
-                    userId: allTask[i].userId
-                  }
-                }).then((res) => {
-                  setDriverProfile(res.data)
-                })
-              }
-
-              if (allTaskList[i].deliveryDtoList.length) {
-
-                const course_temp = {
-                  start: make_LatLng([
-                    allTaskList[i].deliveryDtoList[0].longitude,
-                    allTaskList[i].deliveryDtoList[0].latitude,
-                  ]),
-                  goal: make_LatLng(
-                    [
-                      allTaskList[i].deliveryDtoList[allTaskList[i].deliveryDtoList.length - 1].longitude,
-                      allTaskList[i].deliveryDtoList[allTaskList[i].deliveryDtoList.length - 1].latitude,
-                    ]
-                  ),
-                  option: "trafast",
-                  waypoints: make_waypoints(waypoints_temp),
-                };
-                // 해당하는 모든 루트 경로 찍기
-                cal_course(course_temp).then((appData) => {
-                  new naver.maps.Polyline({
-                    map: map,
-                    path: appData,
-                    strokeColor: routeId > 0 ? "#0F1839" : color_temp,
-                    strokeStyle: "solid",
-                    strokeLineCap: "round",
-                    strokeWeight: 10,
-                    strokeOpacity: 0.6,
-                    strokeLineJoin: "round",
-                  });
+                    size: new naver.maps.Size(22, 35),
+                    anchor: new naver.maps.Point(11, 35),
+                  },
                 });
-
+                // 루트 선택, 목적지 미선택
+              } else if (allTask[i].routeId === routeId) {
+                new naver.maps.Marker({
+                  map: map,
+                  position: new naver.maps.LatLng([
+                    allTask[i].deliveryDtoList[j].longitude,
+                    allTask[i].deliveryDtoList[j].latitude,
+                  ]),
+                  animation: 0,
+                  icon: {
+                    content: `
+                        <div class=${styles.mydiv} style="outline-style:solid; outline-width:7px; outline-color:${routeId > 0 ? "#F5CC1F" : color_temp};">
+                          ${j + 1}
+                        </div>
+                      `,
+                    size: new naver.maps.Size(22, 35),
+                    anchor: new naver.maps.Point(11, 35),
+                  },
+                });
+                // 루트 선택 없을 시
+              } else {
+                new naver.maps.Marker({
+                  map: map,
+                  position: new naver.maps.LatLng([
+                    allTask[i].deliveryDtoList[j].longitude,
+                    allTask[i].deliveryDtoList[j].latitude,
+                  ]),
+                  animation: 0,
+                  icon: {
+                    content: `
+                        <div class=${styles.mydiv} style="outline-style:solid; outline-width:7px; outline-color:${routeId > 0 ? "#F5CC1F" : color_temp};">
+                          ${j + 1}
+                        </div>
+                      `,
+                    size: new naver.maps.Size(22, 35),
+                    anchor: new naver.maps.Point(11, 35),
+                  },
+                });
               }
-
+              temp_lat += allTask[i].deliveryDtoList[j].latitude
+              temp_lng += allTask[i].deliveryDtoList[j].longitude
             }
+            // 루트 선택
+            if (allTask[i].routeId === routeId) {
+
+              if (positionLoc.length === 0 & focus === 0) {
+                map.setCenter([temp_lng / allTask[i].deliveryDtoList.length, temp_lat / allTask[i].deliveryDtoList.length])
+                map.setZoom(14)
+                setCenter([temp_lng / allTask[i].deliveryDtoList.length, temp_lat / allTask[i].deliveryDtoList.length])
+              }
+              setDriverId(allTask[i].userId)
+              setOneTask(allTask[i])
+              console.log(oneTask.deliveryDtoList)
+
+              axios({
+                url: `https://k7c207.p.ssafy.io:8000/user-service/user/${allTask[i].userId}`,
+                method: "get"
+              }).then((res) => {
+                setDirverInfo(res.data)
+              })
+              axios({
+                url: `https://k7c207.p.ssafy.io:8000/s3-service/getProfile`,
+                method: "get",
+                params: {
+                  userId: allTask[i].userId
+                }
+              }).then((res) => {
+                setDriverProfile(res.data)
+              })
+            }
+
+            const course_temp = {
+              start: make_LatLng([
+                allTask[i].deliveryDtoList[0].longitude,
+                allTask[i].deliveryDtoList[0].latitude,
+              ]),
+              goal: make_LatLng(
+                [
+                  allTask[i].deliveryDtoList[allTask[i].deliveryDtoList.length - 1].longitude,
+                  allTask[i].deliveryDtoList[allTask[i].deliveryDtoList.length - 1].latitude,
+                ]
+              ),
+              option: "trafast",
+              waypoints: make_waypoints(waypoints_temp),
+            };
+            // 해당하는 모든 루트 경로 찍기
+            cal_course(course_temp).then((appData) => {
+              new naver.maps.Polyline({
+                map: map,
+                path: appData,
+                strokeColor: routeId > 0 ? "#0F1839" : color_temp,
+                strokeStyle: "solid",
+                strokeLineCap: "round",
+                strokeWeight: 10,
+                strokeOpacity: 0.6,
+                strokeLineJoin: "round",
+              });
+            });
           }
         }
         // } //
@@ -622,21 +645,31 @@ const RealTime = (props) => {
       map.setZoom(18)
       setCenter(positionLoc)
     }
-  }, [SsafyCloudStoneCourse, allTask, routeId, positionLoc, params_temp, focus, refresh]);
+  }, [SsafyCloudStoneCourse, allTask, routeId, positionLoc, params_temp, focus, refresh, oneTask]);
+
+
+  // 1. 제일 처음 싸피-클라우드 스톤을 이어준다.
   useEffect(() => {
     cal_course(ssafy_cloudstone_route_temp).then((appData) => {
       setSsafyCloudStoneCourse(appData);
     });
   }, []);
-  //초기화
+
+  // 2. autoRefresh 후 초기화가 진행된다.
   useEffect(() => {
     setTimeout(() => {
       setParamsTemp(params_temp + 1);
+      setCheckIn([])
+      searchRegionDateUnivTime();
     }, autoRefresh);
   }, [params_temp, autoRefresh]);
+
+
   useEffect(() => {
     setTempTest(temp_test + 1);
   }, [center]);
+
+
   useEffect(() => {
     setTempTest(temp_test + 1);
     searchRegionDate();
@@ -667,6 +700,11 @@ const RealTime = (props) => {
     setOneTask([])
     setPositionLoc([])
   }, [props.myParams.taskTime]);
+
+
+
+
+
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       {/* 토글 버튼 시작 */}
@@ -684,7 +722,10 @@ const RealTime = (props) => {
       {/* 토글 버튼 끝 */}
       {/* 리프레시 버튼 시작 */}
       <div className={styles.refreshToggle}>RELOAD</div>
-      <div className={styles.toggle2} onClick={() => { refresh ? setRefresh(0) : setRefresh(1) }}>
+      <div className={styles.toggle2} onClick={() => {
+        (refresh ? setRefresh(0) : setRefresh(1))
+        searchRegionDateUnivTime();
+      }}>
         <img className={styles.refresh_off} src={refresh_off} alt="" />
       </div>
       {/* 리프레시 버튼 끝 */}
@@ -732,8 +773,10 @@ const RealTime = (props) => {
                           setDriverId(0);
                           setDirverInfo([]);
                           setOneTask([]);
+                          setCheckIn([])
                         } else {
                           setRouteId(route.routeId);
+                          setCheckIn([])
                         }
                       }}
                     >
@@ -762,8 +805,10 @@ const RealTime = (props) => {
                           setDriverId(0);
                           setDirverInfo([]);
                           setOneTask([]);
+                          setCheckIn([])
                         } else {
                           setRouteId(route.routeId);
+                          setCheckIn([])
                         }
                       }}
                     >
@@ -789,8 +834,10 @@ const RealTime = (props) => {
                             setDriverId(0);
                             setDirverInfo([]);
                             setOneTask([]);
+                            setCheckIn([])
                           } else {
                             setRouteId(route.routeId);
+                            setCheckIn([])
                           }
                         }}
                       >
@@ -813,8 +860,10 @@ const RealTime = (props) => {
                             setDriverId(0);
                             setDirverInfo([]);
                             setOneTask([]);
+                            setCheckIn([])
                           } else {
                             setRouteId(route.routeId);
+                            setCheckIn([])
                           }
                         }}
                       >
@@ -841,8 +890,10 @@ const RealTime = (props) => {
                             setDriverId(0);
                             setDirverInfo([]);
                             setOneTask([]);
+                            setCheckIn([])
                           } else {
                             setRouteId(route.routeId);
+                            setCheckIn([])
                           }
                         }}
                       >
@@ -876,8 +927,10 @@ const RealTime = (props) => {
                           setDriverId(0);
                           setDirverInfo([]);
                           setOneTask([]);
+                          setCheckIn([])
                         } else {
                           setRouteId(route.routeId);
+                          setCheckIn([])
                         }
                       }}
                     >
@@ -906,8 +959,10 @@ const RealTime = (props) => {
                           setDriverId(0);
                           setDirverInfo([]);
                           setOneTask([]);
+                          setCheckIn([])
                         } else {
                           setRouteId(route.routeId);
+                          setCheckIn([])
                         }
                       }}
                     >
@@ -942,7 +997,7 @@ const RealTime = (props) => {
                 height: "100%",
               }}
             >
-              <div style={{ width: "100px", height: "100px", margin: "10px" }}>
+              <div style={{ width: "100px", height: "100px", margin: "15px" }}>
                 <img src={driverProfile} className={styles.taskImg} alt="" />
               </div>
               <div
@@ -988,18 +1043,21 @@ const RealTime = (props) => {
                 배달 장소
               </button>
             </div>
+            <br></br>
+            {/* 픽업지명 완료 미완료 변경 지점 */}
             {menuControl === 1 ? (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", margin: "10px", marginLeft: "0px", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: "50%", textAlign: "center" }}>픽업지명</div>
-                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center" }}>예정 시간</div>
-                  <div style={{ width: "20%", textAlign: "center" }}>상태</div>
+                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>픽업지명</div>
+                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>예정 시간</div>
+                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>상태</div>
                 </div>
                 <hr width="100%" />
                 <div style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}>
                   {oneTask.deliveryDtoList
                     .filter((item) => item.type === "pickup")
                     .map((delivery, index) => {
+                      checkIn.push(delivery.check)
                       return (
                         <div style={{ width: "100%" }}>
                           {
@@ -1007,11 +1065,16 @@ const RealTime = (props) => {
                               className={styles.touch}
                               onClick={() => {
                                 if (positionLoc.length) {
-                                  setPositionLoc([])
+                                  if (positionLoc[0] - delivery.longitude === 0 && positionLoc[1] - delivery.latitude === 0) {
+                                    setPositionLoc([])
+                                  } else {
+                                    setPositionLoc([delivery.longitude, delivery.latitude])
+                                  }
                                 } else {
                                   setPositionLoc([delivery.longitude, delivery.latitude])
                                   setFocus(0)
                                   setMenuControl(1)
+
                                 }
                               }}
                               style={{
@@ -1048,7 +1111,7 @@ const RealTime = (props) => {
                                   {delivery.delScheduledTime.slice(0, 5)}
                                 </div>
                                 {
-                                  delivery.check
+                                  delivery.check && delivery.delActualTime && delivery.delScheduledTime
                                     ? (delivery.delActualTime >= delivery.delScheduledTime)
                                       ? <div style={{ color: "red" }}>
                                         ({delivery.delActualTime.slice(0, 5)})
@@ -1061,9 +1124,32 @@ const RealTime = (props) => {
                               </div>
                               {
                                 delivery.check
+                                  // checkIn[index]
                                   ? <div style={{ width: "20%", textAlign: "center", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     <div style={{ color: "green", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "5px" }}>완료&ensp;</div>
-                                    <img style={{ width: "20px" }} src={picture} alt="" />
+                                    <img style={{ width: "20px" }} onClick={() => {
+                                      axios({
+                                        url: `https://k7c207.p.ssafy.io:8000/s3-service/getCheckIn`,
+                                        method: "get",
+                                        params: {
+                                          delId: delivery.id
+                                        }
+                                      }).then((res) => {
+                                        Swal.fire({
+                                          imageUrl:
+                                            res.data,
+                                          html: `<div style="font-family:BMJUA; font-size:40px;, color:#0F1839;">${delivery.delName}</div>
+                                          <div style="font-family:BMJUA; font-size:20px;, color:#0F1839;">주문 건수 : ${delivery.orderNum}건</div>
+                                          <div style="font-family:BMJUA; font-size:20px;, color:#0F1839;">예상 시간 : ${delivery.delScheduledTime.slice(0, 5)}</div>
+                                          <div style="font-family:BMJUA; font-size:20px;, color:#0F1839;">완료 시간 : ${delivery.delActualTime.slice(0, 5)}</div>`,
+                                          confirmButtonText: "확인",
+                                          confirmButtonColor: "#0F1839",
+                                          timer: 5000,
+                                          timerProgressBar: true,
+                                          allowOutsideClick: false
+                                        })
+                                      })
+                                    }} src={picture} alt="" />
                                   </div>
                                   : <div style={{ width: "20%", textAlign: "center", display: "flex", flexDirection: "columns", justifyContent: "center", alignItems: "center" }}>
                                     <span style={{ color: "red" }}>미완료</span></div>
@@ -1075,26 +1161,34 @@ const RealTime = (props) => {
                     })}
                 </div>
               </div>
+              /* 배달지명 완료 미완료 변경 지점 */
             ) : (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", margin: "10px", marginLeft: "0px", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: "50%", textAlign: "center" }}>배달지명</div>
-                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center" }}>예정 시간</div>
-                  <div style={{ width: "20%", textAlign: "center" }}>상태</div>
+                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>배달지명</div>
+                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>예정 시간</div>
+                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>상태</div>
                 </div>
                 <hr width="100%" />
                 <div style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}>
                   {oneTask.deliveryDtoList
                     .filter((item) => item.type === "delivery")
                     .map((delivery, index) => {
+                      checkIn.push(delivery.check)
                       return (
                         <div style={{ width: "100%" }}>
                           {
                             <div
+                              id={index}
                               className={styles.touch}
                               onClick={() => {
                                 if (positionLoc.length) {
-                                  setPositionLoc([])
+                                  if (positionLoc[0] - delivery.longitude === 0 && positionLoc[1] - delivery.latitude === 0) {
+                                    setPositionLoc([])
+                                    document.getElementById(index).style.backgroundColor = "transparent"
+                                  } else {
+                                    setPositionLoc([delivery.longitude, delivery.latitude])
+                                  }
                                 } else {
                                   setPositionLoc([delivery.longitude, delivery.latitude])
                                   setFocus(0)
@@ -1135,7 +1229,7 @@ const RealTime = (props) => {
                                   {delivery.delScheduledTime.slice(0, 5)}
                                 </div>
                                 {
-                                  delivery.check
+                                  delivery.check && delivery.delActualTime && delivery.delScheduledTime
                                     ? (delivery.delActualTime >= delivery.delScheduledTime)
                                       ? <div style={{ color: "red" }}>
                                         ({delivery.delActualTime.slice(0, 5)})
@@ -1148,6 +1242,7 @@ const RealTime = (props) => {
                               </div>
                               {
                                 delivery.check
+                                  // checkIn[index]
                                   ? <div style={{ width: "20%", textAlign: "center", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     <div style={{ color: "green", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "5px" }}>완료&ensp;</div>
                                     <img style={{ width: "20px" }} onClick={() => {
@@ -1161,8 +1256,11 @@ const RealTime = (props) => {
                                         Swal.fire({
                                           imageUrl:
                                             res.data,
-                                          html: '<div style="font-family:BMJUA;">여기에 루트 이름, 개수, 약속시간, 실제 시간 들어감</div>',
-                                          confirmButtonText: "닫기",
+                                          html: `<div style="font-family:BMJUA; font-size:40px;, color:#0F1839; text-overflow:ellipsis;white-space: nowrap;">${delivery.delName}</div>
+                                            <div style="font-family:BMJUA; font-size:20px;, color:#0F1839;">주문 건수 : ${delivery.orderNum}건</div>
+                                            <div style="font-family:BMJUA; font-size:20px;, color:#0F1839;">예상 시간 : ${delivery.delScheduledTime.slice(0, 5)}</div>
+                                            <div style="font-family:BMJUA; font-size:20px;, color:#0F1839;">완료 시간 : ${delivery.delActualTime.slice(0, 5)}</div>`,
+                                          confirmButtonText: "확인",
                                           confirmButtonColor: "#0F1839",
                                           timer: 5000,
                                           timerProgressBar: true,
