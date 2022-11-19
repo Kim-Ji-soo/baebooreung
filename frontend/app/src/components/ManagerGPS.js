@@ -5,12 +5,17 @@ import {
   Dimensions,
   FlatList,
   Pressable,
+  Image,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {business_service} from '../api/api';
+import yonsei from '../assets/images/yonsei.png';
+import CNU from '../assets/images/CNU.png';
+import GIST from '../assets/images/gist.png';
+
 const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
 const identityColor = '#0B0B3B';
 const identityTextColor = '#FACC2E';
@@ -113,80 +118,77 @@ export default function ManagerGPS({navigation}) {
     //모든 루트 정보가 저장되었을 시 실행
     if (tempList.length !== 0) {
       tempList.map(item => {
-        //routeInfo의 done이 false일때만 진행
-        if (!item.routeInfo.done) {
-          //픽업 현재 진행여부 체크하여 저장(finish/total)
-          let totalPickupSum = 0;
-          let finishPickupSum = 0;
-          item.routeInfo.deliveryList
-            .filter(el => el.type === 'pickup')
-            .map(el => {
-              if (el.check === false) {
-                totalPickupSum += el.orderNum;
-              } else {
-                totalPickupSum += el.orderNum;
-                finishPickupSum += el.orderNum;
-              }
-            });
-          //배달 현재 진행여부 체크하여 저장(finish/total)
-          let totalDeliverySum = 0;
-          let finishDeliverySum = 0;
-          item.routeInfo.deliveryList
-            .filter(el => el.type === 'delivery')
-            .map(el => {
-              if (el.check === false) {
-                totalDeliverySum += el.orderNum;
-              } else {
-                totalDeliverySum += el.orderNum;
-                finishDeliverySum += el.orderNum;
-              }
-            });
-          //list에 대학교가 있는지 여부 판단 후 없으면 리스트에 객체 추가
-          //이때 배달기사는 하나의 학교(RouteName)에만 배달을 한다고 가정하고 진행
-          setUniversity(item.routeInfo.routeName);
-          setPickupTotal(totalPickupSum);
-          setPickupFinish(finishPickupSum);
-          setDeliveryTotal(totalDeliverySum);
-          setDeliveryFinish(finishDeliverySum);
-
-          const index = list.findIndex(function (find) {
-            return find.routeName === item.routeInfo.routeName;
-          });
-          if (index === -1) {
-            setDriverList(driverList => {
-              const newDriverList = [...driverList];
-              newDriverList.push({userId: item.userId, name: item.name});
-              return newDriverList;
-            });
-            setIndex(index);
-          }
-          //학교(routerName)가 있다면 driver 목록에 있는지 여부 판단 후
-          //이미 존재하는 driver라면 driver는 추가하지 않고 원래있던 학교에 배달 진행여부만 체크하여 추가
-          //존재하지 않는 driver라면 driver도 추가
-          else {
-            let check = false;
-            list[index].driver.map(el => {
-              if (el.userId === item.userId) {
-                check = true;
-              }
-            });
-
-            //존재하지 않는 드라이버인 경우 드라이버 추가, 드라이버 숫자 업데이트
-            if (!check) {
-              setList(list => {
-                const newList = [...list];
-                newList[index].driver.push({
-                  userId: item.userId,
-                  name: item.name,
-                });
-                newList[index].driverNum += 1;
-                newList[index].pickupTotal += totalPickupSum;
-                newList[index].pickupFinish += finishPickupSum;
-                newList[index].deliveryTotal += totalDeliverySum;
-                newList[index].deliveryFinish += finishDeliverySum;
-                return newList;
-              });
+        //픽업 현재 진행여부 체크하여 저장(finish/total)
+        let totalPickupSum = 0;
+        let finishPickupSum = 0;
+        item.routeInfo.deliveryList
+          .filter(el => el.type === 'pickup')
+          .map(el => {
+            if (el.check === false) {
+              totalPickupSum += el.orderNum;
+            } else {
+              totalPickupSum += el.orderNum;
+              finishPickupSum += el.orderNum;
             }
+          });
+        //배달 현재 진행여부 체크하여 저장(finish/total)
+        let totalDeliverySum = 0;
+        let finishDeliverySum = 0;
+        item.routeInfo.deliveryList
+          .filter(el => el.type === 'delivery')
+          .map(el => {
+            if (el.check === false) {
+              totalDeliverySum += el.orderNum;
+            } else {
+              totalDeliverySum += el.orderNum;
+              finishDeliverySum += el.orderNum;
+            }
+          });
+        //list에 대학교가 있는지 여부 판단 후 없으면 리스트에 객체 추가
+        //이때 배달기사는 하나의 학교(RouteName)에만 배달을 한다고 가정하고 진행
+        setUniversity(item.routeInfo.routeName);
+        setPickupTotal(totalPickupSum);
+        setPickupFinish(finishPickupSum);
+        setDeliveryTotal(totalDeliverySum);
+        setDeliveryFinish(finishDeliverySum);
+
+        const index = list.findIndex(function (find) {
+          return find.routeName === item.routeInfo.routeName;
+        });
+        if (index === -1) {
+          setDriverList(driverList => {
+            const newDriverList = [...driverList];
+            newDriverList.push({userId: item.userId, name: item.name});
+            return newDriverList;
+          });
+          setIndex(index);
+        }
+        //학교(routerName)가 있다면 driver 목록에 있는지 여부 판단 후
+        //이미 존재하는 driver라면 driver는 추가하지 않고 원래있던 학교에 배달 진행여부만 체크하여 추가
+        //존재하지 않는 driver라면 driver도 추가
+        else {
+          let check = false;
+          list[index].driver.map(el => {
+            if (el.userId === item.userId) {
+              check = true;
+            }
+          });
+
+          //존재하지 않는 드라이버인 경우 드라이버 추가, 드라이버 숫자 업데이트
+          if (!check) {
+            setList(list => {
+              const newList = [...list];
+              newList[index].driver.push({
+                userId: item.userId,
+                name: item.name,
+              });
+              newList[index].driverNum += 1;
+              newList[index].pickupTotal += totalPickupSum;
+              newList[index].pickupFinish += finishPickupSum;
+              newList[index].deliveryTotal += totalDeliverySum;
+              newList[index].deliveryFinish += finishDeliverySum;
+              return newList;
+            });
           }
         }
       });
@@ -255,7 +257,20 @@ export default function ManagerGPS({navigation}) {
                 {({pressed}) => (
                   <View
                     style={
-                      pressed ? styles.dailyWorkListClick : styles.dailyWorkList
+                      pressed
+                        ? styles.dailyWorkListClick
+                        : [
+                            styles.dailyWorkList,
+                            item.routeName === '전남대학교' && {
+                              backgroundColor: '#CCFFE5',
+                            },
+                            item.routeName === '연세대학교' && {
+                              backgroundColor: '#CCFFFF',
+                            },
+                            item.routeName === '광주과학기술원' && {
+                              backgroundColor: '#FFCCE5',
+                            },
+                          ]
                     }>
                     <View style={styles.dailWorkFirstLine}>
                       <View style={{flex: 1}}>
@@ -263,6 +278,31 @@ export default function ManagerGPS({navigation}) {
                           {item.routeName}
                         </Text>
                       </View>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.driverNumText}>
+                          드라이버 {item.driverNum}명
+                        </Text>
+                      </View>
+                    </View>
+                    {/* 대학 로고 Layout */}
+                    <View style={styles.universityLogoLayout}>
+                      {item.routeName === '연세대학교' && (
+                        <Image
+                          source={yonsei}
+                          style={styles.universityLogo}></Image>
+                      )}
+                      {item.routeName === '전남대학교' && (
+                        <Image
+                          source={CNU}
+                          style={styles.universityLogo}></Image>
+                      )}
+                      {item.routeName === '광주과학기술원' && (
+                        <Image
+                          source={GIST}
+                          style={styles.universityLogo}></Image>
+                      )}
+                    </View>
+                    <View style={styles.dailWorkFirstLine}>
                       <View
                         style={{
                           flex: 1,
@@ -290,13 +330,6 @@ export default function ManagerGPS({navigation}) {
                             </Text>
                           </View>
                         )}
-                      </View>
-                    </View>
-                    <View style={styles.dailWorkFirstLine}>
-                      <View style={{flex: 1}}>
-                        <Text style={styles.driverNumText}>
-                          드라이버 {item.driverNum}명
-                        </Text>
                       </View>
                       <View
                         style={{
@@ -386,7 +419,7 @@ const styles = StyleSheet.create({
   dailyWorkList: {
     flex: 1,
     height: SCREEN_HEIGHT / 10,
-    justifyContent: 'space-between',
+    flexDirection: 'row',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,
@@ -400,20 +433,31 @@ const styles = StyleSheet.create({
   dailyWorkListClick: {
     flex: 1,
     height: SCREEN_HEIGHT / 10,
-    justifyContent: 'space-between',
+    flexDirection: 'row',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: 'rgb(210, 230, 255)',
+    backgroundColor: '#E0E0E0',
     marginBottom: 20,
     shadowOffset: {width: 0, height: 1},
     shadowRadius: 2,
     elevation: 1,
     shadowOpacity: 0.4,
   },
+  universityLogo: {
+    flex: 1,
+    width: SCREEN_WIDTH / 6,
+    height: SCREEN_HEIGHT / 6,
+    opacity: 0.7,
+  },
+  universityLogoLayout: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   dailWorkFirstLine: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   dailyWorkListText: {
     fontSize: 14,

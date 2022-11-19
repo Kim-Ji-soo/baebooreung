@@ -7,7 +7,11 @@ import {
   View,
   Pressable,
   Alert,
+  Image,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
+import AppText from '../../components/AppText';
 
 // axios
 import axios from 'axios';
@@ -29,13 +33,19 @@ import work, {
 import CustomButton from '../../components/CustomButton';
 import {isEmail, isPassword} from '../../utils/inputCheck';
 import messaging from '@react-native-firebase/messaging';
+import logo from '../../assets/images/logo.png';
+const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
+const identityColor = '#0B0B3B';
+const identityTextColor = '#FACC2E';
 
 const Login = ({navigation}) => {
   const fcmToken = useSelector(state => state.auth.fcmToken);
   console.log(fcmToken);
   const ButtonStyle = {
     borderWidth: 0.8,
-    borderRadius: 16,
+    borderRadius: 12,
+    borderColor: 'white',
+    borderWidth: 4,
     overflow: 'hidden',
     width: '100%',
   };
@@ -65,10 +75,10 @@ const Login = ({navigation}) => {
       url: business_service.getDriverRoute() + `${id}` + '/routes/today/undone',
     })
       .then(res => {
+        console.log('드라이버 업무 불러오기 성공', res.data);
         const workList = res.data;
-        console.log(workList);
         for (let i = 0; i < workList.length; i++) {
-          console.log(i, workList[i].id);
+          console.log('드라이버 업무리스트', workList[i]);
           if (workList[i].routeType === 'lunch') {
             dispatch(
               setLunchRouteInfo({
@@ -97,7 +107,7 @@ const Login = ({navigation}) => {
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log('드라이버 업무 불러오기 실패', err);
       });
   };
   const fetchUserInfo = async id => {
@@ -156,50 +166,55 @@ const Login = ({navigation}) => {
         email: id,
         password: password,
       },
-    }).then(res => {
-      // axios global header configuration.
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${res.headers.token}`;
-      axios.defaults.headers.common['id'] = res.headers.id;
-      axios.defaults.headers.common['specialkey'] = res.headers.specialkey;
-      //redux
-      dispatch(
-        setUserInfo({
-          id: res.headers.id,
-          accessToken: res.headers.token,
-          specialkey: res.headers.specialkey,
-          name: res.headers.name,
-        }),
-      );
-      fetchUserInfo(res.headers.id);
-      fetchUserProfile(res.headers.id);
-      getDriverWorkRoute(res.headers.id);
-      console.log('Login Success!');
-      // send fcmToken to server
-      messaging()
-        .getToken()
-        .then(token => {
-          axios({
-            method: 'put',
-            url: user_service.saveFCMToken(),
-            data: {
-              id: res.headers.id,
-              fcmToken: token,
-            },
-          })
-            .then(res => {
-              // console.log(res);
+    })
+      .then(res => {
+        console.log('유저네임--------->', res.headers.name);
+        // axios global header configuration.
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${res.headers.token}`;
+        axios.defaults.headers.common['id'] = res.headers.id;
+        axios.defaults.headers.common['specialkey'] = res.headers.specialkey;
+        //redux
+        dispatch(
+          setUserInfo({
+            id: res.headers.id,
+            accessToken: res.headers.token,
+            specialkey: res.headers.specialkey,
+            name: res.headers.name,
+          }),
+        );
+        fetchUserInfo(res.headers.id);
+        fetchUserProfile(res.headers.id);
+        getDriverWorkRoute(res.headers.id);
+        console.log('로그인성공');
+        // send fcmToken to server
+        messaging()
+          .getToken()
+          .then(token => {
+            axios({
+              method: 'put',
+              url: user_service.saveFCMToken(),
+              data: {
+                id: res.headers.id,
+                fcmToken: token,
+              },
             })
-            .catch(err => {
-              console.log(err);
-            });
-        })
-        .catch(err => {
-          console.log(err);
-          console.log('Login failed!');
-        });
-    });
+              .then(res => {
+                // console.log(res);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        Alert.alert('로그인', '아이디 혹은 비밀번호가 틀렸습니다.');
+        console.log('로그인 실패');
+      });
   };
   // id 유효성 검사
   const onChangeId = event => {
@@ -234,41 +249,61 @@ const Login = ({navigation}) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>배부릉 로그인</Text>
-      </View>
-      <View style={styles.Body}>
-        <Text style={styles.label}>아이디</Text>
-        <TextInput
-          style={styles.idForm}
-          placeholder="아이디를 입력하세요."
-          onChange={onChangeId}
-        />
-        <Text style={styles.label}>비밀번호</Text>
-        <TextInput
-          style={styles.passwordForm}
-          placeholder="비밀번호를 입력하세요."
-          onChange={onChangePw}
-          secureTextEntry={true}
-        />
-        <Text>{pwMessage}</Text>
-        <View style={styles.needSignUp}>
-          <Text>회원이 아니신가요?</Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate('Signup');
-            }}>
-            <Text style={{color: 'blue'}}>회원가입</Text>
-          </Pressable>
+      <View style={[styles.headerContainer]}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Image
+            source={logo}
+            style={{
+              width: SCREEN_WIDTH / 2.5,
+              height: SCREEN_HEIGHT / 5,
+            }}></Image>
         </View>
       </View>
-      <View style={styles.footer}>
-        <View style={styles.btnContainer}>
-          <CustomButton onPress={login} ButtonStyle={ButtonStyle}>
-            <Text>로그인</Text>
-          </CustomButton>
+      <ScrollView style={{flex: 1}}>
+        <View style={styles.Body}>
+          <Text style={[styles.label, {marginHorizontal: 40}]}>아이디</Text>
+          <TextInput
+            style={[styles.idForm, {marginHorizontal: 40}]}
+            placeholder="아이디를 입력하세요."
+            placeholderTextColor="white"
+            onChange={onChangeId}
+          />
+          <Text style={[styles.label, {marginHorizontal: 40}]}>비밀번호</Text>
+          <TextInput
+            style={[styles.passwordForm, {marginHorizontal: 40}]}
+            placeholder="비밀번호를 입력하세요."
+            placeholderTextColor="white"
+            onChange={onChangePw}
+            secureTextEntry={true}
+          />
+          <Text>{pwMessage}</Text>
+          <View style={styles.needSignUp}>
+            <Text style={{color: 'white', marginHorizontal: 40}}>
+              회원이 아니신가요?
+            </Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('Signup');
+              }}>
+              <Text style={{color: identityTextColor, marginHorizontal: 40}}>
+                회원가입
+              </Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
+        <View style={styles.footer}>
+          <View style={styles.btnContainer}>
+            <CustomButton
+              onPress={login}
+              ButtonStyle={ButtonStyle}
+              backgroundColor="white">
+              <Text style={{color: identityColor, fontWeight: 'bold'}}>
+                로그인
+              </Text>
+            </CustomButton>
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -279,17 +314,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItem: 'center',
     paddingHorizontal: 10,
+    backgroundColor: identityColor,
   },
   headerContainer: {
-    flex: 1,
+    flex: 0.5,
     justifyContent: 'center',
     alignItem: 'center',
     marginVertical: 10,
     // borderWidth: 1,
-  },
-  header: {
-    fontSize: 20,
-    textAlign: 'center',
   },
   Body: {
     flex: 1,
@@ -300,15 +332,21 @@ const styles = StyleSheet.create({
   },
   idForm: {
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 30,
     paddingLeft: 20,
+    borderColor: 'white',
+    borderWidth: 4,
+    color: 'white',
   },
   passwordForm: {
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 10,
     borderWidth: 1,
     paddingLeft: 20,
+    borderColor: 'white',
+    borderWidth: 4,
+    color: 'white',
   },
   needSignUp: {
     flexDirection: 'row',
@@ -331,6 +369,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 15,
     fontWeight: '800',
+    color: 'white',
+    fontFamily: 'BMJUA_ttf',
   },
 });
 
