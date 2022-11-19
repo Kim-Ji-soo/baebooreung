@@ -12,4 +12,6 @@ public interface DeliveryService {
     public String getImg(int delId);
 
     public List<DeliveryDto> getDeliveryList(int routeId) throws Exception;
+
+    public boolean getCheckDelivery(int deliveryId) throws Exception;
 }
