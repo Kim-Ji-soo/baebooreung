@@ -1,12 +1,10 @@
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
-import {setFcmToken} from '../redux/auth';
 import {Alert} from 'react-native';
 import {launchCamera} from 'react-native-image-picker';
 import axios from 'axios';
 import {camera_service} from '../api/api';
 import {business_service} from '../api/api';
+import Geolocation from 'react-native-geolocation-service';
 export async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
   const enabled =
@@ -27,7 +25,20 @@ function getFCMToken() {
     });
 }
 
-function checkin(userId, deliveryId, image) {
+function checkin(
+  userId,
+  deliveryId,
+  RouteId,
+  image,
+  navigation,
+  delName,
+  watchId,
+  dispatch,
+  setLunchDone,
+  setDinnerDone,
+  lunchRouteId,
+  dinnerRouteId,
+) {
   axios({
     method: 'post',
     url: business_service.checkIn() + `${userId}`,
@@ -37,26 +48,87 @@ function checkin(userId, deliveryId, image) {
     },
   })
     .then(res => {
-      console.log('checkin--------->', res.data);
+      console.log('체크인 성공--------->', res.data);
+      Alert.alert('체크인', `${delName} 체크인이 완료 되었습니다. `);
+      if (res.data.deliveryId === -1) {
+        Alert.alert(
+          '배송 완료',
+          '업무를 종료하시겠습니까?',
+          [
+            {
+              text: '아니오',
+              style: 'cancel',
+            },
+            {
+              text: '예',
+              onPress: () => {
+                axios({
+                  url:
+                    business_service.workDone() +
+                    `${userId}` +
+                    '/end/' +
+                    `${RouteId}`,
+                  method: 'put',
+                })
+                  .then(res => {
+                    console.log('업무종료', res.data);
+                    Alert.alert('업무 종료', '업무가 종료되었습니다');
+                    if (RouteId === lunchRouteId) {
+                      dispatch(setLunchDone(true));
+                    } else {
+                      dispatch(setDinnerDone(true));
+                    }
+                    navigation.reset({routes: [{name: 'home'}]});
+                    if (watchId !== null) {
+                      Geolocation.clearWatch(watchId);
+                      console.log('tracking location stop');
+                    }
+                  })
+                  .catch(Err => {
+                    console.log('workDone is error', Err);
+                    Alert.alert('업무 종료 실패', '관리자에게 문의해주세요');
+                    navigation.reset({routes: [{name: 'home'}]});
+                  });
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+      // setIsCheckIn(true);
+      // setCheckMessage('체크인 성공');
     })
     .catch(err => {
+      Alert.alert(
+        '체크인',
+        `${delName} 체크인이 실패했습니다. 관리자에게 문의 해주세요.`,
+      );
       console.log('체크인 실패', err);
     });
 }
 
 export function NotificationListener(
   userId,
-  routeId,
+  deliveryId,
+  RouteId,
   delName,
   pageIndex,
   sequence,
+  navigation,
+  watchId,
+  dispatch,
+  setLunchDone,
+  setDinnerDone,
+  lunchRouteId,
+  dinnerRouteId,
 ) {
   console.log('notification is listening...');
   if (pageIndex) {
     console.log(
       'parameters----->',
       userId,
-      routeId,
+      deliveryId,
+      RouteId,
       delName,
       pageIndex.current.getCurrentIndex(),
       sequence,
@@ -87,7 +159,7 @@ export function NotificationListener(
         [
           {
             text: '아니요',
-            onPress: () => console.log('아니라는데'), //onPress 이벤트시 콘솔창에 로그를 찍는다
+            onPress: () => console.log('취소'), //onPress 이벤트시 콘솔창에 로그를 찍는다
             style: 'cancel',
           },
           {
@@ -112,7 +184,7 @@ export function NotificationListener(
                 }
                 const formdata = new FormData();
                 formdata.append('image', image);
-                formdata.append('delId', routeId); //delId 값 넣으면 됩니당
+                formdata.append('delId', deliveryId); //delId 값 넣으면 됩니당
                 axios({
                   method: 'post',
                   url: camera_service.uploadCheckIn(),
@@ -130,12 +202,25 @@ export function NotificationListener(
                       method: 'get',
                       url: camera_service.getCheckIn(),
                       params: {
-                        delId: routeId, // delId 값 넣으면 됩니당
+                        delId: deliveryId, // delId 값 넣으면 됩니당
                       },
                     })
                       .then(result => {
                         console.log('체크인 이미지 가져오기', result.data);
-                        checkin(userId, routeId, result.data);
+                        checkin(
+                          userId,
+                          deliveryId,
+                          RouteId,
+                          result.data,
+                          navigation,
+                          delName,
+                          watchId,
+                          dispatch,
+                          setLunchDone,
+                          setDinnerDone,
+                          lunchRouteId,
+                          dinnerRouteId,
+                        );
                       })
                       .catch(e => {
                         console.log(e);

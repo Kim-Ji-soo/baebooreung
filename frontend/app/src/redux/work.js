@@ -41,20 +41,28 @@ const initialState = {
   dinnerDone: false,
   dinnerDate: '',
   dinnerScheduledStartTime: '',
-  actualStartTime: null,
+  lunchActualStartTime: null,
+  dinnerActualStartTime: null,
+  workDone: false,
 };
 const workSlice = createSlice({
   name: 'work',
   initialState,
   reducers: {
-    setActualStartTime: (state, action) => {
-      state.actualStartTime = action.payload;
+    setDinnerActualStartTime: (state, action) => {
+      state.dinnerActualStartTime = action.payload;
+    },
+    setLunchActualStartTime: (state, action) => {
+      state.lunchActualStartTime = action.payload;
     },
     setLunchDone: (state, action) => {
       state.lunchDone = action.payload;
     },
     setDinnerDone: (state, action) => {
       state.dinnerDone = action.payload;
+    },
+    setWorkDone: (state, action) => {
+      state.workDone = action.payload;
     },
     setLunchIsCheckIn: (state, action) => {
       state.lunchRoute[action.payload.index].check = action.payload.check;
@@ -92,6 +100,10 @@ export const {
   setDinnerRoute,
   setLunchRouteInfo,
   setDinnerRouteInfo,
+  setDinnerActualStartTime,
+  setLunchActualStartTime,
+  setDinnerDone,
+  setLunchDone,
 } = workSlice.actions;
 // state
 export const lunchRoute = state => state.lunchRoute;
@@ -108,4 +120,6 @@ export const dinnerDone = state => state.dinnerDone;
 export const dinnerRouteName = state => state.dinnerRouteName;
 export const dinnerDate = state => state.dinnerDate;
 export const dinnerScheduledStartTime = state => state.dinnerScheduledStartTime;
+export const dinnerActualStartTime = state => state.dinnerActualStartTime;
+export const lunchActualStartTime = state => state.lunchActualStartTime;
 export default workSlice.reducer;

@@ -1,27 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import line from '../assets/images/separator.png';
 import BottomScrollSheet from './BottomScrollSheet';
+import {business_service} from '../api/api';
+import axios from 'axios';
 
 const Route = ({navigation}) => {
   const lunchRoute = useSelector(state => state.work.lunchRoute);
   const dinnerRoute = useSelector(state => state.work.dinnerRoute);
   const lunchRouteId = useSelector(state => state.work.lunchRouteId);
   const dinnerRouteId = useSelector(state => state.work.dinnerRouteId);
-  const lunchDone = useSelector(state => state.work.lunchDone);
-  const lunchRouteType = useSelector(state => state.work.lunchRouteType);
   const lunchRouteName = useSelector(state => state.work.lunchRouteName);
   const lunchDate = useSelector(state => state.work.lunchDate);
   const lunchScheduledStartTime = useSelector(
     state => state.work.lunchScheduledStartTime,
   );
-  const dinnerDone = useSelector(state => state.work.dinnerDone);
   const dinnerRouteName = useSelector(state => state.work.dinnerRouteName);
   const dinnerDate = useSelector(state => state.work.dinnerDate);
   const dinnerScheduledStartTime = useSelector(
     state => state.work.dinnerScheduledStartTime,
   );
+  const dinnerActualStartTime = useSelector(
+    state => state.work.dinnerActualStartTime,
+  );
+  const lunchActualStartTime = useSelector(
+    state => state.work.lunchActualStartTime,
+  );
+  const dinnerDone = useSelector(state => state.work.dinnerDone);
+  const lunchDone = useSelector(state => state.work.lunchDone);
 
   return (
     <View style={styles.workRootContainer}>
@@ -33,17 +40,17 @@ const Route = ({navigation}) => {
               <Text style={styles.routeName}>{lunchRouteName}</Text>
             </View>
             <View>
-              {lunchScheduledStartTime === null && lunchDone === false ? (
+              {lunchActualStartTime === null ? (
                 <View style={styles.workReady}>
                   <Text style={styles.workIndicatorText}>배송 예정 - 점심</Text>
                 </View>
               ) : null}
-              {lunchScheduledStartTime !== null && lunchDone === false ? (
+              {lunchActualStartTime !== null && lunchDone === false ? (
                 <View style={styles.workStart}>
                   <Text style={styles.workIndicatorText}>배송 중 - 점심</Text>
                 </View>
               ) : null}
-              {lunchScheduledStartTime !== null && lunchDone !== false ? (
+              {lunchDone === true ? (
                 <View style={styles.workEnd}>
                   <Text style={styles.workIndicatorText}>배송 완료 - 점심</Text>
                 </View>
@@ -98,17 +105,17 @@ const Route = ({navigation}) => {
               <Text style={styles.routeName}>{dinnerRouteName}</Text>
             </View>
             <View>
-              {dinnerScheduledStartTime === null && dinnerDone === false ? (
+              {dinnerActualStartTime === null ? (
                 <View style={styles.workReady}>
                   <Text style={styles.workIndicatorText}>배송 예정 - 저녁</Text>
                 </View>
               ) : null}
-              {dinnerScheduledStartTime !== null && dinnerDone === false ? (
+              {dinnerActualStartTime !== null && dinnerDone === false ? (
                 <View style={styles.workStart}>
                   <Text style={styles.workIndicatorText}>배송 중 - 저녁</Text>
                 </View>
               ) : null}
-              {dinnerScheduledStartTime !== null && dinnerDone !== false ? (
+              {dinnerDone === true ? (
                 <View style={styles.workEnd}>
                   <Text style={styles.workIndicatorText}>배송 완료 - 저녁</Text>
                 </View>
