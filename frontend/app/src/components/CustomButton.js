@@ -5,7 +5,7 @@ const CustomButton = props => {
     props.onPress(props.data);
   };
   return (
-    <View style={props.ButtonStyle}>
+    <View style={[props.ButtonStyle, {backgroundColor: props.backgroundColor}]}>
       <Pressable
         style={({pressed}) =>
           pressed
