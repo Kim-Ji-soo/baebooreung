@@ -130,8 +130,8 @@ export function NotificationListener(
       deliveryId,
       RouteId,
       delName,
-      pageIndex.current.getCurrentIndex(),
-      sequence,
+      pageIndex.sequence,
+      pageIndex,
     );
   }
   messaging().onNotificationOpenedApp(remoteMessage => {
@@ -154,7 +154,7 @@ export function NotificationListener(
     console.log('notification on froground state.....', remoteMessage);
     if (pageIndex.current.getCurrentIndex() + 1 === sequence) {
       Alert.alert(
-        {delName} + remoteMessage.notification.title,
+        remoteMessage.notification.title,
         remoteMessage.notification.body,
         [
           {

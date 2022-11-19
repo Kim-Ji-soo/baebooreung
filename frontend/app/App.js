@@ -42,7 +42,11 @@ import {
   requestUserPermission,
   NotificationListener,
 } from './src/components/push';
+// <-- ignore warning box -->
+import {LogBox} from 'react-native';
 
+console.disableYellowBox = true;
+LogBox.ignoreAllLogs();
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const identityColor = '#0B0B3B';
@@ -180,6 +184,9 @@ function DriverTab() {
             backgroundColor: '#29b6f6',
           },
           headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="home" color={color} size={size}></Icon>
+          ),
         }}></Tab.Screen>
       <Tab.Screen
         name="Message"
@@ -202,11 +209,14 @@ function DriverTab() {
         name="Detail"
         component={DetailRoutePage}
         options={{
-          title: 'Test',
+          title: '업무',
           headerStyle: {
             backgroundColor: '#29b6f6',
           },
           headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="directions-car" color={color} size={size}></Icon>
+          ),
         }}></Tab.Screen>
     </Tab.Navigator>
   );

@@ -246,11 +246,11 @@ const DetailJob = props => {
         console.log(err);
       });
   }
-  // useEffect(() => {
-  //   if (currentLocation !== false) {
-  //     getDrawingData();
-  //   }
-  // }, [currentLocation]);
+  useEffect(() => {
+    if (currentLocation !== false) {
+      getDrawingData();
+    }
+  }, [currentLocation]);
 
   return (
     <View style={styles.DetailJobcontainer}>
@@ -265,20 +265,88 @@ const DetailJob = props => {
             center={{...markerCoords, zoom: 16}}>
             <Marker
               coordinate={{latitude: lat, longitude: lng}}
-              pinColor={'red'}
-            />
+              width={40}
+              height={40}>
+              <View
+                style={{
+                  // backgroundColor: 'rgba(255,0,0,0.2)',
+                  borderRadius: 80,
+                }}>
+                <View
+                  style={{
+                    // backgroundColor: 'rgba(0,0,255,0.3)',
+                    // borderWidth: 2,
+                    borderColor: 'black',
+                    flexDirection: 'row',
+                  }}>
+                  <Image
+                    source={require('../assets/images/shuttle.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      // backgroundColor: 'rgba(0,0,0,0.2)',
+                      resizeMode: 'stretch',
+                      // borderWidth: 2,
+                      // borderColor: 'black',
+                    }}
+                    fadeDuration={0}
+                  />
+                </View>
+                {/* <ImageBackground
+                        source={require('../assets/images/favorite.png')}
+                        style={{width: 64, height: 64}}>
+                        <Text>image background</Text>
+                      </ImageBackground> */}
+              </View>
+            </Marker>
             <Marker
               coordinate={{
                 latitude: props.item.latitude,
                 longitude: props.item.longitude,
               }}
-            />
+              width={40}
+              height={40}>
+              <View
+                style={{
+                  // backgroundColor: 'rgba(255,0,0,0.2)',
+                  borderRadius: 80,
+                }}>
+                <View
+                  style={{
+                    // backgroundColor: 'rgba(0,0,255,0.3)',
+                    // borderWidth: 2,
+                    borderColor: 'black',
+                    flexDirection: 'row',
+                  }}>
+                  <Image
+                    source={require('../assets/images/shop.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      // backgroundColor: 'rgba(0,0,0,0.2)',
+                      resizeMode: 'stretch',
+                      // borderWidth: 2,
+                      // borderColor: 'black',
+                    }}
+                    fadeDuration={0}
+                  />
+                </View>
+                {/* <ImageBackground
+                        source={require('../assets/images/favorite.png')}
+                        style={{width: 64, height: 64}}>
+                        <Text>image background</Text>
+                      </ImageBackground> */}
+              </View>
+            </Marker>
             {path !== false ? (
               <Path coordinates={path} width={10} color="red" />
             ) : null}
           </NaverMapView>
         ) : (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
         )}
       </View>
       <View style={styles.body}>
@@ -288,7 +356,12 @@ const DetailJob = props => {
             <Text style={styles.address}>{props.item.address}</Text>
           </View>
           <View style={styles.TimeInfo}>
-            <Text>도착 예정 : </Text>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              도착 예정 :{' '}
+            </Text>
             <Text style={styles.delTime}>
               {props.item.delScheduledTime.split(':')[0] +
                 '시' +
@@ -317,7 +390,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     borderRadius: 8,
-    backgroundColor: '#e8e8e8',
+    backgroundColor: '#0B0B3B',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -333,6 +406,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
+    color: 'white',
   },
   headerText2: {
     fontSize: 20,
@@ -369,10 +443,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 5,
     textAlignVertical: 'bottom',
+    color: 'white',
   },
   address: {
     textAlignVertical: 'bottom',
     paddingBottom: 2,
+    color: 'white',
+
     // borderWidth: 1,
   },
   bodyRight: {
@@ -389,7 +466,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   delTime: {
-    color: 'crimson',
+    color: '#FACC2E',
   },
   RouteInfo: {
     // flexDirection: 'row',

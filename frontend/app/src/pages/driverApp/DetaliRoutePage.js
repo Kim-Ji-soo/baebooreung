@@ -46,7 +46,7 @@ export const DetailRoutePage = props => {
           error => {
             console.log("driverApp/Gps => getWatchLocation's error", error);
           },
-          {enableHighAccuracy: true, fastestInterval: 3000, distanceFilter: 0},
+          {enableHighAccuracy: true, fastestInterval: 10000, distanceFilter: 0},
         );
       }
     });
@@ -57,7 +57,7 @@ export const DetailRoutePage = props => {
   }, []);
   useEffect(() => {
     if (watchLocation !== false) {
-      // sendGps(setKafka());
+      sendGps(setKafka());
       dispatch(setLat(watchLocation.latitude));
       dispatch(setLng(watchLocation.longitude));
     }
@@ -109,7 +109,7 @@ export const DetailRoutePage = props => {
         alignItems: 'center',
       }}
       paginationStyleItem={{width: 7, height: 7, borderRadius: 4}}
-      paginationActiveColor={'crimson'}
+      paginationActiveColor={'#FACC2E'}
     />
   );
 };

@@ -293,7 +293,10 @@ const Login = ({navigation}) => {
         </View>
         <View style={styles.footer}>
           <View style={styles.btnContainer}>
-            <CustomButton onPress={login} ButtonStyle={ButtonStyle}>
+            <CustomButton
+              onPress={login}
+              ButtonStyle={ButtonStyle}
+              backgroundColor="white">
               <Text style={{color: identityColor, fontWeight: 'bold'}}>
                 로그인
               </Text>
