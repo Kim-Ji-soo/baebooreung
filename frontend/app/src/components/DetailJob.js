@@ -1,31 +1,121 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  FlatList,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import camera from '../assets/images/camera.png';
 import {useEffect} from 'react';
 import {requestStoragePermission} from '../utils/permission';
-import {camera_service} from '../api/api';
+import {camera_service, business_service} from '../api/api';
 import axios from 'axios';
 import Cam from '../components/Cam';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
-import ImagePicker, {
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
-import {getLocationPermission} from '../utils/permission';
+import {launchCamera} from 'react-native-image-picker';
+import {useSelector, useDispatch} from 'react-redux';
+import {NotificationListener} from './push';
+import {useNavigation} from '@react-navigation/native';
+import {setLunchDone, setDinnerDone, setWorkDone} from '../redux/work';
 import Geolocation from 'react-native-geolocation-service';
-import {sendGps} from '../api/kafka';
-import {useDispatch, useSelector} from 'react-redux';
-import {setLat, setLng, setWatchId} from '../redux/gps';
 
 const DetailJob = props => {
+  const dispatch = useDispatch();
+  const watchId = useSelector(state => state.gps.watchId);
   const lat = useSelector(state => state.gps.lat);
   const lng = useSelector(state => state.gps.lng);
-  console.log('lat, lng', lat, lng);
   const [targetLocation, setTargetLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(false);
   const [markerCoords, setMarkerCoords] = useState(false);
+  //<-------------------------checkin---------------------------->
+  const userId = useSelector(state => state.auth.id);
+  const [isCheckIn, setIsCheckIn] = useState(false);
+  const [checkMessage, setCheckMessage] = useState('');
+  const navigation = useNavigation();
+  const [path, setPath] = useState(false);
+  const lunchRouteId = useSelector(state => state.work.lunchRouteId);
+  const dinnerRouteId = useSelector(state => state.work.dinnerRouteId);
+  function checkin2(userId, deliveryId, image) {
+    axios({
+      method: 'post',
+      url: business_service.checkIn() + `${userId}`,
+      data: {
+        deliveryId: deliveryId,
+        img: image,
+      },
+    })
+      .then(res => {
+        // Alert.alert(
+        //   '체크인',
+        //   `[${props.item.delName}] 체크인이 완료 되었습니다. 다음 배송지로 이동해주세요.`,
+        // );
+        if (res.data.deliveryId === -1) {
+          Alert.alert(
+            '배송 완료',
+            '업무를 종료하시겠습니까?',
+            [
+              {
+                text: '아니오',
+                style: 'cancel',
+              },
+              {
+                text: '예',
+                onPress: () => {
+                  axios({
+                    url:
+                      business_service.workDone() +
+                      `${userId}` +
+                      '/end/' +
+                      `${props.RouteId}`,
+                    method: 'put',
+                  })
+                    .then(res => {
+                      console.log('업무종료', res.data);
+                      Alert.alert('업무 종료', '업무가 종료되었습니다');
+                      if (props.RouteId === lunchRouteId) {
+                        dispatch(setLunchDone(true));
+                      } else {
+                        dispatch(setDinnerDone(true));
+                      }
+                      navigation.navigate('home');
+                      if (watchId !== null) {
+                        Geolocation.clearWatch(watchId);
+                        console.log('tracking location stop');
+                      }
+                    })
+                    .catch(Err => {
+                      console.log('workDone is error', Err);
+                      Alert.alert('업무 종료 실패', '관리자에게 문의해주세요');
+                    });
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        }
+        Alert.alert(
+          '체크인',
+          `[${props.item.delName}] 체크인이 완료 되었습니다. 다음 배송지로 이동해주세요.`,
+        );
+        setIsCheckIn(true);
+        setCheckMessage('체크인 성공');
+      })
+      .catch(err => {
+        Alert.alert(
+          '체크인',
+          `${props.item.delName} 체크인이 실패 했습니다. 관리자에게 문의해주세요.`,
+        );
+        console.log('체크인 실패', err);
+        setIsCheckIn(false);
+        setCheckMessage('체크인 실패');
+      });
+  }
   //<---------------------------cam------------------------------>
-  const activeCam = () => {
+  function activeCam() {
     const image = {
       uri: '',
       type: 'image/jpeg',
@@ -68,6 +158,7 @@ const DetailJob = props => {
           })
             .then(result => {
               console.log('체크인 이미지 가져오기', result.data);
+              checkin2(userId, props.item.id, result.data);
             })
             .catch(e => {
               console.log(e);
@@ -78,16 +169,34 @@ const DetailJob = props => {
         });
     });
     return <Cam />;
-  };
+  }
 
   useEffect(() => {
     requestStoragePermission();
+    NotificationListener(
+      userId,
+      props.item.id,
+      props.RouteId,
+      props.item.delName,
+      props.scrollRef,
+      props.item.sequence,
+      navigation,
+      watchId,
+      dispatch,
+      setLunchDone,
+      setDinnerDone,
+      lunchRouteId,
+      dinnerRouteId,
+    );
   }, []);
 
   useEffect(() => {
     setTargetLocation(
       String(props.item.longitude) + ',' + String(props.item.latitude),
     );
+    if (props !== undefined) {
+      // NotificationListener();
+    }
   }, []);
 
   useEffect(() => {
@@ -108,13 +217,14 @@ const DetailJob = props => {
     data.map((e, index) => {
       reDefineData.push({latitude: e[1], longitude: e[0]});
     });
+    // console.log(reDefineData);
     return reDefineData;
   }
 
   const apiData = {
     start: currentLocation,
     goal: targetLocation,
-    option: 'trafast',
+    option: 'traoptimal',
   };
 
   function getDrawingData() {
@@ -124,20 +234,23 @@ const DetailJob = props => {
       data: apiData,
     })
       .then(res => {
-        console.log('실행됨?');
-        console.log(res.data);
+        // console.log('DrawingData ?');
+        console.log('경로 데이터 성공');
+        // console.log(res.data.route.trafast[0].path);
+        const route = res.data.route.traoptimal[0].path;
+        const redefineData = reDefine(route);
+        setPath(redefineData);
       })
       .catch(err => {
-        console.log('에러남');
+        console.log('경로 데이터 에러');
         console.log(err);
       });
   }
-
-  // useEffect(() => {
-  //   if (currentLocation !== false) {
-  //     getDrawingData();
-  //   }
-  // }, [currentLocation]);
+  useEffect(() => {
+    if (currentLocation !== false) {
+      getDrawingData();
+    }
+  }, [currentLocation]);
 
   return (
     <View style={styles.DetailJobcontainer}>
@@ -149,22 +262,90 @@ const DetailJob = props => {
               width: '100%',
               height: '100%',
             }}
-            center={{...markerCoords, zoom: 16}}>
+            center={{...markerCoords, zoom: 14}}>
             <Marker
               coordinate={{latitude: lat, longitude: lng}}
-              pinColor={'red'}
-            />
+              width={40}
+              height={40}>
+              <View
+                style={{
+                  // backgroundColor: 'rgba(255,0,0,0.2)',
+                  borderRadius: 80,
+                }}>
+                <View
+                  style={{
+                    // backgroundColor: 'rgba(0,0,255,0.3)',
+                    // borderWidth: 2,
+                    borderColor: 'black',
+                    flexDirection: 'row',
+                  }}>
+                  <Image
+                    source={require('../assets/images/shuttle.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      // backgroundColor: 'rgba(0,0,0,0.2)',
+                      resizeMode: 'stretch',
+                      // borderWidth: 2,
+                      // borderColor: 'black',
+                    }}
+                    fadeDuration={0}
+                  />
+                </View>
+                {/* <ImageBackground
+                        source={require('../assets/images/favorite.png')}
+                        style={{width: 64, height: 64}}>
+                        <Text>image background</Text>
+                      </ImageBackground> */}
+              </View>
+            </Marker>
             <Marker
               coordinate={{
                 latitude: props.item.latitude,
                 longitude: props.item.longitude,
               }}
-            />
-            {/* <Path coordinates={path} width={10} color="red" /> */}
+              width={40}
+              height={40}>
+              <View
+                style={{
+                  // backgroundColor: 'rgba(255,0,0,0.2)',
+                  borderRadius: 80,
+                }}>
+                <View
+                  style={{
+                    // backgroundColor: 'rgba(0,0,255,0.3)',
+                    // borderWidth: 2,
+                    borderColor: 'black',
+                    flexDirection: 'row',
+                  }}>
+                  <Image
+                    source={require('../assets/images/shop.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      // backgroundColor: 'rgba(0,0,0,0.2)',
+                      resizeMode: 'stretch',
+                      // borderWidth: 2,
+                      // borderColor: 'black',
+                    }}
+                    fadeDuration={0}
+                  />
+                </View>
+                {/* <ImageBackground
+                        source={require('../assets/images/favorite.png')}
+                        style={{width: 64, height: 64}}>
+                        <Text>image background</Text>
+                      </ImageBackground> */}
+              </View>
+            </Marker>
+            {path !== false ? (
+              <Path coordinates={path} width={10} color="red" />
+            ) : null}
           </NaverMapView>
         ) : (
-          <View>
-            <Text>Loading...</Text>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="white" />
           </View>
         )}
       </View>
@@ -175,7 +356,12 @@ const DetailJob = props => {
             <Text style={styles.address}>{props.item.address}</Text>
           </View>
           <View style={styles.TimeInfo}>
-            <Text>도착 예정 : </Text>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              도착 예정 :{' '}
+            </Text>
             <Text style={styles.delTime}>
               {props.item.delScheduledTime.split(':')[0] +
                 '시' +
@@ -204,7 +390,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     borderRadius: 8,
-    backgroundColor: '#e8e8e8',
+    backgroundColor: '#0B0B3B',
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -220,6 +406,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
+    color: 'white',
   },
   headerText2: {
     fontSize: 20,
@@ -256,10 +443,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 5,
     textAlignVertical: 'bottom',
+    color: 'white',
   },
   address: {
     textAlignVertical: 'bottom',
     paddingBottom: 2,
+    color: 'white',
+
     // borderWidth: 1,
   },
   bodyRight: {
@@ -276,7 +466,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   delTime: {
-    color: 'crimson',
+    color: '#FACC2E',
   },
   RouteInfo: {
     // flexDirection: 'row',
