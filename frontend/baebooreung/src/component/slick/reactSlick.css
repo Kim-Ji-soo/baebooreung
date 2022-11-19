@@ -15,13 +15,11 @@
 {
     font-size: 0;
     line-height: 0;
-
     position: absolute;
     top: 50%;
     color:black;
     display: block;
     background-image: url("../../assets/images/prev.png");
-
     width: 20px;
     height: 20px;
     padding: 0;

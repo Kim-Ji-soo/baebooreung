@@ -29,6 +29,11 @@ const Chatting = () => {
     userList
       .filter((item) => item.email !== user.email)
       .map((item, idx) => {
+        setUserProfileList((userProfileList) => {
+          const newUserProfileList = [...userProfileList];
+          newUserProfileList.push(item);
+          return newUserProfileList;
+        });
         setCreateChatCheckBox((createChatCheckBox) => {
           const newArr = [...createChatCheckBox];
           newArr.push(false);
@@ -253,29 +258,6 @@ const Chatting = () => {
   }, []);
 
   useEffect(() => {
-    // 유저목록 프로필사진 가능하면...?
-    // if (userList.length !== 0 && userList !== undefined) {
-    //   userList.map(item => {
-    //     axios({
-    //       method: 'get',
-    //       url: user_service.getProfile() + `${item.id}`,
-    //     })
-    //       .then(res => {
-    //         console.log('파일가져오기', res.data);
-    //         setUserProfileList(userProfileList => {
-    //           const newUserProfileList = [...userProfileList];
-    //           newUserProfileList.push({
-    //             email: item.email,
-    //             grade: item.grade,
-    //             id: item.id,
-    //             name: item.name,
-    //             profile: res.data,
-    //           });
-    //         });
-    //       })
-    //       .catch(e => {});
-    //   });
-    // }
     connect();
     return () => disconnect();
   }, []);
@@ -353,7 +335,7 @@ const Chatting = () => {
                             method: "post",
                             url:
                               chat.invite() +
-                              `${res.data.roomId}/${userList[idx].email}/`,
+                              `${res.data.roomId}/${userProfileList[idx].email}/`,
                           })
                             .then((res) => {
                               console.log("초대", res.data);
