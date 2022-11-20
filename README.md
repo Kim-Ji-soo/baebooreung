@@ -34,6 +34,10 @@
 <img src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">  
 <img src="https://img.shields.io/badge/flask-gray?style=for-the-badge&logo=flask&logoColor=white" height="30">
 <img src="https://img.shields.io/badge/AmazonS3-pink?style=for-the-badge&logo=amazons3&logoColor=white" height="30">
+<img src="https://img.shields.io/badge/Mysql-231123?style=for-the-badge&logo=mysql&logoColor=white" height="30">
+<img src="https://img.shields.io/badge/APACHE-Kafka-231123?style=for-the-badge&logo=apachekafka&logoColor=white" height="30">
+
+
 
 <br> 
 <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
@@ -47,8 +51,11 @@
 <br>
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
   <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+    <img src="https://img.shields.io/badge/gitlab-877632?style=for-the-badge&logo=gitlab&logoColor=white">
   <img src="https://img.shields.io/badge/notion-232391?style=for-the-badge&logo=notion&logoColor=white">
   <img src="https://img.shields.io/badge/jira-465523?style=for-the-badge&logo=jira&logoColor=white">
+
+
 
 
 </div>
