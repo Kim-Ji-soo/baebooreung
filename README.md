@@ -9,13 +9,13 @@
 ## 🧑팀원 소개👩
 ### Front-end
 
-| <img title="" src="https://user-images.githubusercontent.com/97590478/187514521-02903d44-4264-4a31-abc2-0072a1bf03f4.jpg" alt="">**<div align="center">이준호(팀장)😎</div>** | <img title="" src="https://user-images.githubusercontent.com/97590478/187514542-49a62b50-b1b9-439f-896f-8535b461579b.jpeg" alt="">**<div align="center">나장엽😏</div>** | <img title="" src="https://user-images.githubusercontent.com/61959111/202900549-6abdc678-5a8b-4983-9f3d-be9366a76080.jpeg" width="300" height="280" alt="">**<div align="center">김지수😀</div>** |
+| <img title="" src="https://user-images.githubusercontent.com/97590478/187514521-02903d44-4264-4a31-abc2-0072a1bf03f4.jpg" alt="">**<div align="center">이준호(팀장)😎</div>** | <img title="" src="https://user-images.githubusercontent.com/97590478/187514542-49a62b50-b1b9-439f-896f-8535b461579b.jpeg" alt="">**<div align="center">나장엽😏</div>** | <img title="" src="https://user-images.githubusercontent.com/61959111/202900549-6abdc678-5a8b-4983-9f3d-be9366a76080.jpeg" width="300" height="270" alt="">**<div align="center">김지수😀</div>** |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 |                                                  |                                                              |                                                        |
 
 ### Back-end
 
-| <img title="" src="https://user-images.githubusercontent.com/61959111/202900587-60dffa73-fabc-4840-8557-5fecb3b8f383.jpg" width="300" height="280" alt="">**<div align="center">이승희(BE_Leader)😙</div>** | <img title="" src="https://user-images.githubusercontent.com/97590478/187514544-e64e1654-d1d7-4f42-9e39-8a3602b852e2.png" alt="">**<div align="center">이지은😝</div>** | <img title="" src="https://user-images.githubusercontent.com/97590478/187514529-c13d6cf8-37a9-4526-a7d5-9631562b7307.jpg" alt="">**<div align="center">안다슬😁</div>** |
+| <img title="" src="https://user-images.githubusercontent.com/61959111/202900587-60dffa73-fabc-4840-8557-5fecb3b8f383.jpg" width="300" height="270" alt="">**<div align="center">이승희(BE_Leader)😙</div>** | <img title="" src="https://user-images.githubusercontent.com/97590478/187514544-e64e1654-d1d7-4f42-9e39-8a3602b852e2.png" alt="">**<div align="center">이지은😝</div>** | <img title="" src="https://user-images.githubusercontent.com/97590478/187514529-c13d6cf8-37a9-4526-a7d5-9631562b7307.jpg" alt="">**<div align="center">안다슬😁</div>** |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | BE_Leader                                           |                                                              |      
 
