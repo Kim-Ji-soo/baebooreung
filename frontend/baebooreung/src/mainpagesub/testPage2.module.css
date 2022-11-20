@@ -1,0 +1,103 @@
+.App {
+text-align: center;
+width:100%;
+height:100%;
+}
+
+  .app_width {
+  display:flex;
+  width:100%;
+  height:100%;
+  flex-direction: column;
+  }
+
+  .app_color {
+  background-color:skyblue;
+  padding:20px;
+  }
+
+  .app_color_white {
+  background-color: white;
+  padding:10px;
+  display:flex;
+  width:300px;
+  }
+
+  .profile {
+    /* background-color: blue; */
+    border-radius: 50%;
+    height:50px;
+    width:50px;
+    margin-bottom:10px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+  }
+  
+  .profileList {
+    position:absolute;
+    padding:10px;
+    top: 120px;
+    left: 257px;
+    display: flex ;
+    flex-direction: column;
+    z-index: 2; 
+    background-color: rgba( 255, 255, 255, 1 );
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgba( 0, 0, 0, 0.1 ) ;
+    padding-left:10px;
+    margin-right: 20px;
+    font-family: 'BMJUA';
+    /* border: 1px solid black; */
+  }
+
+  .profileImage {
+    /* background-color: blue; */
+    border-radius: 50%;
+    font-size: 20px;
+    width:40px;
+    height:40px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+  .profileImageContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'BMJUA';
+    font-size:16px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+  }
+
+  .profileImageContent:hover {
+    background-color: #EFEFEF;
+    border-radius: 10px;
+  }
+
+  .profileContent {
+    margin-left:10px;
+    margin-right:10px;
+    text-align: center;
+  }
+
+  .mydiv {
+    color:black;
+    font-size: 20px;
+    font-family: 'BMJUA';
+    display:flex;
+    position: absolute;
+    top:1px;
+    left:10px;
+    transform: translate(-50%, -50%);
+  }
