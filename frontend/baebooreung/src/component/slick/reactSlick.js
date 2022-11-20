@@ -67,7 +67,59 @@ const SliderSlick = () => {
             alt=""
           />
         </div>
-        <div
+        <div className='player-wrapper' style={{ height: "100%", width: "100%" }}>
+          <div style={{
+            position: "relative",
+            top: "30%",
+            left: "53%",
+            height: "100%",
+            transform: "translate(-53%, 25%)",
+            cursor: "pointer",
+            border: "none",
+            borderStyle: "none",
+          }}>
+            <div style={{ fontSize: "36px", color: "white", fontFamily: "BMJUA", textAlign: "center", marginBottom: "10px" }}>배달긱 소개 영상</div>
+            <ReactPlayer
+              className='react-player'
+              url={movie}   // 플레이어 url
+              width='100%'         // 플레이어 크기 (가로)
+              height='100%'        // 플레이어 크기 (세로)
+              playing={false}        // 자동 재생 on
+              muted={false}          // 자동 재생 on
+              controls={true}       // 플레이어 컨트롤 노출 여부
+              light={false}         // 플레이어 모드
+              pip={true}            // pip 모드 설정 여부
+            // onEnded={}  // 플레이어 끝났을 때 이벤트
+            />
+          </div>
+        </div>
+        <div className='player-wrapper' style={{ height: "100%", width: "100%" }}>
+          <div style={{
+            position: "relative",
+            top: "30%",
+            left: "53%",
+            height: "80%",
+            transform: "translate(-53%, 25%)",
+            cursor: "pointer",
+            border: "none",
+            borderStyle: "none",
+          }}>
+            <div style={{ fontSize: "36px", color: "white", fontFamily: "BMJUA", textAlign: "center", marginBottom: "10px" }}>배부릉 발표 UCC</div>
+            <ReactPlayer
+              className='react-player'
+              url={movie2}   // 플레이어 url
+              width='100%'         // 플레이어 크기 (가로)
+              height='100%'        // 플레이어 크기 (세로)
+              playing={false}        // 자동 재생 on
+              muted={false}          // 자동 재생 on
+              controls={true}       // 플레이어 컨트롤 노출 여부
+              light={false}         // 플레이어 모드
+              pip={true}            // pip 모드 설정 여부
+            // onEnded={}  // 플레이어 끝났을 때 이벤트
+            />
+          </div>
+        </div>
+        {/* <div
           style={{
             height: "100%",
             width: "100%",
@@ -89,7 +141,8 @@ const SliderSlick = () => {
             src={new_logo}
             alt=""
           />
-        </div>
+        </div> */}
+
       </Slider>
     </div>
   );

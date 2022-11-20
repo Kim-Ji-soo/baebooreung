@@ -39,7 +39,7 @@ const RealTime = (props) => {
   const ssafy_cloudstone_route_temp = {
     start: make_LatLng(ssafyLatLng),
     goal: make_LatLng(cloudStoneLatLng),
-    option: "trafast",
+    option: "traoptimal",
   };
   const [center, setCenter] = useState(
     setTwoCenter(ssafyLatLng, cloudStoneLatLng)
@@ -93,7 +93,7 @@ const RealTime = (props) => {
       method: "post",
       data: requestBody,
     }).then((res) => {
-      const path = res.data.route.trafast[0].path;
+      const path = res.data.route.traoptimal[0].path;
       for (let i = 0; i <= path.length - 1; i++) {
         course.push(new naver.maps.LatLng(path[i][1], path[i][0]));
       }
@@ -540,7 +540,7 @@ const RealTime = (props) => {
                   allTask[i].deliveryDtoList[allTask[i].deliveryDtoList.length - 1].latitude,
                 ]
               ),
-              option: "trafast",
+              option: "traoptimal",
               waypoints: make_waypoints(waypoints_temp),
             };
             // 해당하는 모든 루트 경로 찍기
@@ -944,9 +944,9 @@ const RealTime = (props) => {
             {menuControl === 1 ? (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", margin: "10px", marginLeft: "0px", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>픽업지명</div>
-                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>예정 시간</div>
-                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>상태</div>
+                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>픽업지명</div>
+                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>예정 시간</div>
+                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>상태</div>
                 </div>
                 <hr width="100%" />
                 <div style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}>
@@ -1058,9 +1058,9 @@ const RealTime = (props) => {
             ) : (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", margin: "10px", marginLeft: "0px", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>배달지명</div>
-                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>예정 시간</div>
-                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>상태</div>
+                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>배달지명</div>
+                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>예정 시간</div>
+                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>상태</div>
                 </div>
                 <hr width="100%" />
                 <div style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}>
