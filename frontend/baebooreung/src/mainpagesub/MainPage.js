@@ -25,6 +25,7 @@ import { createTheme, styled, ThemeProvider, } from '@mui/material/styles';
 import FormHelperText from '@mui/material/FormHelperText';
 import { nodeName } from 'jquery';
 import { display } from '@mui/system';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 
 
@@ -119,7 +120,7 @@ const MainPage = () => {
   }
   const myParams2 = {
     ...myParams,
-    pickDate: pickDate2
+    pickDate: pickDate
   }
 
   const contents = {
@@ -238,6 +239,7 @@ const MainPage = () => {
                               >
                                 <MenuItem sx={{ fontFamily: "BMJUA" }} value={'전남대학교'}>전남대학교</MenuItem>
                                 <MenuItem sx={{ fontFamily: "BMJUA" }} value={'광주과학기술원'}>광주과학기술원</MenuItem>
+                                {/* <MenuItem sx={{ fontFamily: "BMJUA" }} value={'기타'}>기타</MenuItem> */}
                               </Select>
                             </FormControl>
                             :
@@ -302,7 +304,7 @@ const MainPage = () => {
                               />
                             </LocalizationProvider>
                             : <LocalizationProvider sx={{ fontFamily: "BMJUA" }} color="mymaincolor" dateAdapter={AdapterDayjs}>
-                              <DatePicker
+                              <MobileDatePicker
                                 inputFormat='YYYY년 MM월 DD일'
                                 fontFamily="BMJUA"
                                 color="mymaincolor"
@@ -452,13 +454,13 @@ const MainPage = () => {
                                 fontFamily="BMJUA"
                                 color="mymaincolor"
                                 label="날짜"
-                                value={pickDate2}
+                                value={pickDate}
                                 // value={pickDate2}
                                 sx={{ fontFamily: "BMJUA" }}
-                                // maxDate={new Date()}
-                                maxDate={new Date(new Date().setDate(new Date().getDate() - 1))}
+                                maxDate={new Date()}
+                                // maxDate={new Date(new Date().setDate(new Date().getDate() - 1))}
                                 onChange={(newValue) => {
-                                  pickDateValue2(newValue);
+                                  pickDateValue(newValue);
                                   // pickDateValue2(newValue);
                                 }}
                                 renderInput={(params) => (
@@ -482,10 +484,11 @@ const MainPage = () => {
                                 label="날짜"
                                 disabled={true}
                                 value={pickDate2}
+                                // value={pickDate2}
                                 sx={{ fontFamily: "BMJUA" }}
                                 maxDate={new Date()}
                                 onChange={(newValue) => {
-                                  pickDateValue2(newValue);
+                                  pickDateValue(newValue);
                                 }}
                                 renderInput={(params) => (
                                   <TextField color="mymaincolor"

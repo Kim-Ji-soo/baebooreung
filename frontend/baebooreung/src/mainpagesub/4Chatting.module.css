@@ -6,20 +6,35 @@
 }
 
 .userListLayout{
-    background-color: blue;
+    background-color: gray;
     display :flex;
     flex-direction: column;
-    width:30%;
+    width:28%;
     height:100%;
+    align-items: center;
+    border-radius: 50px;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    color:black;
+}
+.userListLayout::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 .userList{
     display :flex;
-
+    margin: 10px;
+    margin-top: 20px;
 }
 
 .userListName {
     display:flex;
-    background-color:aqua;
+    /* background-color:; */
+    font-size: 35px;
+}
+.userListPhone {
+
+    font-size: 25px;
 }
 
 .chatLayout {
@@ -27,21 +42,24 @@
     flex-direction: row;
     width:100%;
     height:100%;
+
 }
 .chatRoomLayout{
     background-color: red;
     display : flex;
     flex-direction: column;
-    width:150%;
+    width:50%;
     height:100%;
+    border-radius: 50px;
 }
 
 .chatRoomListLayout{
     background-color: green;
     display:flex;
     flex-direction : column;
-    width:100%;
+    width:50%;
     height:100%;
+    border-radius: 50px;
 }
 .chatRoomList{
     display:flex;
@@ -126,7 +144,7 @@
     display :flex;
     flex-direction: row;
     justify-content: space-evenly;
-    background-color: yellow;
+    background-color: #F5CC1F;
     padding :2%;
     margin :1%;
     border-bottom-left-radius: 10px;
@@ -151,4 +169,9 @@
 .buttonLayout{
     flex-direction:  row;
     justify-content : flex-end;
+}
+
+.image {
+    width:100;
+    height:100;
 }
