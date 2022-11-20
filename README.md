@@ -1,13 +1,13 @@
-# ![favicon-32x32](/uploads/4944dc5a980a3538a92716548917d7ca/favicon-32x32.png) GGANBU.GG (깐부.GG)
+배부릉 ()
 빅데이터를 활용한 롤 챔피언 추천
 
 <br/>
 
 ## 🧑팀원 소개
 
-|<center>최진욱(팀장)</center>|<center>남현우</center>|<center>강석민</center>|<center>최영선</center>|<center>김지수</center>|<center>박무창</center>|
+|<center>이준호(팀장)</center>|<center>김지수</center>|<center>나장엽</center>|<center>안다슬</center>|<center>이승희</center>|<center>이지은</center>|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|<center>BACKEND</center>|<center>BACKEND</center>|<center>BACKEND</center>|<center>FRONTEND</center>|<center>FRONTEND</center>|<center>FRONTEND</center>|
+|<center>FRONTEND</center>|<center>FRONTEND</center>|<center>FRONTEND</center>|<center>BACKEND</center>|<center>BACKEND</center>|<center>BACKEND</center>|
 
 
 
