@@ -141,8 +141,10 @@ git push
 
 ### 관리자 앱
 - 메인화면 & 실시간 위치
+
 ![KakaoTalk_Photo_2022-11-20-21-45-17](https://user-images.githubusercontent.com/61959111/202902553-4b53500f-11e8-4342-af44-01e2a1dd9e79.gif)
 - 채팅 & 음성호출
+
 ![KakaoTalk_Image_2022-11-20-20-18-11](https://user-images.githubusercontent.com/61959111/202902304-cbd59a51-a1fd-4498-9058-050b1aa4aec1.gif)
 <br/><br/><br/>
 
