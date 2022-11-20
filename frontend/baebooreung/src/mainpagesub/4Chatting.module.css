@@ -52,23 +52,33 @@
     border: 3px solid #0F1839;
     display : flex;
     flex-direction: column;
-    width:48%;
+    width:36%;
     height:100%;
+    margin-right: 20px;
     border-radius: 30px;
-    margin:auto;
 }
 
 .chatRoomListLayout{
     background-color: green;
     display:flex;
     flex-direction : column;
-    width:48%;
+    width:36%;
     height:100%;
     border-radius: 30px;
-    margin:auto;
+    margin-right: 0px;
 }
 .chatRoomList{
     display:flex;
+}
+
+.testDiv {
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.testDiv::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 
 
@@ -133,35 +143,56 @@
 
 }
 .createModal{
+    width:100%;
     display:flex;
-    justify-content: center;
-    background-color: 'rgba(0,0,0,0.7)',
+    /* background-color: aqua; */
+    /* justify-content: center; */
+    /* background-color: 'rgba(0,0,0,0.7)', */
 }
 .modalView {
-    margin :20;
-    background-color: white;
+    width:100%;
+    /* background-color: red; */
+    /* margin :20; */
+    /* background-color: white; */
 }
 
 .createRoomNameLayout{
-    margin : 10;
-    align-items: center;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* margin : 10; */
+    /* align-items: center; */
 }
+.createRoomNameLayout::-webkit-scrollbar{
+    display: none; /* Chrome, Safari, Opera*/
+} 
 .createChatListStyle {
     display :flex;
     flex-direction: row;
+    width:100%;
     justify-content: space-evenly;
-    background-color: #F5CC1F;
-    padding :2%;
-    margin :1%;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
+    background-color: transparent;
+    /* border: 1px solid black; */
+    margin-top:10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    /* padding :2%; */
+    /* margin :1%; */
+    /* border-bottom-left-radius: 10px; */
+    /* border-top-right-radius: 10px; */
 }
+
+.createChatListStyle::-webkit-scrollbar{
+    display: none; /* Chrome, Safari, Opera*/
+} 
 .userListDetailText{
     display:flex;
     flex-direction: row;
     align-items: center;
-    padding-left: 10%;
-    font-weight: bold;
+    /* padding-left: 10%; */
+    /* font-weight: bold; */
 }
 .userListDetailCheckBox{
     display :flex;
