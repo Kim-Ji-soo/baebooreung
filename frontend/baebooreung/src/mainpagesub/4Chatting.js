@@ -593,10 +593,11 @@ const Chatting = () => {
           </div>
         )}
 
-        {!page && (<div style={{ width: "50%", marginRight: "1%", height: "100%", border: "3px solid #0F1839", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px", fontFamily: "NanumSquareNeo-Variable", fontSize: "20px" }}>사용자 초대하고 채팅 시작하기 {createChatCheckBox}</div>)}
+        {!page && (<div style={{ width: "50%", marginRight: "1%", height: "100%", border: "3px solid #0F1839", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px", fontFamily: "NanumSquareNeo-Variable", fontSize: "25px" }}>사용자 초대하고 채팅 시작하기 {createChatCheckBox}</div>)}
 
         {/* 채팅방 목록 div */}
         <div className={styles.chatRoomListLayout}>
+          <div style={{ height: "100%", display: "flex", fontSize: "25px", fontFamily: "NanumSquareNeo-Variable", justifyContent: "center", alignItems: "center" }}>존재하는 채팅방이 없습니다.</div>
           {/* 채팅방 리스트 출력 */}
           {chatRoomList.map((item, idx) => {
             return (
