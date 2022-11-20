@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./mainpagesub/MainPage";
 import Login from "./loginpage/login";
+import TestPage2 from "./mainpagesub/testpage2"
 import { useSelector } from "react-redux";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         )}
         {userInfo.token === "" && (
           <Routes style={{ height: "100%", width: "100%" }}>
+            <Route path="/test" element={<TestPage2 />} />
             <Route path="*" element={<Login />} />
           </Routes>
         )}
