@@ -253,29 +253,6 @@ const Chatting = () => {
   }, []);
 
   useEffect(() => {
-    // 유저목록 프로필사진 가능하면...?
-    // if (userList.length !== 0 && userList !== undefined) {
-    //   userList.map(item => {
-    //     axios({
-    //       method: 'get',
-    //       url: user_service.getProfile() + `${item.id}`,
-    //     })
-    //       .then(res => {
-    //         console.log('파일가져오기', res.data);
-    //         setUserProfileList(userProfileList => {
-    //           const newUserProfileList = [...userProfileList];
-    //           newUserProfileList.push({
-    //             email: item.email,
-    //             grade: item.grade,
-    //             id: item.id,
-    //             name: item.name,
-    //             profile: res.data,
-    //           });
-    //         });
-    //       })
-    //       .catch(e => {});
-    //   });
-    // }
     connect();
     return () => disconnect();
   }, []);
@@ -321,6 +298,10 @@ const Chatting = () => {
     console.log(userProfileList);
   }, [userProfileList]);
 
+  useEffect(() => {
+    setCreateChatVisible(!createChatVisible);
+  }, [])
+
   // useEffect(() => {
   //   console.log(createChatCheckBox);
   // }, [createChatCheckBox]);
@@ -329,9 +310,10 @@ const Chatting = () => {
     return (
       <div className={styles.createModal}>
         <div className={styles.modalView}>
-          <div className={styles.createRoomNameLayout}>
-            <p>방제목</p>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <br />
             <input
+              style={{ width: "70%", height: "35px", marginTop: "25px" }}
               type="text"
               placeholder="방 제목을 입력하세요"
               onChange={(e) => {
@@ -340,36 +322,43 @@ const Chatting = () => {
               value={roomName}
               maxLength="45"
             ></input>
-
+          </div>
+          <br />
+          <hr style={{ width: "90%" }}></hr>
+          <br />
+          <div className={styles.createRoomNameLayout}>
             {/* 채팅방에 추가할 초대 유저목록을 갱신 후
              체크박스를 통해 초대할 유저정보 입력*/}
             {userProfileList
               // .filter((item) => item.email !== user.email)
               .map((item, idx) => {
-                console.log(item.profile);
                 return (
                   <div key={idx} className={styles.createChatListStyle}>
-                    <div className={styles.userListDetailText}>
-                      {item.name}
-                      {item.grade === "MANAGER" && "관리자"}
-                      {item.grade === "DRIVER" && "드라이버"}
-                    </div>
-                    <div className={styles.userListDetailCheckBox}>
-                      {/* 체크박스 상태가 변하면 유저정보를 저장한 
-                      createChatCheckBox의 상태도 같이 변화*/}
-                      <input
-                        type="checkbox"
-                        onChange={() => {
-                          setCreateChatCheckBox((el) => {
-                            const newArr = [...el];
-                            newArr[idx] = !newArr[idx];
-                            return newArr;
-                          });
-                        }}
-                      ></input>
+                    <div style={{ cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center" }}
+                      onClick={() => {
+                        setCreateChatCheckBox((el) => {
+                          const newArr = [...el];
+                          newArr[idx] = !newArr[idx];
+                          return newArr;
+                        });
+                      }}
+                    >
+                      <div className={styles.userListDetailText}>
+                        <img
+                          src={`${item.profile}`}
+                          style={{ width: "70px", height: "70px", borderRadius: "50%", border: "3px solid #0F1839" }}
+                        ></img>
+                        <div style={{ marginLeft: "20px" }}>
+                          <div>
+                            <span style={{ fontSize: "25px", fontFamily: "NanumSquareNeo-Variable" }}>{item.name}</span>
+                            <span style={{ fontSize: "20px", fontFamily: "NanumSquareNeo-Variable" }}>{item.grade === "MANAGER" && "   (관리자)"}</span>
+                          </div>
+                          <div className={styles.userListPhone}>{item.phone}</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                );
+                )
               })}
             {/* 초대버튼을 누를 시 나를 주체로 채팅방을 생성하고 
               체크박스로 추가된 유저목록의 유저들을 채팅방에 초대한다
@@ -395,7 +384,7 @@ const Chatting = () => {
                             method: "post",
                             url:
                               chat.invite() +
-                              `${res.data.roomId}/${userList[idx].email}/`,
+                              `${res.data.roomId}/${userProfileList[idx].email}/`,
                           })
                             .then((res) => {
                               console.log("초대", res.data);
@@ -426,14 +415,16 @@ const Chatting = () => {
                 }
               }}
             >
-              <button>초대</button>
-              <button
-                onClick={() => {
-                  setCreateChatVisible(!createChatVisible);
-                }}
-              >
-                취소
-              </button>
+              <div style={{ display: "flex", justifyContent: "space-around", marginTop: "10px", marginBottom: "10px" }}>
+                <button style={{ width: "80px", height: "40px", border: "none", backgroundColor: "#F5CC1F", cursor: "pointer", borderRadius: "10px" }}>초대</button>
+                <button style={{ width: "80px", height: "40px", border: "none", backgroundColor: "#0F1839", cursor: "pointer", color: "white", borderRadius: "10px" }}
+                  onClick={() => {
+                    setCreateChatVisible(!createChatVisible);
+                  }}
+                >
+                  취소
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -442,8 +433,20 @@ const Chatting = () => {
   }
   return (
     <div className={styles.background}>
+      {!createChatVisible && (<div style={{ height: "100%", width: "25%" }}>
+        <div style={{ fontFamily: "NanumSquareNeo-Variable", fontSize: "25px", cursor: "pointer", width: "100%", height: "100%", border: "3px solid #0F1839", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px" }}
+          onClick={() => {
+            setCreateChatVisible(!createChatVisible);
+          }}
+        >
+          눌러서 사용자 초대하기
+        </div>
+      </div>)}
+      {/* 채팅방 생성 모달 불러오기 */}
+      {createChatVisible && createRoomModal()}
+
       {/*유저목록 div */}
-      <div className={styles.userListLayout}>
+      {/* <div className={styles.userListLayout}>
         {userProfileList
           .filter((item) => item.email !== user.email)
           .map((item, idx) => {
@@ -462,7 +465,7 @@ const Chatting = () => {
               </div>
             );
           })}
-      </div>
+      </div> */}
       <div className={styles.chatLayout}>
         {/* 채팅창 div */}
         {page && (
@@ -590,19 +593,10 @@ const Chatting = () => {
           </div>
         )}
 
+        {!page && (<div style={{ width: "50%", marginRight: "1%", height: "100%", border: "3px solid #0F1839", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px", fontFamily: "NanumSquareNeo-Variable", fontSize: "20px" }}>사용자 초대하고 채팅 시작하기 {createChatCheckBox}</div>)}
+
         {/* 채팅방 목록 div */}
         <div className={styles.chatRoomListLayout}>
-          <p>채팅방 목록</p>
-          <button
-            onClick={() => {
-              setCreateChatVisible(!createChatVisible);
-            }}
-          >
-            채팅방 생성
-          </button>
-          {/* 채팅방 생성 모달 불러오기 */}
-          {createChatVisible && createRoomModal()}
-
           {/* 채팅방 리스트 출력 */}
           {chatRoomList.map((item, idx) => {
             return (
@@ -645,7 +639,7 @@ const Chatting = () => {
           })}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
