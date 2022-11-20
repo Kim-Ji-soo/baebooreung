@@ -40,10 +40,10 @@ const RealTime = (props) => {
   const ssafy_cloudstone_route_temp = {
     start: make_LatLng(ssafyLatLng),
     goal: make_LatLng(cloudStoneLatLng),
-    option: "traoptimal",
+    option: "trafast",
   };
   const [center, setCenter] = useState(
-    [126.82222, 35.1755]
+    setTwoCenter(ssafyLatLng, cloudStoneLatLng)
   );
 
 
@@ -92,7 +92,7 @@ const RealTime = (props) => {
       method: "post",
       data: requestBody,
     }).then((res) => {
-      const path = res.data.route.traoptimal[0].path;
+      const path = res.data.route.trafast[0].path;
       for (let i = 0; i <= path.length - 1; i++) {
         course.push(new naver.maps.LatLng(path[i][1], path[i][0]));
       }
@@ -324,7 +324,7 @@ const RealTime = (props) => {
               // focus 여부에 체크되어 있다면 줌, 센터
               if (focus) {
                 map.setCenter([res.data.longitude, res.data.latitude])
-                map.setZoom(19)
+                map.setZoom(18)
                 setCenter([res.data.longitude, res.data.latitude])
               }
             })
@@ -432,7 +432,7 @@ const RealTime = (props) => {
                       allTaskList[i].deliveryDtoList[0].longitude,
                       allTaskList[i].deliveryDtoList[0].latitude,
                     ]),
-                    option: "traoptimal",
+                    option: "trafast",
                   };
                   cal_course(temp_course).then((appData) => {
                     new naver.maps.Polyline({
@@ -481,7 +481,7 @@ const RealTime = (props) => {
                       allTaskList[i].deliveryDtoList[0].longitude,
                       allTaskList[i].deliveryDtoList[0].latitude,
                     ]),
-                    option: "traoptimal",
+                    option: "trafast",
                   };
                   cal_course(temp_course).then((appData) => {
                     new naver.maps.Polyline({
@@ -616,7 +616,7 @@ const RealTime = (props) => {
                   allTask[i].deliveryDtoList[allTask[i].deliveryDtoList.length - 1].latitude,
                 ]
               ),
-              option: "traoptimal",
+              option: "trafast",
               waypoints: make_waypoints(waypoints_temp),
             };
             // 해당하는 모든 루트 경로 찍기
@@ -719,13 +719,12 @@ const RealTime = (props) => {
       </div>
       {/* 토글 버튼 끝 */}
       {/* 리프레시 버튼 시작 */}
-      {/* <div className={styles.refreshToggle}>RELOAD</div> */}
+      <div className={styles.refreshToggle}>RELOAD</div>
       <div className={styles.toggle2} onClick={() => {
         (refresh ? setRefresh(0) : setRefresh(1))
         searchRegionDateUnivTime();
       }}>
         <img className={styles.refresh_off} src={refresh_off} alt="" />
-        <div className={styles.refreshToggle}>RELOAD</div>
       </div>
       {/* 리프레시 버튼 끝 */}
       {/* 오토리프레시 버튼 시작 */}
@@ -736,7 +735,6 @@ const RealTime = (props) => {
             ? <img className={styles.autoRefresh} src={refresh_move_on} alt="" />
             : <img className={styles.autoRefresh} src={refresh_move_off} alt="" />
         }
-        <div className={styles.autoRefreshMent}>AUTO</div>
       </div>
       {/* 오토리프레시 버튼 끝
       {/* 안내 설명 시작 */}
