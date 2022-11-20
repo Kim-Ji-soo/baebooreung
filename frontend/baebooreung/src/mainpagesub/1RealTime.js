@@ -40,7 +40,7 @@ const RealTime = (props) => {
   const ssafy_cloudstone_route_temp = {
     start: make_LatLng(ssafyLatLng),
     goal: make_LatLng(cloudStoneLatLng),
-    option: "trafast",
+    option: "traoptimal",
   };
   const [center, setCenter] = useState(
     setTwoCenter(ssafyLatLng, cloudStoneLatLng)
@@ -92,7 +92,7 @@ const RealTime = (props) => {
       method: "post",
       data: requestBody,
     }).then((res) => {
-      const path = res.data.route.trafast[0].path;
+      const path = res.data.route.traoptimal[0].path;
       for (let i = 0; i <= path.length - 1; i++) {
         course.push(new naver.maps.LatLng(path[i][1], path[i][0]));
       }
@@ -324,7 +324,7 @@ const RealTime = (props) => {
               // focus 여부에 체크되어 있다면 줌, 센터
               if (focus) {
                 map.setCenter([res.data.longitude, res.data.latitude])
-                map.setZoom(18)
+                map.setZoom(19)
                 setCenter([res.data.longitude, res.data.latitude])
               }
             })
@@ -432,7 +432,7 @@ const RealTime = (props) => {
                       allTaskList[i].deliveryDtoList[0].longitude,
                       allTaskList[i].deliveryDtoList[0].latitude,
                     ]),
-                    option: "trafast",
+                    option: "traoptimal",
                   };
                   cal_course(temp_course).then((appData) => {
                     new naver.maps.Polyline({
@@ -481,7 +481,7 @@ const RealTime = (props) => {
                       allTaskList[i].deliveryDtoList[0].longitude,
                       allTaskList[i].deliveryDtoList[0].latitude,
                     ]),
-                    option: "trafast",
+                    option: "traoptimal",
                   };
                   cal_course(temp_course).then((appData) => {
                     new naver.maps.Polyline({
@@ -616,7 +616,7 @@ const RealTime = (props) => {
                   allTask[i].deliveryDtoList[allTask[i].deliveryDtoList.length - 1].latitude,
                 ]
               ),
-              option: "trafast",
+              option: "traoptimal",
               waypoints: make_waypoints(waypoints_temp),
             };
             // 해당하는 모든 루트 경로 찍기
