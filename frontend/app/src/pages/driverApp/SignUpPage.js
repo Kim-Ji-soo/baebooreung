@@ -6,6 +6,8 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Image,
+  Dimensions,
 } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import SelectList from 'react-native-dropdown-select-list';
@@ -13,10 +15,17 @@ import {isEmail, isPhoneNumber} from '../../utils/inputCheck';
 import {isPassword} from '../../utils/inputCheck';
 import {user_service} from '../../api/api';
 import axios from 'axios';
+import logo from '../../assets/images/logo.png';
+const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
+const identityColor = '#0B0B3B';
+const identityTextColor = '#FACC2E';
+
 const SignUp = () => {
   const ButtonStyle = {
     borderWidth: 0.8,
-    borderRadius: 16,
+    borderRadius: 12,
+    borderColor: 'white',
+    borderWidth: 4,
     overflow: 'hidden',
     width: '100%',
   };
@@ -144,16 +153,28 @@ const SignUp = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>배부릉 회원가입</Text>
-      </View>
       <ScrollView>
+        <View style={styles.headerContainer}>
+          <View style={{flex: 1}}>
+            <Image
+              source={logo}
+              style={{
+                width: SCREEN_WIDTH / 2.5,
+                height: SCREEN_HEIGHT / 5,
+              }}></Image>
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.header}>배부릉 회원가입</Text>
+          </View>
+        </View>
+
         <View style={styles.Scroll}>
           <View style={styles.login}>
             <Text style={styles.label}>아이디</Text>
             <TextInput
               style={styles.loginForm}
               placeholder="아이디를 입력하세요."
+              placeholderTextColor="white"
               onChange={onChangeId}
               // autoFocus={true}
               returnKeyType="next"
@@ -168,6 +189,7 @@ const SignUp = () => {
             <TextInput
               style={styles.passwordForm}
               placeholder="비밀번호를 입력하세요."
+              placeholderTextColor="white"
               onChange={onChangePw}
               returnKeyType="next"
               onSubmitEditing={() => ref_input3.current.focus()}
@@ -180,6 +202,7 @@ const SignUp = () => {
             <TextInput
               style={styles.passwordForm}
               placeholder="비밀번호를 한번 더 입력하세요."
+              placeholderTextColor="white"
               onChange={onChangePwConfirm}
               ref={ref_input3}
               returnKeyType="next"
@@ -194,7 +217,8 @@ const SignUp = () => {
             <Text style={styles.label}>이름</Text>
             <TextInput
               style={styles.nameForm}
-              placeholder="배부릉"
+              placeholder="이름을 입력하세요."
+              placeholderTextColor="white"
               onChange={onChangeName}
               ref={ref_input4}
               returnKeyType="next"
@@ -203,7 +227,8 @@ const SignUp = () => {
             <Text style={styles.label}>전화번호</Text>
             <TextInput
               style={styles.phoneNumberForm}
-              placeholder="010-1234-5678"
+              placeholder="ex) 010-1234-5678"
+              placeholderTextColor="white"
               onChange={onChangePhoneNum}
               ref={ref_input5}
             />
@@ -214,6 +239,10 @@ const SignUp = () => {
           <View style={styles.extra2}>
             <Text style={styles.label}>지역</Text>
             <SelectList
+              boxStyles={styles.selectedBoxList}
+              dropdownStyles={styles.selectedDropdownList}
+              dropdownTextStyles={styles.selectedDropdownText}
+              inputStyles={styles.selectedInputStyles}
               setSelected={setRegion}
               data={regionDrop}
               search={false}
@@ -223,6 +252,10 @@ const SignUp = () => {
           <View style={styles.extra2}>
             <Text style={styles.label}>회원 유형</Text>
             <SelectList
+              boxStyles={styles.selectedBoxList}
+              dropdownStyles={styles.selectedDropdownList}
+              dropdownTextStyles={styles.selectedDropdownText}
+              inputStyles={styles.selectedInputStyles}
               setSelected={setSelectedGrade}
               onSelect={() => {
                 console.log(selectedGrade);
@@ -236,8 +269,13 @@ const SignUp = () => {
       </ScrollView>
       <View style={styles.btnContainer}>
         <View style={styles.signupBtn}>
-          <CustomButton ButtonStyle={ButtonStyle} onPress={join}>
-            <Text>회원가입</Text>
+          <CustomButton
+            ButtonStyle={ButtonStyle}
+            backgroundColor="white"
+            onPress={join}>
+            <Text style={{color: identityColor, fontWeight: 'bold'}}>
+              회원가입
+            </Text>
           </CustomButton>
         </View>
       </View>
@@ -251,6 +289,7 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: 'center',
     alignItem: 'center',
+    backgroundColor: identityColor,
   },
   Scroll: {
     // borderWidth: 1,
@@ -259,6 +298,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '800',
     marginBottom: 5,
+    marginHorizontal: 5,
+    color: 'white',
   },
   headerContainer: {
     marginVertical: 40,
@@ -268,51 +309,75 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
   },
   login: {
     // borderWidth: 2,
     marginBottom: 20,
+    marginHorizontal: 40,
   },
   loginForm: {
     height: 45,
-    borderWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 4,
+    borderColor: 'white',
     paddingLeft: 20,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   password: {
     // borderWidth: 2,
     marginBottom: 20,
+    marginHorizontal: 40,
   },
   passwordForm: {
     height: 45,
     paddingLeft: 20,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
+    borderWidth: 4,
+    borderColor: 'white',
+    borderRadius: 12,
     marginBottom: 5,
   },
   extra: {
     // borderWidth: 2,
     marginBottom: 20,
+    marginHorizontal: 40,
   },
   extra2: {
     marginBottom: 20,
+    marginHorizontal: 40,
   },
   nameForm: {
     height: 45,
-    borderWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 4,
+    borderColor: 'white',
     paddingLeft: 20,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 20,
   },
   phoneNumberForm: {
-    borderWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 4,
+    borderColor: 'white',
     height: 45,
     paddingLeft: 20,
-    borderRadius: 8,
+    borderRadius: 12,
+  },
+  selectedBoxList: {
+    borderWidth: 4,
+    borderColor: 'white',
+    paddingLeft: 20,
+    borderRadius: 12,
+  },
+  selectedDropdownList: {
+    borderWidth: 4,
+    borderColor: 'white',
+    paddingLeft: 20,
+    borderRadius: 12,
+  },
+  selectedDropdownText: {
+    color: 'white',
+  },
+  selectedInputStyles: {
+    color: 'white',
   },
   signupBtn: {
     width: '50%',
