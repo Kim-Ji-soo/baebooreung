@@ -25,7 +25,7 @@ const RealTime = (props) => {
   const [focus, setFocus] = useState(0)
   const [checkIn, setCheckIn] = useState([])
   // 대학교 리스트
-  const [myuniv, setMyUniv] = useState([]);
+  // const [myuniv, setMyUniv] = useState([]);
   const JNU = [126.9063, 35.1767];
   const GIST = [126.8465, 35.224];
   const GWANGJU = [126.88, 35.198];
@@ -132,8 +132,6 @@ const RealTime = (props) => {
             return 0;
           })
         )
-        console.log(allTask)
-
       })
   }
 
@@ -375,7 +373,7 @@ const RealTime = (props) => {
       for (let i = 0; i <= allTask.length - 1; i++) {
         // if (i <= 2) {
         //
-        myuniv.push(allTask[i].routeName); // route이름을 집어넣는다.
+        // myuniv.push(allTask[i].routeName); // route이름을 집어넣는다.
         // 배달할 곳이 남아있다면
         if (allTask[i].deliveryDtoList.length) {
           let randomBrightColor = () => {
@@ -673,7 +671,7 @@ const RealTime = (props) => {
   useEffect(() => {
     setTempTest(temp_test + 1);
     searchRegionDate();
-    setMyUniv([]);
+    // setMyUniv([]);
     setRouteColor([]);
     setRouteId(0);
     setDriverId(0);
@@ -684,7 +682,7 @@ const RealTime = (props) => {
     setTempTest(temp_test + 1);
     setRouteColor([]);
     searchRegionDateUniv();
-    setMyUniv([]);
+    // setMyUniv([]);
     setRouteId(0);
     setDriverId(0);
     setOneTask([])
@@ -694,7 +692,7 @@ const RealTime = (props) => {
     setTempTest(temp_test + 1);
     setRouteColor([]);
     searchRegionDateUnivTime();
-    setMyUniv([]);
+    // setMyUniv([]);
     setRouteId(0);
     setDriverId(0);
     setOneTask([])
@@ -743,9 +741,9 @@ const RealTime = (props) => {
       {props.myParams.region === "" ? (
         <div className={styles.effect}>
           <div className={styles.ment}>
-            <div style={{ marginBottom: "10px" }}> <span style={{ color: "blue" }}>실시간 업무 현황 </span>페이지 입니다.</div>
+            <div style={{ marginTop: "10px", marginBottom: "10px" }}> <span style={{ color: "blue" }}>실시간 업무 현황 </span>페이지 입니다.</div>
             <div style={{ marginLeft: "10px", marginRight: "10px", marginBottom: "10px", fontSize: "25px" }}><span style={{ color: "blue" }}>지역, 대학, 시간</span>을 순서대로 선택해주세요. <img style={{ width: "20px" }} src={arrow} alt="" /></div>
-            <div style={{ color: "red", fontSize: "20px" }}>*날짜 선택 불가</div>
+            <div style={{ color: "gray", fontSize: "20px", marginBottom: "10px" }}>*날짜 선택 불가</div>
           </div>
         </div>
       ) : (
@@ -763,7 +761,6 @@ const RealTime = (props) => {
               return allTask.map((route, index) => {
                 return (
                   <div>
-                    {/* <button className={styles.profileImageContent} style="background-color:white;" onClick={() => { setRoute(route.routeId) }}> */}
                     <button
                       className={styles.profileImageContent}
                       style={{ color: routeColor[index] }}
@@ -780,10 +777,9 @@ const RealTime = (props) => {
                         }
                       }}
                     >
-                      {/* <button className={styles.profileImageContent} style={{ outlineColor: routeColor[index], outlineStyle: "solid", outlineWidth: "4px" }}> */}
                       <img className={styles.profileImage} src={jnu} alt="" />
                       <div className={styles.profileContent}>
-                        {route.routeName}&nbsp;
+                        {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
                       </div>
                     </button>
                   </div>
@@ -814,12 +810,45 @@ const RealTime = (props) => {
                     >
                       <img className={styles.profileImage} src={gist} alt="" />
                       <div className={styles.profileContent}>
-                        {route.routeName}&nbsp;
+                        {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
+
                       </div>
                     </button>
                   </div>
                 );
               });
+              // } else if (
+              //   props.myParams.region === "GWANGJU" &&
+              //   props.myParams.univ === "기타"
+              // ) {
+              //   return allTask.map((route, index) => {
+              //     console.log(allTask)
+              //     return (
+              //       <div>
+              //         <button
+              //           className={styles.profileImageContent}
+              //           style={{ color: routeColor[index] }}
+              //           onClick={() => {
+              //             if (routeId === route.routeId) {
+              //               setRouteId(0);
+              //               setDriverId(0);
+              //               setDirverInfo([]);
+              //               setOneTask([]);
+              //               setCheckIn([])
+              //             } else {
+              //               setRouteId(route.routeId);
+              //               setCheckIn([])
+              //             }
+              //           }}
+              //         >
+              //           <img className={styles.profileImage} src={gist} alt="" />
+              //           <div className={styles.profileContent}>
+              //             {route.routeName}&nbsp;
+              //           </div>
+              //         </button>
+              //       </div>
+              //     );
+              //   });
             } else if (props.myParams.region === "GWANGJU") {
               return allTask.map((route, index) => {
                 if (route.routeName.slice(0, 5) === "전남대학교") {
@@ -843,7 +872,8 @@ const RealTime = (props) => {
                       >
                         <img className={styles.profileImage} src={jnu} alt="" />
                         <div className={styles.profileContent}>
-                          {route.routeName}&nbsp;
+                          {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
+
                         </div>
                       </button>
                     </div>
@@ -873,7 +903,8 @@ const RealTime = (props) => {
                           alt=""
                         />
                         <div className={styles.profileContent}>
-                          {route.routeName}&nbsp;
+                          {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
+
                         </div>
                       </button>
                     </div>
@@ -904,7 +935,8 @@ const RealTime = (props) => {
                           alt=""
                         />
                         <div className={styles.profileContent}>
-                          {route.routeName}&nbsp;
+                          {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
+
                         </div>
                       </button>
                     </div>
@@ -940,7 +972,8 @@ const RealTime = (props) => {
                         alt=""
                       />
                       <div className={styles.profileContent}>
-                        {route.routeName}&nbsp;
+                        {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
+
                       </div>
                     </button>
                   </div>
@@ -972,7 +1005,8 @@ const RealTime = (props) => {
                         alt=""
                       />
                       <div className={styles.profileContent}>
-                        {route.routeName}&nbsp;
+                        {route.routeName}_{route.routeType === 'dinner' ? "저녁" : "점심"}&nbsp;
+
                       </div>
                     </button>
                   </div>
@@ -1048,9 +1082,9 @@ const RealTime = (props) => {
             {menuControl === 1 ? (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", margin: "10px", marginLeft: "0px", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>픽업지명</div>
-                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>예정 시간</div>
-                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>상태</div>
+                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>픽업지명</div>
+                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>예정 시간</div>
+                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>상태</div>
                 </div>
                 <hr width="100%" />
                 <div style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}>
@@ -1165,9 +1199,9 @@ const RealTime = (props) => {
             ) : (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", margin: "10px", marginLeft: "0px", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>배달지명</div>
-                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>예정 시간</div>
-                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "20px" }}>상태</div>
+                  <div style={{ width: "50%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>배달지명</div>
+                  <div style={{ width: "20%", marginRight: "10px", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>예정 시간</div>
+                  <div style={{ width: "20%", textAlign: "center", fontWeight: "300", fontSize: "15px" }}>상태</div>
                 </div>
                 <hr width="100%" />
                 <div style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}>
