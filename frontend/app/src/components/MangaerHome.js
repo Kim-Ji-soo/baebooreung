@@ -126,7 +126,9 @@ function ManagerHome({navigation}) {
   useEffect(() => {
     setInfoList();
   }, [userList]);
-
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
   useEffect(() => {
     // axios({
     //   method: 'get',
