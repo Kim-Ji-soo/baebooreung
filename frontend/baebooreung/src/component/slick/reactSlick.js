@@ -6,7 +6,7 @@ import "./reactSlick.css";
 import "./reactSlick2.css";
 import new_logo from "../../assets/images/new_logo_2.png";
 import { useNavigate } from "react-router-dom";
-import ReactPlayer from 'react-player/lazy';
+// import ReactPlayer from 'react-player/lazy';
 // import movie from '../../assets/배달긱영상40초.mp4';
 // import movie2 from '../../assets/배부릉 UCC 저용량.mp4';
 // import { fontSize } from "@mui/system";
