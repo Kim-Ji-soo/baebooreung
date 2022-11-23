@@ -7,9 +7,9 @@ import "./reactSlick2.css";
 import new_logo from "../../assets/images/new_logo_2.png";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from 'react-player/lazy';
-import movie from '../../assets/배달긱영상40초.mp4';
-import movie2 from '../../assets/배부릉 UCC 저용량.mp4';
-import { fontSize } from "@mui/system";
+// import movie from '../../assets/배달긱영상40초.mp4';
+// import movie2 from '../../assets/배부릉 UCC 저용량.mp4';
+// import { fontSize } from "@mui/system";
 
 // import "./styles.css";
 const SliderSlick = () => {
@@ -67,7 +67,7 @@ const SliderSlick = () => {
             alt=""
           />
         </div>
-        <div className='player-wrapper' style={{ height: "100%", width: "100%" }}>
+        {/* <div className='player-wrapper' style={{ height: "100%", width: "100%" }}>
           <div style={{
             position: "relative",
             top: "30%",
@@ -118,7 +118,7 @@ const SliderSlick = () => {
             // onEnded={}  // 플레이어 끝났을 때 이벤트
             />
           </div>
-        </div>
+        </div> */}
         {/* <div
           style={{
             height: "100%",
