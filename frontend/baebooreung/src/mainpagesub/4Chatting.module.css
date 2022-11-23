@@ -123,6 +123,9 @@
 }
 
 
+
+
+/* 여기서부터 체크시작 */
 .myChatComponent{
     display :flex;
     flex-direction: 'row-reverse';
@@ -178,6 +181,8 @@
     color :black;
 }
 
+/* 여기서 체크 마무리 */
+
 .bottomContainer {
     flex-direction: row;
     /* background-color: aqua; */
@@ -187,6 +192,8 @@
     justify-content: center;
 
 }
+
+
 
 .messageInput {
 
