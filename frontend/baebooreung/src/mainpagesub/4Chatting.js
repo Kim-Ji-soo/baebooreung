@@ -300,17 +300,24 @@ const Chatting = () => {
 
   useEffect(() => {
     setCreateChatVisible(!createChatVisible);
-  }, [])
+  }, []);
 
-  // useEffect(() => {
-  //   console.log(createChatCheckBox);
-  // }, [createChatCheckBox]);
+  useEffect(() => {
+    console.log(userProfileList);
+    console.log(createChatCheckBox);
+  }, [createChatCheckBox]);
 
   function createRoomModal() {
     return (
       <div className={styles.createModal}>
         <div className={styles.modalView}>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <br />
             <input
               style={{ width: "70%", height: "35px", marginTop: "25px" }}
@@ -331,93 +338,150 @@ const Chatting = () => {
              체크박스를 통해 초대할 유저정보 입력*/}
             {userProfileList
               // .filter((item) => item.email !== user.email)
+
               .map((item, idx) => {
                 return (
-                  <div key={idx} className={styles.createChatListStyle}>
-                    <div style={{ cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center" }}
-                      onClick={() => {
-                        setCreateChatCheckBox((el) => {
-                          const newArr = [...el];
-                          newArr[idx] = !newArr[idx];
-                          return newArr;
-                        });
-                      }}
-                    >
-                      <div className={styles.userListDetailText}>
-                        <img
-                          src={`${item.profile}`}
-                          style={{ width: "70px", height: "70px", borderRadius: "50%", border: "3px solid #0F1839" }}
-                        ></img>
-                        <div style={{ marginLeft: "20px" }}>
-                          <div>
-                            <span style={{ fontSize: "25px", fontFamily: "NanumSquareNeo-Variable" }}>{item.name}</span>
-                            <span style={{ fontSize: "20px", fontFamily: "NanumSquareNeo-Variable" }}>{item.grade === "MANAGER" && "   (관리자)"}</span>
+                  <div key={idx}>
+                    {createChatCheckBox[idx] === false && (
+                      <div className={styles.createChatListStyle}>
+                        <div
+                          style={{
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          onClick={() => {
+                            setCreateChatCheckBox((el) => {
+                              const newArr = [...el];
+                              newArr[idx] = !newArr[idx];
+                              return newArr;
+                            });
+                          }}
+                        >
+                          <div className={styles.userListDetailText}>
+                            <img
+                              src={`${item.profile}`}
+                              style={{
+                                width: "70px",
+                                height: "70px",
+                                borderRadius: "50%",
+                                border: "3px solid #0F1839",
+                              }}
+                            ></img>
+                            <div style={{ marginLeft: "20px" }}>
+                              <div>
+                                <span
+                                  style={{
+                                    fontSize: "25px",
+                                    fontFamily: "NanumSquareNeo-Variable",
+                                  }}
+                                >
+                                  {item.name}
+                                </span>
+                                <span
+                                  style={{
+                                    fontSize: "20px",
+                                    fontFamily: "NanumSquareNeo-Variable",
+                                  }}
+                                >
+                                  {item.grade === "MANAGER" && "   (관리자)"}
+                                </span>
+                              </div>
+                              <div className={styles.userListPhone}>
+                                {item.phone}
+                              </div>
+                            </div>
                           </div>
-                          <div className={styles.userListPhone}>{item.phone}</div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )
+                );
               })}
             {/* 초대버튼을 누를 시 나를 주체로 채팅방을 생성하고 
               체크박스로 추가된 유저목록의 유저들을 채팅방에 초대한다
               그 후에 체크박스의 체크된 요소들을 초기화시키고
               변경된 모든사항을 초기화시킨후(방목록)
               추가된 방목록을 재갱신 시킨다.*/}
-            <div
-              className={styles.buttonLayout}
-              onClick={async () => {
-                if (roomName !== "") {
-                  await axios({
-                    method: "post",
-                    url: chat.createRoom(),
-                    params: {
-                      name: roomName,
-                      userId: user.email,
-                    },
-                  })
-                    .then((res) => {
+            <div className={styles.buttonLayout}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                }}
+              >
+                <button
+                  onClick={async () => {
+                    if (roomName !== "") {
+                      await axios({
+                        method: "post",
+                        url: chat.createRoom(),
+                        params: {
+                          name: roomName,
+                          userId: user.email,
+                        },
+                      })
+                        .then((res) => {
+                          createChatCheckBox.map((item, idx) => {
+                            if (item === true) {
+                              axios({
+                                method: "post",
+                                url:
+                                  chat.invite() +
+                                  `${res.data.roomId}/${userProfileList[idx].email}/`,
+                              })
+                                .then((res) => {
+                                  console.log("초대", res.data);
+                                })
+                                .catch((e) => {
+                                  console.log(e);
+                                });
+                            }
+                          });
+                        })
+                        .catch((e) => {
+                          console.log(e);
+                        });
                       createChatCheckBox.map((item, idx) => {
                         if (item === true) {
-                          axios({
-                            method: "post",
-                            url:
-                              chat.invite() +
-                              `${res.data.roomId}/${userProfileList[idx].email}/`,
-                          })
-                            .then((res) => {
-                              console.log("초대", res.data);
-                            })
-                            .catch((e) => {
-                              console.log(e);
-                            });
+                          setCreateChatCheckBox((createChatCheckBox) => {
+                            const newArr = [...createChatCheckBox];
+                            newArr[idx] = false;
+                            return newArr;
+                          });
                         }
                       });
-                    })
-                    .catch((e) => {
-                      console.log(e);
-                    });
-                  createChatCheckBox.map((item, idx) => {
-                    if (item === true) {
-                      setCreateChatCheckBox((createChatCheckBox) => {
-                        const newArr = [...createChatCheckBox];
-                        newArr[idx] = false;
-                        return newArr;
-                      });
-                    }
-                  });
 
-                  setRoomName("");
-                  setChatRoomList([]);
-                  findAllRooms();
-                  setCreateChatVisible(!createChatVisible);
-                }
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-around", marginTop: "10px", marginBottom: "10px" }}>
-                <button style={{ width: "80px", height: "40px", border: "none", backgroundColor: "#F5CC1F", cursor: "pointer", borderRadius: "10px" }}>초대</button>
-                <button style={{ width: "80px", height: "40px", border: "none", backgroundColor: "#0F1839", cursor: "pointer", color: "white", borderRadius: "10px" }}
+                      setRoomName("");
+                      setChatRoomList([]);
+                      findAllRooms();
+                      setCreateChatVisible(!createChatVisible);
+                    }
+                  }}
+                  style={{
+                    width: "80px",
+                    height: "40px",
+                    border: "none",
+                    backgroundColor: "#F5CC1F",
+                    cursor: "pointer",
+                    borderRadius: "10px",
+                  }}
+                >
+                  초대
+                </button>
+                <button
+                  style={{
+                    width: "80px",
+                    height: "40px",
+                    border: "none",
+                    backgroundColor: "#0F1839",
+                    cursor: "pointer",
+                    color: "white",
+                    borderRadius: "10px",
+                  }}
                   onClick={() => {
                     setCreateChatVisible(!createChatVisible);
                   }}
@@ -433,15 +497,29 @@ const Chatting = () => {
   }
   return (
     <div className={styles.background}>
-      {!createChatVisible && (<div style={{ height: "100%", width: "25%" }}>
-        <div style={{ fontFamily: "NanumSquareNeo-Variable", fontSize: "25px", cursor: "pointer", width: "100%", height: "100%", border: "3px solid #0F1839", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px" }}
-          onClick={() => {
-            setCreateChatVisible(!createChatVisible);
-          }}
-        >
-          눌러서 사용자 초대하기
+      {!createChatVisible && (
+        <div style={{ height: "100%", width: "25%" }}>
+          <div
+            style={{
+              fontFamily: "NanumSquareNeo-Variable",
+              fontSize: "25px",
+              cursor: "pointer",
+              width: "100%",
+              height: "100%",
+              border: "3px solid #0F1839",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "20px",
+            }}
+            onClick={() => {
+              setCreateChatVisible(!createChatVisible);
+            }}
+          >
+            눌러서 사용자 초대하기
+          </div>
         </div>
-      </div>)}
+      )}
       {/* 채팅방 생성 모달 불러오기 */}
       {createChatVisible && createRoomModal()}
 
@@ -489,8 +567,8 @@ const Chatting = () => {
                       item.roomId === roomId && item.sender === user.email
                         ? styles.myChatComponent
                         : item.roomId === roomId && item.sender !== user.email
-                          ? styles.otherChatComponent
-                          : {}
+                        ? styles.otherChatComponent
+                        : {}
                     }
                   >
                     {/* messages에 저장된 roomId가 내가 입장한 roomId와 일치하고
@@ -529,11 +607,11 @@ const Chatting = () => {
                             ? styles.noticeChat
                             : item.roomId === roomId &&
                               item.sender === user.email
-                              ? styles.myChat
-                              : item.roomId === roomId &&
-                                item.sender !== user.email
-                                ? styles.otherChat
-                                : {}
+                            ? styles.myChat
+                            : item.roomId === roomId &&
+                              item.sender !== user.email
+                            ? styles.otherChat
+                            : {}
                         }
                       >
                         {/* messages에 저장된 roomId가 내가 입장한 roomId와 일치하고
@@ -593,11 +671,108 @@ const Chatting = () => {
           </div>
         )}
 
-        {!page && (<div style={{ width: "50%", marginRight: "1%", height: "100%", border: "3px solid #0F1839", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px", fontFamily: "NanumSquareNeo-Variable", fontSize: "25px" }}>사용자 초대하고 채팅 시작하기 {createChatCheckBox}</div>)}
+        {!page && (
+          <div>
+            <div
+              style={{
+                width: "100%",
+                paddingRight: "1%",
+                height: "100%",
+                border: "3px solid #0F1839",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "20px",
+                fontFamily: "NanumSquareNeo-Variable",
+                fontSize: "25px",
+              }}
+            >
+              {/* 여기는 createChatcheckBox가 true인 친구들만 나오게 */}
+              <div className={styles.createRoomNameLayout}>
+                {userProfileList
+                  // .filter((item) => item.email !== user.email)
+
+                  .map((item, idx) => {
+                    return (
+                      <div key={idx}>
+                        {createChatCheckBox[idx] === true && (
+                          <div className={styles.createChatListStyle}>
+                            <div
+                              style={{
+                                cursor: "pointer",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              onClick={() => {
+                                setCreateChatCheckBox((el) => {
+                                  const newArr = [...el];
+                                  newArr[idx] = !newArr[idx];
+                                  return newArr;
+                                });
+                              }}
+                            >
+                              <div className={styles.userListDetailText}>
+                                <img
+                                  src={`${item.profile}`}
+                                  style={{
+                                    width: "70px",
+                                    height: "70px",
+                                    borderRadius: "50%",
+                                    border: "3px solid #0F1839",
+                                  }}
+                                ></img>
+                                <div style={{ marginLeft: "20px" }}>
+                                  <div>
+                                    <span
+                                      style={{
+                                        fontSize: "25px",
+                                        fontFamily: "NanumSquareNeo-Variable",
+                                      }}
+                                    >
+                                      {item.name}
+                                    </span>
+                                    <span
+                                      style={{
+                                        fontSize: "20px",
+                                        fontFamily: "NanumSquareNeo-Variable",
+                                      }}
+                                    >
+                                      {item.grade === "MANAGER" &&
+                                        "   (관리자)"}
+                                    </span>
+                                  </div>
+                                  <div className={styles.userListPhone}>
+                                    {item.phone}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                사용자 초대하고 채팅 시작하기 {createChatCheckBox}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 채팅방 목록 div */}
         <div className={styles.chatRoomListLayout}>
-          <div style={{ height: "100%", display: "flex", fontSize: "25px", fontFamily: "NanumSquareNeo-Variable", justifyContent: "center", alignItems: "center" }}>존재하는 채팅방이 없습니다.</div>
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              fontSize: "25px",
+              fontFamily: "NanumSquareNeo-Variable",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            존재하는 채팅방이 없습니다.
+          </div>
           {/* 채팅방 리스트 출력 */}
           {chatRoomList.map((item, idx) => {
             return (
@@ -640,7 +815,7 @@ const Chatting = () => {
           })}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
