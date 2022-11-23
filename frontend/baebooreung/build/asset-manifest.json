@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.51ceb95e.css",
-    "main.js": "/static/js/main.9a7db2f7.js",
+    "main.js": "/static/js/main.99d6b8fb.js",
     "reactPlayerYouTube.js": "/static/js/reactPlayerYouTube.6d2638b2.chunk.js",
     "reactPlayerSoundCloud.js": "/static/js/reactPlayerSoundCloud.8706cf5e.chunk.js",
     "reactPlayerVimeo.js": "/static/js/reactPlayerVimeo.2b82eb37.chunk.js",
@@ -15,8 +15,6 @@
     "reactPlayerKaltura.js": "/static/js/reactPlayerKaltura.b6de1bbb.chunk.js",
     "reactPlayerFilePlayer.js": "/static/js/reactPlayerFilePlayer.4796108a.chunk.js",
     "reactPlayerPreview.js": "/static/js/reactPlayerPreview.2bbc0f9e.chunk.js",
-    "static/media/배부릉 UCC 저용량.mp4": "/static/media/배부릉 UCC 저용량.d3ab8318ff1eced18f88.mp4",
-    "static/media/배달긱영상40초.mp4": "/static/media/배달긱영상40초.396e0a95d2d62520d248.mp4",
     "static/media/refresh_move_on.gif": "/static/media/refresh_move_on.04121b5dee5be1a83413.gif",
     "static/media/연세대.png": "/static/media/연세대.5d14a1e936ef224d7e22.png",
     "static/media/animation.gif": "/static/media/animation.2fff346d79ce2ea973e0.gif",
@@ -45,7 +43,7 @@
     "static/media/send.png": "/static/media/send.1912f3f1fdb66d040d2c.png",
     "index.html": "/index.html",
     "main.51ceb95e.css.map": "/static/css/main.51ceb95e.css.map",
-    "main.9a7db2f7.js.map": "/static/js/main.9a7db2f7.js.map",
+    "main.99d6b8fb.js.map": "/static/js/main.99d6b8fb.js.map",
     "reactPlayerYouTube.6d2638b2.chunk.js.map": "/static/js/reactPlayerYouTube.6d2638b2.chunk.js.map",
     "reactPlayerSoundCloud.8706cf5e.chunk.js.map": "/static/js/reactPlayerSoundCloud.8706cf5e.chunk.js.map",
     "reactPlayerVimeo.2b82eb37.chunk.js.map": "/static/js/reactPlayerVimeo.2b82eb37.chunk.js.map",
@@ -62,6 +60,6 @@
   },
   "entrypoints": [
     "static/css/main.51ceb95e.css",
-    "static/js/main.9a7db2f7.js"
+    "static/js/main.99d6b8fb.js"
   ]
 }
