@@ -68,6 +68,13 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    public int getUserDeliveryId(int id){
+        UserEntity userEntity = userRepository.findById(id);
+        if (userEntity == null) throw new UsernameNotFoundException(id + ": not found");
+        if (userEntity.getDeliveryId() == null) throw new NullPointerException("DeliveryId is not found");
+        return userEntity.getDeliveryId();
+    }
+
 
     @Override //Username으로
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

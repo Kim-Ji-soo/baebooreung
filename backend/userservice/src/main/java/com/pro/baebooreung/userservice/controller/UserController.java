@@ -141,6 +141,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/fcm/user/{id}") //회원이 다음에 향할 지점인 deliveryId 가져오기
+    public int getUserDeliveryId(@PathVariable int id) {
+        int result = userService.getUserDeliveryId(id);
+        return result;
+    }
+
 //    @GetMapping("/api/logout")
 //    public ResponseEntity<?> logout(@RequestHeader(value="token") String token) {
 //        //근데 그냥 토큰이 로그인 할 떄마다 발급되는데 내가 없애줄 게 있나? 강제로 만료하게 하는 것도 불가능 하잖아

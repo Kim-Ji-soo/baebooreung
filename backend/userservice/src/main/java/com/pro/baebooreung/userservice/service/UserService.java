@@ -31,4 +31,6 @@ public interface UserService extends UserDetailsService {
     public String getProfile(int userId);
 
     public String getSpecialKey(int id);
+
+    public int getUserDeliveryId(int id);
 }
