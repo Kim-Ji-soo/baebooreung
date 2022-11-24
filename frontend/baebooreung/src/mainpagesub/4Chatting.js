@@ -435,7 +435,7 @@ const Chatting = () => {
   return (
     <div className={styles.background}>
       {!createChatVisible && (
-        <div style={{ height: "100%", width: "33%", marginRight: "1%" }}>
+        <div style={{ height: "100%", width: "33%", marginRight: "1.5%" }}>
           <div
             style={{
               fontFamily: "NanumSquareNeo-Variable",
@@ -505,6 +505,7 @@ const Chatting = () => {
               </button>
             </div>
 
+            {/* 여기서부터 채팅 내용 CSS 정리 시작 */}
             <div className={styles.chatRoomLayout}>
               <div className={styles.chatOutDiv}>
                 {messages.map((item, idx) => {
@@ -605,6 +606,7 @@ const Chatting = () => {
                 })}
               </div>
             </div>
+            {/* 여기까지 채팅 내용 CSS 정리 마무리 */}
             {/* 채팅 메세지 입력 컴포넌트  */}
             <div className={styles.bottomContainer}>
               <hr style={{ width: "95%" }} />
@@ -658,30 +660,32 @@ const Chatting = () => {
         )}
 
         {!page && (
-          <div style={{ width: "50%", height: "100%", marginRight: "1.5%" }}>
             <div
               style={{
                 // backgroundColor: "blue",
-                width: "100%",
+                width: "50%",
                 height: "100%",
                 border: "3px solid #0F1839",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: "20px",
+                borderRadius: "30px",
                 fontFamily: "NanumSquareNeo-Variable",
                 fontSize: "25px",
+                marginRight:"1.68%",
               }}
             >
               {/* 여기는 createChatcheckBox가 true인 친구들만 나오게 */}
               {!createChatCheckBox.includes(true) && (
                 <div
                   style={{
+                    width: "100%",
                     height: "100%",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    flexDirection: "column",
                   }}
                   // onClick={() => {
                   //   setCreateChatVisible(!createChatVisible);
@@ -696,6 +700,8 @@ const Chatting = () => {
                     width: "100%",
                     height: "100%",
                     display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                     flexDirection: "column",
                   }}
                 >
@@ -885,7 +891,6 @@ const Chatting = () => {
                 </div>
               )}
             </div>
-          </div>
         )}
 
         {/* 채팅방 목록 div */}
@@ -970,7 +975,7 @@ const Chatting = () => {
                 alignItems: "center",
               }}
             >
-              존재하는 채팅방이 없습니다.
+              채팅방이 없습니다.
             </div>
           )}
         </div>
