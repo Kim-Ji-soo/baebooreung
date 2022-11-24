@@ -1,12 +1,16 @@
 package com.pro.baebooreung.apigatewayservice.config;
 
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+
 //@Configuration
-public class WebMvcConfig{// implements WebMvcConfigurer {
+public class WebMvcConfig{//} implements WebMvcConfigurer {
+//
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
 //        registry.addMapping("/**")
@@ -18,4 +22,5 @@ public class WebMvcConfig{// implements WebMvcConfigurer {
 //                        HttpMethod.PUT.name(),
 //                        HttpMethod.DELETE.name());
 //    }
+
 }
