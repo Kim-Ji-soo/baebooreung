@@ -29,15 +29,6 @@ public class FCMService {
 
     @Autowired
     DeliveryRepository deliveryRepository;
-//    @Autowired
-//    BusinessServiceClient businessServiceClient;
-
-//    @Autowired
-//    public FCMService(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-
-
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/baebooreung-398a1/messages:send";
 
@@ -107,9 +98,6 @@ public class FCMService {
         User findUser = userRepository.findOne(userId);
         String targetToken = findUser.getFcmToken();
 
-        //deliveryId로 delivery name 찾아오기
-//        String delivery_name = deliveryRepository.findOne(findUser.getDeliveryId()).getDelName();
-//        body += " - " + delivery_name;
         String message = makeMessage(targetToken, title, body);
 
         sendMessageCommon(message);
