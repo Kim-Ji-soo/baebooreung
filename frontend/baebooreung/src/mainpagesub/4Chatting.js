@@ -533,7 +533,7 @@ const Chatting = () => {
                           )}
                         {/*  */}
                         <div
-                          style={{ width: "100%" }}
+                          // style={{ width: "100%" }}
                           className={
                             (item.type === "ENTER" || item.type === "QUIT") &&
                             styles.noticeChatLayout

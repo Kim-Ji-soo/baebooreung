@@ -75,6 +75,7 @@
     flex-direction: column;
     width:100%;
     height:79%;
+
 }
 
 .chatOutDiv {
@@ -82,6 +83,7 @@
     overflow-y: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+    /* background-color: red; */
 }
 
 .chatOutDiv::-webkit-scrollbar {
@@ -134,14 +136,27 @@
 
 
 /* 여기서부터 체크시작 */
+
 .myChatComponent{
+    /* margin-left:10px; */
+    /* width:100%; */
     display :flex;
-    flex-direction: 'row-reverse';
+    justify-content: end;
+    padding-right:10px;
+    padding-left:10px;
+    /* background-color: green; */
 }
 
 .otherChatComponent {
+    width:100%;
     display :flex;
-    flex-direction : 'row';
+    /* flex-direction : 'row'; */
+    justify-content: start;
+    padding-right:10px;
+    /* margin-left:10px; */
+    /* padding-left:10px; */
+    /* margin-left:10px; */
+    /* background-color: yellow; */
 }
 
 .otherChatProfile{
@@ -150,6 +165,10 @@
 
 .noticeChatLayout{
     display:flex;
+    justify-content: center;
+    width:100%;
+    /* background-color: GREEN; */
+    /* margin-right:10px; */
 }
 
 .otherChatName {
@@ -161,32 +180,70 @@
     display :flex;
     margin : 1%;
     align-items: center;
+    /* background-color: #F5CC1F; */
 }
 .myChat {
-    background-color: #58ACFA;
-    border-radius :10%;
-    margin : 5%;
+    /* display: flex;
+    justify-content: end;  */
+    /* display: flex; */
+    /* justify-content: end; */
+    background-color: #F5CC1F;
+    /* text-align: end; */
+    border-radius :10px;
+    width:100%;
+    margin-top: 10px;
+    padding-top:10px;
+    margin-bottom: 10px;
+    padding-bottom:10px;
+    color:black;
+    /* margin-left:10px; */
+    /* padding-right:10px; */
+    
+    /* margin : 5%;
     padding : 7%;
+    max-width: 100%; */
 }
 .otherChat{
-    background-color : white;
-    border-radius :10%;
+    /* background-color : blue; */
+    background-color: #0F1839;
+    box-sizing: border-box;
+    /* border: 2px solid #0F1839; */
+    border-radius :10px;
+    /* padding-left:10px; */
+    /* margin-left:10px; */
+    width:100%;
+    margin-top: 10px;
+    padding-top:10px;
+    margin-bottom: 10px;
+    padding-bottom:10px;
+    /* padding-right:10px; */
+    margin-left:10px;
+    /* max-width: 100%;
     margin : 5%;
-    padding : 7%;
+    padding : 7%; */
 }
 .noticeChatText {
-    color: #BDBDBD;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    
+    color: #0F1839;
     font-weight: bold;
-    background-color: blue;
+    /* background-color: red; */
     width:100%;
     /* margin-left:"20px" */
 }
 
 .myChatText{
-    color: white;
+    /* background-color: #F5CC1F; */
+    color: #0F1839;
+    margin-right: 10px;
+    margin-left:5px;
 }
 .otherChatText{
-    color :black;
+    color :#EFEFEF;
+    margin-left: 10px;
+    margin-right:5px;
 }
 
 /* 여기서 체크 마무리 */
