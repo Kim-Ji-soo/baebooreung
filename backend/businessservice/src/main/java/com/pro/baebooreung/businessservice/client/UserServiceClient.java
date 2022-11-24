@@ -26,4 +26,6 @@ public interface UserServiceClient {
 
     @GetMapping("/route/delivery/{userId}")
     public ResponseDriverRoute checkRouteAndDelivery(@PathVariable("userId") int userId);
+
+
 }

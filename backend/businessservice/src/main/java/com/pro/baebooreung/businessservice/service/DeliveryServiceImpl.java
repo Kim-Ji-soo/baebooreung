@@ -6,6 +6,7 @@ import com.pro.baebooreung.businessservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.businessservice.domain.repository.NavigationRepository;
 import com.pro.baebooreung.businessservice.dto.CheckResponse;
 import com.pro.baebooreung.businessservice.dto.DeliveryDto;
+import com.pro.baebooreung.businessservice.dto.DeliveryGPSDto;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,15 @@ public class DeliveryServiceImpl implements DeliveryService {
             deliveryRepository.save(findDel.get());
         }
 
+    }
+
+    @Override
+    public DeliveryGPSDto getByDelivery(int deliveryId) throws Exception {
+        Optional<Delivery> findDel = deliveryRepository.findById(deliveryId);
+        if(findDel.isEmpty()){
+            throw new IllegalStateException("존재하지 않는 배달지점 정보입니다.");
+        }
+        return DeliveryGPSDto.builder().latitude(findDel.get().getLatitude()).longitude(findDel.get().getLongitude()).build();
     }
 
     @Override
