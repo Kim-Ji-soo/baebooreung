@@ -56,7 +56,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         if(findDel.isEmpty()){
             throw new IllegalStateException("존재하지 않는 배달지점 정보입니다.");
         }
-        return DeliveryGPSDto.builder().latitude(findDel.get().getLatitude()).longitude(findDel.get().getLongitude()).build();
+        return DeliveryGPSDto.builder().latitude(findDel.get().getLatitude()).longitude(findDel.get().getLongitude()).delName(findDel.get().getDelName()).build();
     }
 
     @Override
