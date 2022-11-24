@@ -1,12 +1,16 @@
 package com.pro.baebooreung.checkinservice.service;
 
+import com.pro.baebooreung.checkinservice.client.BusinessServiceClient;
+import com.pro.baebooreung.checkinservice.client.UserServiceClient;
 import com.pro.baebooreung.checkinservice.domain.Delivery;
 import com.pro.baebooreung.checkinservice.domain.User;
 import com.pro.baebooreung.checkinservice.domain.repository.DeliveryRepository;
 import com.pro.baebooreung.checkinservice.domain.repository.UserRepository;
+import com.pro.baebooreung.checkinservice.dto.DeliveryGPSDto;
 import com.pro.baebooreung.checkinservice.dto.GpsSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,15 +20,16 @@ public class CheckinService {
     private final UserRepository userRepository;
     private final DeliveryRepository deliveryRepository;
     private final FCMService fcmService;
+    private final UserServiceClient userServiceClient;
+    private final BusinessServiceClient businessServiceClient;
 
     public void checkin(GpsSaveDto gpsSaveDto) throws Exception {
         // 유저 찾기
-        User user = userRepository.findOne(gpsSaveDto.getUserId());
-        if(user == null) throw new IllegalStateException("해당 회원이 존재하지 않습니다.");
+        int deliveryId = userServiceClient.getUserDeliveryId(gpsSaveDto.getUserId());
 
         // 향하는 배달 지점 찾기
-        Delivery delivery = deliveryRepository.findOne(user.getDeliveryId());
-        if(delivery == null) throw new IllegalStateException("해당 회원이 존재하지 않습니다.");
+        DeliveryGPSDto delivery = businessServiceClient.getDeliveryGps(deliveryId);
+        if(delivery == null) throw new IllegalStateException("해당 지점이 존재하지 않습니다.");
 
         // 향하는 지점 ~ 현재 위치 간이 거리 계산(meter)
         double dist = distance(Double.parseDouble(gpsSaveDto.getLatitude()), Double.parseDouble(gpsSaveDto.getLongitude()), delivery.getLatitude(), delivery.getLongitude());
@@ -35,7 +40,7 @@ public class CheckinService {
             String title = "체크인 가능";
             String body = delivery.getDelName()+" 체크인이 가능한 위치입니다. 사진을 찍어 체크인해주세요!";
             fcmService.sendMessageCheckIn(
-                    user.getId(),
+                    gpsSaveDto.getUserId(),
                     title,
                     body);
         }
