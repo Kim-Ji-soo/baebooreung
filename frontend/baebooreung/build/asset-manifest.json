@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.51ceb95e.css",
-    "main.js": "/static/js/main.1e3d1e7d.js",
+    "main.css": "/static/css/main.a3eca311.css",
+    "main.js": "/static/js/main.28d6c941.js",
     "static/media/refresh_move_on.gif": "/static/media/refresh_move_on.04121b5dee5be1a83413.gif",
     "static/media/연세대.png": "/static/media/연세대.5d14a1e936ef224d7e22.png",
     "static/media/animation.gif": "/static/media/animation.2fff346d79ce2ea973e0.gif",
@@ -16,10 +16,10 @@
     "static/media/map.png": "/static/media/map.73948584a92a3fc87a6f.png",
     "static/media/new_logo_2_fold_stroke.png": "/static/media/new_logo_2_fold_stroke.ee49dfe98c5a6b7924d6.png",
     "static/media/tracking.png": "/static/media/tracking.4987be19d148fe0e0c81.png",
-    "static/media/logout2.png": "/static/media/logout2.71f78f0bc33ca3abbcd4.png",
     "static/media/refresh_move_off.gif": "/static/media/refresh_move_off.69f82c62d8560ef49bf5.gif",
     "static/media/task.png": "/static/media/task.ab4c39d2e156f466dd92.png",
     "static/media/profile.png": "/static/media/profile.4c1db188c1ed79a85c7b.png",
+    "static/media/logout2.png": "/static/media/logout2.5d2e9c4272faa2b8e7e7.png",
     "static/media/focus_off.png": "/static/media/focus_off.865baf34c0da8549cbda.png",
     "static/media/chat.png": "/static/media/chat.7425923556a70039e052.png",
     "static/media/지스트.png": "/static/media/지스트.f5e76f19e1e954e9903e.png",
@@ -29,11 +29,11 @@
     "static/media/logout_white.png": "/static/media/logout_white.821e6f5bddd8427e6395.png",
     "static/media/send.png": "/static/media/send.1912f3f1fdb66d040d2c.png",
     "index.html": "/index.html",
-    "main.51ceb95e.css.map": "/static/css/main.51ceb95e.css.map",
-    "main.1e3d1e7d.js.map": "/static/js/main.1e3d1e7d.js.map"
+    "main.a3eca311.css.map": "/static/css/main.a3eca311.css.map",
+    "main.28d6c941.js.map": "/static/js/main.28d6c941.js.map"
   },
   "entrypoints": [
-    "static/css/main.51ceb95e.css",
-    "static/js/main.1e3d1e7d.js"
+    "static/css/main.a3eca311.css",
+    "static/js/main.28d6c941.js"
   ]
 }
