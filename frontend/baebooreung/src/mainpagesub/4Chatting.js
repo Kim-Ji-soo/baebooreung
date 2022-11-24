@@ -10,9 +10,7 @@ import logout from "../assets/images/logout2.png";
 import Swal from "sweetalert2";
 import send from "../assets/images/send.png";
 
-
 const Chatting = () => {
-
   // document.getElementById('textarea').addEventListener('keydown', function () {
   //   sendMessage()
   // })
@@ -28,6 +26,7 @@ const Chatting = () => {
   const userList = useSelector((state) => state.userList.userList);
   const user = useSelector((state) => state.user);
   const [userProfileList, setUserProfileList] = useState([]);
+  const [mainRoomName, setMainRoomName] = useState(); // 메인 채팅창 방제목
   const name = user.name; //메세지를 전송하는 주체
   const dispatch = useDispatch();
   const client = useRef({});
@@ -124,13 +123,22 @@ const Chatting = () => {
   //입장정보가 false면 mySQL의 입장정보를 true로 바꾸고
   //Redis에 저장된 채팅DB에 type이 ENTER인 publish 요청을 보냄
   async function enterRoom(roomId, userId) {
+    await axios({
+      method: "get",
+      url: chat.findRoom() + `${roomId}`,
+    })
+      .then((result) => {
+        setMainRoomName(result.data.roomName);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     setRoomId(roomId);
     axios({
       method: "get",
       url: chat.getInfo() + `${roomId}/${userId}`,
     })
-      .then((res) => {
-        console.log("getInfo", res.data.isEnter, res.data.isSubscribe);
+      .then(async (res) => {
         if (res.data.isSubscribe === false) {
           axios({
             method: "put",
@@ -280,7 +288,7 @@ const Chatting = () => {
             },
           })
             .then((res) => {
-              console.log("파일가져오기", res.data);
+              // console.log("파일가져오기", res.data);
 
               setUserProfileList((userProfileList) => {
                 const newUserProfileList = [...userProfileList];
@@ -303,7 +311,7 @@ const Chatting = () => {
   }, [userList]);
 
   useEffect(() => {
-    console.log(userProfileList);
+    // console.log(userProfileList);
   }, [userProfileList]);
 
   useEffect(() => {
@@ -311,8 +319,8 @@ const Chatting = () => {
   }, []);
 
   useEffect(() => {
-    console.log(userProfileList);
-    console.log(createChatCheckBox);
+    // console.log(userProfileList);
+    // console.log(createChatCheckBox);
   }, [createChatCheckBox]);
 
   function createRoomModal() {
@@ -328,7 +336,14 @@ const Chatting = () => {
           >
             <br />
             <input
-              style={{ width: "85%", height: "50px", marginTop: "25px", borderRadius: "10px", fontSize: "20px", fontFamily: "NanumSquareNeo-Variable", }}
+              style={{
+                width: "85%",
+                height: "50px",
+                marginTop: "25px",
+                borderRadius: "10px",
+                fontSize: "20px",
+                fontFamily: "NanumSquareNeo-Variable",
+              }}
               type="text"
               autoFocus
               placeholder=" 방 제목을 입력하세요(필수)"
@@ -364,7 +379,7 @@ const Chatting = () => {
                               newArr[idx] = !newArr[idx];
                               return newArr;
                             });
-                            setPage(false)
+                            setPage(false);
                           }}
                         >
                           <div className={styles.userListDetailText}>
@@ -412,9 +427,7 @@ const Chatting = () => {
               그 후에 체크박스의 체크된 요소들을 초기화시키고
               변경된 모든사항을 초기화시킨후(방목록)
               추가된 방목록을 재갱신 시킨다.*/}
-
           </div>
-
         </div>
       </div>
     );
@@ -422,7 +435,7 @@ const Chatting = () => {
   return (
     <div className={styles.background}>
       {!createChatVisible && (
-        <div style={{ height: "100%", width: "33%", marginRight: "1%" }}>
+        <div style={{ height: "100%", width: "33%", marginRight: "1.5%" }}>
           <div
             style={{
               fontFamily: "NanumSquareNeo-Variable",
@@ -435,7 +448,6 @@ const Chatting = () => {
               justifyContent: "center",
               alignItems: "center",
               borderRadius: "20px",
-
             }}
             onClick={() => {
               setCreateChatVisible(!createChatVisible);
@@ -473,11 +485,18 @@ const Chatting = () => {
         {/* 채팅창 div */}
         {page && (
           <div className={styles.chatRoomLayout2}>
-
             <div className={styles.chatheadder}>
               <div></div>
-              <div style={{ fontSize: "24px" }}>여긴 방제목</div>
-              <button style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "NanumSquareNeo-Variable", marginRight: "10px", color: "white" }}
+              <div style={{ fontSize: "24px" }}>{mainRoomName}</div>
+              <button
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "NanumSquareNeo-Variable",
+                  marginRight: "10px",
+                  color: "white",
+                }}
                 onClick={() => {
                   setPage(false);
                 }}
@@ -486,6 +505,7 @@ const Chatting = () => {
               </button>
             </div>
 
+            {/* 여기서부터 채팅 내용 CSS 정리 시작 */}
             <div className={styles.chatRoomLayout}>
               <div className={styles.chatOutDiv}>
                 {messages.map((item, idx) => {
@@ -498,9 +518,10 @@ const Chatting = () => {
                         className={
                           item.roomId === roomId && item.sender === user.email
                             ? styles.myChatComponent
-                            : item.roomId === roomId && item.sender !== user.email
-                              ? styles.otherChatComponent
-                              : {}
+                            : item.roomId === roomId &&
+                              item.sender !== user.email
+                            ? styles.otherChatComponent
+                            : {}
                         }
                       >
                         {/* messages에 저장된 roomId가 내가 입장한 roomId와 일치하고
@@ -511,7 +532,8 @@ const Chatting = () => {
                             <div className={styles.otherChatProfile}></div>
                           )}
                         {/*  */}
-                        <div style={{ width: "100%" }}
+                        <div
+                          // style={{ width: "100%" }}
                           className={
                             (item.type === "ENTER" || item.type === "QUIT") &&
                             styles.noticeChatLayout
@@ -539,20 +561,21 @@ const Chatting = () => {
                                 ? styles.noticeChat
                                 : item.roomId === roomId &&
                                   item.sender === user.email
-                                  ? styles.myChat
-                                  : item.roomId === roomId &&
-                                    item.sender !== user.email
-                                    ? styles.otherChat
-                                    : {}
+                                ? styles.myChat
+                                : item.roomId === roomId &&
+                                  item.sender !== user.email
+                                ? styles.otherChat
+                                : {}
                             }
                           >
                             {/* messages에 저장된 roomId가 내가 입장한 roomId와 일치하고
                         type이 'ENTER'라면 아래 메세지 출력 */}
-                            {item.roomId === roomId && item.type === "ENTER" && (
-                              <div className={styles.noticeChatText}>
-                                {item.name}님이 입장하셨습니다.
-                              </div>
-                            )}
+                            {item.roomId === roomId &&
+                              item.type === "ENTER" && (
+                                <div className={styles.noticeChatText}>
+                                  {item.name}님이 입장하셨습니다.
+                                </div>
+                              )}
 
                             {/* messages에 저장된 roomId가 내가 입장한 roomId와 일치하고
                         type이 'QUIT' 이라면 아래 메세지 출력 */}
@@ -582,14 +605,31 @@ const Chatting = () => {
                   );
                 })}
               </div>
-
             </div>
+            {/* 여기까지 채팅 내용 CSS 정리 마무리 */}
             {/* 채팅 메세지 입력 컴포넌트  */}
             <div className={styles.bottomContainer}>
               <hr style={{ width: "95%" }} />
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: "0px" }}>
-                <textarea id="textarea"
-                  style={{ width: "85%", marginLeft: "1%", marginRight: "1%", marginTop: "1%", marginBottom: "1%", borderRadius: "10px", height: "50px", fontSize: "20px", fontFamily: "NanumSquareNeo-Variable", }}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "0px",
+                }}
+              >
+                <textarea
+                  id="textarea"
+                  style={{
+                    width: "85%",
+                    marginLeft: "1%",
+                    marginRight: "1%",
+                    marginTop: "1%",
+                    marginBottom: "1%",
+                    borderRadius: "10px",
+                    height: "50px",
+                    fontSize: "20px",
+                    fontFamily: "NanumSquareNeo-Variable",
+                  }}
                   className={styles.messageInput}
                   placeholder={" 메세지를 입력하세요"}
                   onChange={(e) => {
@@ -597,7 +637,17 @@ const Chatting = () => {
                   }}
                   value={message}
                 ></textarea>
-                <button style={{ marginTop: "1%", marginBottom: "1%", background: "none", border: "none", cursor: "pointer", backgroundColor: "#0F1839", borderRadius: "10px", fontFamily: "NanumSquareNeo-Variable", }}
+                <button
+                  style={{
+                    marginTop: "1%",
+                    marginBottom: "1%",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    backgroundColor: "#0F1839",
+                    borderRadius: "10px",
+                    fontFamily: "NanumSquareNeo-Variable",
+                  }}
                   clsssName={styles.buttonStyle}
                   onClick={sendMessage}
                   disabled={message === ""}
@@ -606,161 +656,222 @@ const Chatting = () => {
                 </button>
               </div>
             </div>
-
           </div>
         )}
 
         {!page && (
-          <div
-            style={{ width: "50%", height: "100%", marginRight: "1.5%" }}>
             <div
               style={{
                 // backgroundColor: "blue",
-                width: "100%",
+                width: "50%",
                 height: "100%",
                 border: "3px solid #0F1839",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: "20px",
+                borderRadius: "30px",
                 fontFamily: "NanumSquareNeo-Variable",
                 fontSize: "25px",
+                marginRight:"1.68%",
               }}
             >
               {/* 여기는 createChatcheckBox가 true인 친구들만 나오게 */}
               {!createChatCheckBox.includes(true) && (
-                <div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
-                // onClick={() => {
-                //   setCreateChatVisible(!createChatVisible);
-                // }}
-                >선택된 사용자나 열린 채팅방이 없습니다.</div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                  // onClick={() => {
+                  //   setCreateChatVisible(!createChatVisible);
+                  // }}
+                >
+                  선택된 사용자나 열린 채팅방이 없습니다.
+                </div>
               )}
-              {(createChatCheckBox.includes(true) && <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
+              {createChatCheckBox.includes(true) && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div className={styles.createRoomNameLayout2}>
+                    {userProfileList
+                      // .filter((item) => item.email !== user.email)
 
-                <div className={styles.createRoomNameLayout2}>
-                  {userProfileList
-                    // .filter((item) => item.email !== user.email)
-
-                    .map((item, idx) => {
-                      return (
-                        <div key={idx} style={{}}>
-                          {createChatCheckBox[idx] === true && (
-                            <div className={styles.createChatListStyle2}>
-                              <div
-                                style={{
-                                  cursor: "pointer",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                                onClick={() => {
-                                  setCreateChatCheckBox((el) => {
-                                    const newArr = [...el];
-                                    newArr[idx] = !newArr[idx];
-                                    return newArr;
-                                  });
-                                  console.log(createChatCheckBox)
-                                }}
-                              >
-                                <div className={styles.userListDetailText2}>
-                                  <img
-                                    src={`${item.profile}`}
-                                    style={{
-                                      width: "70px",
-                                      height: "70px",
-                                      borderRadius: "50%",
-                                      border: "3px solid #0F1839",
-                                    }}
-                                  ></img>
-                                  <div style={{ marginLeft: "20px" }}>
-                                    <div>
-                                      <span
-                                        style={{
-                                          fontSize: "25px",
-                                          fontFamily: "NanumSquareNeo-Variable",
-                                        }}
-                                      >
-                                        {item.name}
-                                      </span>
-                                      <span
-                                        style={{
-                                          fontSize: "20px",
-                                          fontFamily: "NanumSquareNeo-Variable",
-                                        }}
-                                      >
-                                        {item.grade === "MANAGER" &&
-                                          "   (관리자)"}
-                                      </span>
-                                    </div>
-                                    <div className={styles.userListPhone}>
-                                      {item.phone}
+                      .map((item, idx) => {
+                        return (
+                          <div key={idx} style={{}}>
+                            {createChatCheckBox[idx] === true && (
+                              <div className={styles.createChatListStyle2}>
+                                <div
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                  }}
+                                  onClick={() => {
+                                    setCreateChatCheckBox((el) => {
+                                      const newArr = [...el];
+                                      newArr[idx] = !newArr[idx];
+                                      return newArr;
+                                    });
+                                    // console.log(createChatCheckBox);
+                                  }}
+                                >
+                                  <div className={styles.userListDetailText2}>
+                                    <img
+                                      src={`${item.profile}`}
+                                      style={{
+                                        width: "70px",
+                                        height: "70px",
+                                        borderRadius: "50%",
+                                        border: "3px solid #0F1839",
+                                      }}
+                                    ></img>
+                                    <div style={{ marginLeft: "20px" }}>
+                                      <div>
+                                        <span
+                                          style={{
+                                            fontSize: "25px",
+                                            fontFamily:
+                                              "NanumSquareNeo-Variable",
+                                          }}
+                                        >
+                                          {item.name}
+                                        </span>
+                                        <span
+                                          style={{
+                                            fontSize: "20px",
+                                            fontFamily:
+                                              "NanumSquareNeo-Variable",
+                                          }}
+                                        >
+                                          {item.grade === "MANAGER" &&
+                                            "   (관리자)"}
+                                        </span>
+                                      </div>
+                                      <div className={styles.userListPhone}>
+                                        {item.phone}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                </div>
-                {/* 버튼 시작 */}
-                {/* 여기에 크리에이트체크박스 여부에 따라 파악하기 */}
-                <div className={styles.buttonLayout}>
-                  <hr style={{ width: "90%" }} />
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      // backgroundColor: "black",
-                      justifyContent: "center",
-                      marginTop: "10px",
-                      marginBottom: "10px",
-                    }}
-                  >
-
-                    <button
-                      onClick={async () => {
-                        if (!roomName) {
-                          Swal.fire({
-                            icon: 'error',
-                            title: '방 제목을 입력해주세요',
-                            confirmButtonText: '확인',
-                            confirmButtonColor: '#0F1839'
-                          })
-                        }
-                        if (roomName !== "") {
-                          await axios({
-                            method: "post",
-                            url: chat.createRoom(),
-                            params: {
-                              name: roomName,
-                              userId: user.email,
-                            },
-                          })
-                            .then((res) => {
-                              createChatCheckBox.map((item, idx) => {
-                                if (item === true) {
-                                  axios({
-                                    method: "post",
-                                    url:
-                                      chat.invite() +
-                                      `${res.data.roomId}/${userProfileList[idx].email}/`,
-                                  })
-                                    .then((res) => {
-                                      console.log("초대", res.data);
-                                    })
-                                    .catch((e) => {
-                                      console.log(e);
-                                    });
-                                }
-                              });
-                            })
-                            .catch((e) => {
-                              console.log(e);
-                              console.log("방제목잇음?")
+                            )}
+                          </div>
+                        );
+                      })}
+                  </div>
+                  {/* 버튼 시작 */}
+                  {/* 여기에 크리에이트체크박스 여부에 따라 파악하기 */}
+                  <div className={styles.buttonLayout}>
+                    <hr style={{ width: "90%" }} />
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        // backgroundColor: "black",
+                        justifyContent: "center",
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <button
+                        onClick={async () => {
+                          if (!roomName) {
+                            Swal.fire({
+                              icon: "error",
+                              title: "방 제목을 입력해주세요",
+                              confirmButtonText: "확인",
+                              confirmButtonColor: "#0F1839",
                             });
+                          }
+                          if (roomName !== "") {
+                            await axios({
+                              method: "post",
+                              url: chat.createRoom(),
+                              params: {
+                                name: roomName,
+                                userId: user.email,
+                              },
+                            })
+                              .then((res) => {
+                                createChatCheckBox.map((item, idx) => {
+                                  if (item === true) {
+                                    axios({
+                                      method: "post",
+                                      url:
+                                        chat.invite() +
+                                        `${res.data.roomId}/${userProfileList[idx].email}/`,
+                                    })
+                                      .then((res) => {
+                                        // console.log("초대", res.data);
+                                      })
+                                      .catch((e) => {
+                                        console.log(e);
+                                      });
+                                  }
+                                });
+                              })
+                              .catch((e) => {
+                                console.log(e);
+                              });
+                            createChatCheckBox.map((item, idx) => {
+                              if (item === true) {
+                                setCreateChatCheckBox((createChatCheckBox) => {
+                                  const newArr = [...createChatCheckBox];
+                                  newArr[idx] = false;
+                                  return newArr;
+                                });
+                              }
+                            });
+
+                            setRoomName("");
+                            setChatRoomList([]);
+                            findAllRooms();
+                          }
+                        }}
+                        style={{
+                          width: "120px",
+                          height: "60px",
+                          border: "none",
+                          backgroundColor: "#F5CC1F",
+                          cursor: "pointer",
+                          borderRadius: "10px",
+                          fontSize: "25px",
+                          marginRight: "5%",
+                          fontFamily: "NanumSquareNeo-Variable",
+                        }}
+                      >
+                        생성
+                      </button>
+                      <button
+                        style={{
+                          width: "120px",
+                          height: "60px",
+                          border: "none",
+                          backgroundColor: "#0F1839",
+                          cursor: "pointer",
+                          color: "white",
+                          borderRadius: "10px",
+                          fontSize: "25px",
+                          marginLeft: "5%",
+                          fontFamily: "NanumSquareNeo-Variable",
+                        }}
+                        onClick={() => {
+                          setCreateChatVisible(!createChatVisible);
                           createChatCheckBox.map((item, idx) => {
                             if (item === true) {
                               setCreateChatCheckBox((createChatCheckBox) => {
@@ -770,73 +881,28 @@ const Chatting = () => {
                               });
                             }
                           });
-
-                          setRoomName("");
-                          setChatRoomList([]);
-                          findAllRooms();
-                        }
-                      }}
-                      style={{
-                        width: "120px",
-                        height: "60px",
-                        border: "none",
-                        backgroundColor: "#F5CC1F",
-                        cursor: "pointer",
-                        borderRadius: "10px",
-                        fontSize: "25px",
-                        marginRight: "5%",
-                        fontFamily: "NanumSquareNeo-Variable",
-                      }}
-                    >
-                      생성
-                    </button>
-                    <button
-                      style={{
-                        width: "120px",
-                        height: "60px",
-                        border: "none",
-                        backgroundColor: "#0F1839",
-                        cursor: "pointer",
-                        color: "white",
-                        borderRadius: "10px",
-                        fontSize: "25px",
-                        marginLeft: "5%",
-                        fontFamily: "NanumSquareNeo-Variable",
-                      }}
-                      onClick={() => {
-                        setCreateChatVisible(!createChatVisible);
-                        createChatCheckBox.map((item, idx) => {
-                          if (item === true) {
-                            setCreateChatCheckBox((createChatCheckBox) => {
-                              const newArr = [...createChatCheckBox];
-                              newArr[idx] = false;
-                              return newArr;
-                            });
-                          }
-                        });
-                      }}
-                    >
-                      취소
-                    </button>
+                        }}
+                      >
+                        취소
+                      </button>
+                    </div>
                   </div>
+                  {/* 버튼 끝 */}
                 </div>
-                {/* 버튼 끝 */}
-              </div>)}
+              )}
             </div>
-          </div>
         )}
 
         {/* 채팅방 목록 div */}
         <div className={styles.chatRoomListLayout}>
-
           {/* 채팅방 리스트 출력 */}
           <div style={{ paddingTop: "20px" }}>
             {chatRoomList.map((item, idx) => {
               // console.log(chatRoomList)
               return (
                 <div key={idx} className={styles.chatRoomList}>
-                  <button style={
-                    {
+                  <button
+                    style={{
                       width: "85%",
                       background: "none",
                       border: "none",
@@ -846,7 +912,7 @@ const Chatting = () => {
                       marginLeft: "20px",
                       textAlign: "start",
                       cursor: "pointer",
-                      fontFamily: "NanumSquareNeo-Variable"
+                      fontFamily: "NanumSquareNeo-Variable",
                     }}
                     onClick={() => {
                       setPage(true);
@@ -861,7 +927,11 @@ const Chatting = () => {
                     {item.roomName}
                   </button>
                   <button
-                    style={{ background: "none", border: "none", cursor: "pointer" }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
                     onClick={() => {
                       setPage(false);
                       axios({
@@ -879,27 +949,35 @@ const Chatting = () => {
                       findAllRooms();
                     }}
                   >
-                    <img src={logout} style={{ width: "30px", marginTop: "10px", marginBottom: "10px" }} alt="" />
+                    <img
+                      src={logout}
+                      style={{
+                        width: "30px",
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                      }}
+                      alt=""
+                    />
                   </button>
                 </div>
               );
             })}
           </div>
 
-          {!chatRoomList.length && <div
-            style={{
-              height: "100%",
-              display: "flex",
-              fontSize: "25px",
-              fontFamily: "NanumSquareNeo-Variable",
-              justifyContent: "center",
-              alignItems: "center",
-
-            }}
-          >
-            존재하는 채팅방이 없습니다.
-          </div>}
-
+          {!chatRoomList.length && (
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                fontSize: "25px",
+                fontFamily: "NanumSquareNeo-Variable",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              채팅방이 없습니다.
+            </div>
+          )}
         </div>
       </div>
     </div>
