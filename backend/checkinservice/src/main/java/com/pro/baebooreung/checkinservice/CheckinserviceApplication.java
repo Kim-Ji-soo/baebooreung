@@ -5,11 +5,15 @@ import com.pro.baebooreung.checkinservice.service.CheckinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableDiscoveryClient //유레카 서버에 등록
+@EnableFeignClients //Feign클라이언트로 등록
 public class CheckinserviceApplication {
 	@Autowired
 	private CheckinService checkinService;

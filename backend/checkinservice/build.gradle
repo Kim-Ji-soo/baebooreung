@@ -39,6 +39,10 @@ dependencies {
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.10.0'
 	//mapper
 	implementation 'org.modelmapper:modelmapper:3.1.0'
+	//discovery service에 내가 클라이언트라고 등록하기 위함
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//다른 ms와 통신하기 위함
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
